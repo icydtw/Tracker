@@ -26,11 +26,12 @@ extension TrackersViewController {
             button.setImage(UIImage(systemName: "plus"), for: .normal)
             button.frame = CGRect(x: 0, y: 0, width: 19, height: 18)
             button.addTarget(nil, action: #selector(plusTapped), for: .touchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
             return button
         }()
         
-        plusButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(plusButton)
+        
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
