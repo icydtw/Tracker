@@ -20,20 +20,20 @@ extension TrackersViewController {
     
     private func setupTrackers() {
         view.backgroundColor = .white
-        let navigationBar = UINavigationBar()
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        navigationBar.barTintColor = .white
-        navigationBar.shadowImage = UIImage()
-        let title = UINavigationItem()
-        let plusButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: nil, action: #selector(plusTapped))
-        plusButton.tintColor = .black
-        title.leftBarButtonItem = plusButton
-        navigationBar.items = [title]
-        view.addSubview(navigationBar)
+        
+        let plusButton: UIButton = {
+            let button = UIButton()
+            button.setImage(UIImage(systemName: "plus"), for: .normal)
+            button.frame = CGRect(x: 0, y: 0, width: 19, height: 18)
+            button.addTarget(nil, action: #selector(plusTapped), for: .touchUpInside)
+            return button
+        }()
+        
+        plusButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(plusButton)
         NSLayoutConstraint.activate([
-            navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
     }
     
