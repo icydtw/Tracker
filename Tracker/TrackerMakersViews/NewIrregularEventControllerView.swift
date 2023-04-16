@@ -37,8 +37,34 @@ final class NewIrregularEventControllerView: UIViewController {
             return field
         }()
         
+        let categoriesButton: UIButton = {
+            let button = UIButton(type: .system)
+            button.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
+            button.layer.cornerRadius = 16
+            button.setTitle("Категория", for: .normal)
+            button.setTitleColor(.black, for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setImage(UIImage(named: "arrow"), for: .normal)
+            button.semanticContentAttribute = .forceRightToLeft
+            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+            button.tintColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+            button.contentHorizontalAlignment = .left
+            return button
+        }()
+        
+        let emojiTitle: UILabel = {
+            let title = UILabel()
+            title.text = "Emoji"
+            title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+            return title
+        }()
+        
         view.addSubview(titleLabel)
         view.addSubview(enterNameTextField)
+        view.addSubview(categoriesButton)
+        view.addSubview(emojiTitle)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -46,7 +72,11 @@ final class NewIrregularEventControllerView: UIViewController {
             enterNameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             enterNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             enterNameTextField.heightAnchor.constraint(equalToConstant: 75),
-            enterNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+            enterNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoriesButton.topAnchor.constraint(equalTo: enterNameTextField.bottomAnchor, constant: 24),
+            categoriesButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoriesButton.heightAnchor.constraint(equalToConstant: 75),
         ])
     }
     
