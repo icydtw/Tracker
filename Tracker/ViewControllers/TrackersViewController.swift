@@ -65,12 +65,11 @@ extension TrackersViewController {
         
         let stackView: UIStackView = {
             let stack = UIStackView()
-            stack.addSubview(questionLabel)
-            stack.addSubview(starImage)
-            stack.backgroundColor = .red
+            stack.addArrangedSubview(starImage)
+            stack.addArrangedSubview(questionLabel)
             stack.axis = .vertical
-            stack.alignment = .fill
-            stack.distribution = .fillEqually
+            stack.alignment = .center
+            stack.distribution = .fillProportionally
             stack.spacing = 8.0
             stack.translatesAutoresizingMaskIntoConstraints = false
             return stack
@@ -90,10 +89,6 @@ extension TrackersViewController {
             trackersLabel.leadingAnchor.constraint(equalTo: plusButton.leadingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             datePicker.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13),
-            starImage.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
-            starImage.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
-            questionLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
-            questionLabel.centerXAnchor.constraint(equalTo: starImage.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
@@ -102,7 +97,8 @@ extension TrackersViewController {
     
     @objc
     private func plusTapped() {
-        print("Plus tapped")
+        let selecterTrackerVC = SelectingTrackerViewController()
+        show(selecterTrackerVC, sender: self)
     }
     
 }
