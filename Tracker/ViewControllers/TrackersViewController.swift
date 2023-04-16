@@ -48,6 +48,7 @@ extension TrackersViewController {
             datePicker.preferredDatePickerStyle = .compact
             datePicker.datePickerMode = .date
             datePicker.translatesAutoresizingMaskIntoConstraints = false
+            datePicker.locale = Locale(identifier: "ru_RU")
             return datePicker
         }()
         
