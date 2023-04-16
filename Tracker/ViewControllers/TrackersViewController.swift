@@ -52,9 +52,34 @@ extension TrackersViewController {
             return datePicker
         }()
         
+        let starImage = UIImageView(image: UIImage(named: "star"))
+        starImage.translatesAutoresizingMaskIntoConstraints = false
+        
+        let questionLabel: UILabel = {
+            let label = UILabel()
+            label.text = "Что будем отслеживать?"
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.systemFont(ofSize: 12)
+            return label
+        }()
+        
+        let stackView: UIStackView = {
+            let stack = UIStackView()
+            stack.addSubview(questionLabel)
+            stack.addSubview(starImage)
+            stack.backgroundColor = .red
+            stack.axis = .vertical
+            stack.alignment = .fill
+            stack.distribution = .fillEqually
+            stack.spacing = 8.0
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            return stack
+        }()
+        
         view.addSubview(plusButton)
         view.addSubview(trackersLabel)
         view.addSubview(datePicker)
+        view.addSubview(stackView)
         
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -64,7 +89,13 @@ extension TrackersViewController {
             trackersLabel.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13),
             trackersLabel.leadingAnchor.constraint(equalTo: plusButton.leadingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            datePicker.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13)
+            datePicker.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13),
+            starImage.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
+            starImage.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
+            questionLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
+            questionLabel.centerXAnchor.constraint(equalTo: starImage.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
     }

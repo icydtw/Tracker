@@ -72,8 +72,8 @@
 			isa = PBXGroup;
 			children = (
 				B43DE80129CD9C2B004AB4F7 /* TrackersViewController.swift */,
-				B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */,
 				B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */,
+				B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
