@@ -15,6 +15,8 @@
 		B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */; };
 		B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */; };
 		B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */; };
+		B464D7D829EC60000033AC5B /* NewIrregularEventControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */; };
+		B464D7DA29EC61630033AC5B /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D929EC61630033AC5B /* NewHabitViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectingTrackerViewController.swift; sourceTree = "<group>"; };
+		B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewIrregularEventControllerView.swift; sourceTree = "<group>"; };
+		B464D7D929EC61630033AC5B /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */,
+				B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */,
+				B464D7D929EC61630033AC5B /* NewHabitViewController.swift */,
 			);
 			path = TrackerMakersViews;
 			sourceTree = "<group>";
@@ -159,12 +165,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B464D7DA29EC61630033AC5B /* NewHabitViewController.swift in Sources */,
 				B43DE80229CD9C2B004AB4F7 /* TrackersViewController.swift in Sources */,
 				B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */,
 				B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */,
 				B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */,
 				B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */,
 				B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */,
+				B464D7D829EC60000033AC5B /* NewIrregularEventControllerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

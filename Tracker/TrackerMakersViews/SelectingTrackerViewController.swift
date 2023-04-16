@@ -31,6 +31,7 @@ final class SelectingTrackerViewController: UIViewController {
             button.setTitle("Привычка", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
             button.layer.cornerRadius = 16
+            button.addTarget(nil, action: #selector(habitTapped), for: .touchUpInside)
             return button
         }()
         
@@ -40,6 +41,7 @@ final class SelectingTrackerViewController: UIViewController {
             button.setTitle("Нерегулярное событие", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
             button.layer.cornerRadius = 16
+            button.addTarget(nil, action: #selector(irregularTapped), for: .touchUpInside)
             return button
         }()
         
@@ -68,5 +70,17 @@ final class SelectingTrackerViewController: UIViewController {
             irregularEventButton.heightAnchor.constraint(equalToConstant: 60)
         ])
         
+    }
+    
+    @objc
+    private func irregularTapped() {
+        let irregularEventVC = NewIrregularEventControllerView()
+        show(irregularEventVC, sender: self)
+    }
+    
+    @objc
+    private func habitTapped() {
+        let habitVC = NewHabitViewController()
+        show(habitVC, sender: self)
     }
 }

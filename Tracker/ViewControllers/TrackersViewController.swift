@@ -26,9 +26,9 @@ extension TrackersViewController {
             let image = UIImage(systemName: "plus")
             let imageView = UIImageView(image: image)
             imageView.tintColor = .black
-            imageView.contentMode = .scaleAspectFill // Устанавливаем свойство contentMode
-            imageView.clipsToBounds = true // Устанавливаем свойство clipsToBounds
-            imageView.frame = button.bounds // Устанавливаем размеры imageView равными размерам button
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            imageView.frame = button.bounds
             button.addSubview(imageView)
             button.addTarget(nil, action: #selector(plusTapped), for: .touchUpInside)
             button.translatesAutoresizingMaskIntoConstraints = false
