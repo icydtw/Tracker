@@ -70,11 +70,20 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             return collection
         }()
         
+        let colorTitle: UILabel = {
+            let title = UILabel()
+            title.text = "Цвет"
+            title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+            title.translatesAutoresizingMaskIntoConstraints = false
+            return title
+        }()
+        
         view.addSubview(titleLabel)
         view.addSubview(enterNameTextField)
         view.addSubview(categoriesButton)
         view.addSubview(emojiTitle)
         view.addSubview(emojiCollection)
+        view.addSubview(colorTitle)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -92,7 +101,9 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             emojiCollection.leadingAnchor.constraint(equalTo: emojiTitle.leadingAnchor),
             emojiCollection.topAnchor.constraint(equalTo: emojiTitle.bottomAnchor, constant: 31),
             emojiCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            emojiCollection.heightAnchor.constraint(equalToConstant: 150)
+            emojiCollection.heightAnchor.constraint(equalToConstant: 150),
+            colorTitle.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor, constant: 47),
+            colorTitle.leadingAnchor.constraint(equalTo: emojiTitle.leadingAnchor)
         ])
         
         emojiCollection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
