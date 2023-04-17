@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewIrregularEventControllerView: UIViewController {
+final class NewIrregularEventControllerView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,13 +58,23 @@ final class NewIrregularEventControllerView: UIViewController {
             let title = UILabel()
             title.text = "Emoji"
             title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+            title.translatesAutoresizingMaskIntoConstraints = false
             return title
+        }()
+        
+        let emojiCollection: UICollectionView = {
+            let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            collection.delegate = self
+            collection.dataSource = self
+            return collection
         }()
         
         view.addSubview(titleLabel)
         view.addSubview(enterNameTextField)
         view.addSubview(categoriesButton)
         view.addSubview(emojiTitle)
+        view.addSubview(emojiCollection)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -77,7 +87,38 @@ final class NewIrregularEventControllerView: UIViewController {
             categoriesButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoriesButton.heightAnchor.constraint(equalToConstant: 75),
+            emojiTitle.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor, constant: 32),
+            emojiTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 28),
+            emojiCollection.leadingAnchor.constraint(equalTo: emojiTitle.leadingAnchor),
+            emojiCollection.topAnchor.constraint(equalTo: emojiTitle.bottomAnchor, constant: 31),
+            emojiCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
+            emojiCollection.heightAnchor.constraint(equalToConstant: 150)
         ])
+        
+        emojiCollection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
+
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        emojiCollectionData.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
+        cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
+        return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (view.bounds.width-56) / 6, height: 50)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
 }
