@@ -14,7 +14,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(ColorCellsViewController.self, forCellWithReuseIdentifier: "colorCell")
         collection.register(EmojiHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        collection.allowsMultipleSelection = true
+        //collection.allowsMultipleSelection = true
         return collection
     }()
     
@@ -23,8 +23,92 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
         collection.register(EmojiHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        collection.allowsMultipleSelection = true
+        //collection.allowsMultipleSelection = true
         return collection
+    }()
+    
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Новое нерегулярное событие"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let enterNameTextField: UITextField = {
+        let field = UITextField()
+        field.placeholder = "Введите название трекера"
+        field.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
+        field.layer.cornerRadius = 16
+        field.translatesAutoresizingMaskIntoConstraints = false
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: field.frame.height))
+        field.leftView = paddingView
+        field.leftViewMode = .always
+        return field
+    }()
+    
+    let categoriesButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
+        button.layer.cornerRadius = 16
+        button.setTitle("Категория", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "arrow"), for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.tintColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    let firstStack: UIStackView = {
+        let stack = UIStackView()
+        
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        stack.spacing = 8.0
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    let cancelButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Отменить", for: .normal)
+        button.setTitleColor(UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1), for: .normal)
+        button.layer.borderColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1).cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 16
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(nil, action: #selector(cancel), for: .touchUpInside)
+        return button
+    }()
+    
+    let createButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Создать", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+        button.layer.cornerRadius = 16
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.addTarget(nil, action: #selector(create), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    let secondStack: UIStackView = {
+        let stack = UIStackView()
+        
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        stack.spacing = 24
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }()
     
     override func viewDidLoad() {
@@ -37,88 +121,10 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         
         let forSpaces = ((view.safeAreaLayoutGuide.owningView?.frame.height ?? 0) - 636) / 10
         
-        let titleLabel: UILabel = {
-            let label = UILabel()
-            label.text = "Новое нерегулярное событие"
-            label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
-        
-        let enterNameTextField: UITextField = {
-            let field = UITextField()
-            field.placeholder = "Введите название трекера"
-            field.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
-            field.layer.cornerRadius = 16
-            field.translatesAutoresizingMaskIntoConstraints = false
-            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: field.frame.height))
-            field.leftView = paddingView
-            field.leftViewMode = .always
-            return field
-        }()
-        
-        let categoriesButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
-            button.layer.cornerRadius = 16
-            button.setTitle("Категория", for: .normal)
-            button.setTitleColor(.black, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.setImage(UIImage(named: "arrow"), for: .normal)
-            button.semanticContentAttribute = .forceRightToLeft
-            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-            button.tintColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
-            button.contentHorizontalAlignment = .left
-            return button
-        }()
-        
-        let firstStack: UIStackView = {
-            let stack = UIStackView()
-            stack.addArrangedSubview(enterNameTextField)
-            stack.addArrangedSubview(categoriesButton)
-            stack.axis = .vertical
-            stack.alignment = .fill
-            stack.distribution = .fillEqually
-            stack.spacing = 8.0
-            stack.translatesAutoresizingMaskIntoConstraints = false
-            return stack
-        }()
-        
-        let cancelButton: UIButton = {
-            let button = UIButton()
-            button.setTitle("Отменить", for: .normal)
-            button.setTitleColor(UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1), for: .normal)
-            button.layer.borderColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1).cgColor
-            button.layer.borderWidth = 1
-            button.layer.cornerRadius = 16
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.addTarget(nil, action: #selector(cancel), for: .touchUpInside)
-            return button
-        }()
-        
-        let createButton: UIButton = {
-            let button = UIButton()
-            button.setTitle("Создать", for: .normal)
-            button.setTitleColor(.white, for: .normal)
-            button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
-            button.layer.cornerRadius = 16
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-        
-        let secondStack: UIStackView = {
-            let stack = UIStackView()
-            stack.addArrangedSubview(cancelButton)
-            stack.addArrangedSubview(createButton)
-            stack.axis = .horizontal
-            stack.alignment = .fill
-            stack.distribution = .fillEqually
-            stack.spacing = forSpaces
-            stack.translatesAutoresizingMaskIntoConstraints = false
-            return stack
-        }()
+        firstStack.addArrangedSubview(enterNameTextField)
+        firstStack.addArrangedSubview(categoriesButton)
+        secondStack.addArrangedSubview(cancelButton)
+        secondStack.addArrangedSubview(createButton)
         
         view.addSubview(titleLabel)
         view.addSubview(firstStack)
@@ -161,6 +167,12 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     @objc
     private func cancel() {
         dismiss(animated: true)
+    }
+    
+    @objc
+    func create() {
+        let event = IrregularEvent(name: enterNameTextField.text ?? "222")
+        print(event.name)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

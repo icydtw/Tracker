@@ -7,9 +7,18 @@
 
 import UIKit
 
-struct IrregularEvent {
+@objc
+class IrregularEvent: NSObject {
     var name: String
-    var category: String
-    var emoji: String
-    var color: UIColor
+    var category: String?
+    var emoji: String?
+    var color: UIColor?
+    
+    @objc
+    init(name: String, category: String? = nil, emoji: String? = nil, color: UIColor? = nil) {
+        self.name = name
+        self.category = category
+        self.emoji = emoji
+        self.color = color
+    }
 }
