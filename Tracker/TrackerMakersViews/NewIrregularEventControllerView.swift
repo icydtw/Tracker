@@ -94,6 +94,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             button.layer.borderWidth = 1
             button.layer.cornerRadius = 16
             button.translatesAutoresizingMaskIntoConstraints = false
+            button.addTarget(nil, action: #selector(cancel), for: .touchUpInside)
             return button
         }()
         
@@ -155,6 +156,11 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         emojiCollection.delegate = self
         emojiCollection.dataSource = self
         
+    }
+    
+    @objc
+    private func cancel() {
+        dismiss(animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -232,6 +238,5 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             cell?.backgroundColor = UIColor.clear
         }
     }
-
     
 }

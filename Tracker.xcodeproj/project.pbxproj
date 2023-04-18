@@ -21,6 +21,7 @@
 		B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */; };
 		B464D7E529EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */; };
 		B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */; };
+		B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellsViewController.swift; sourceTree = "<group>"; };
 		B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiHeaderSupplementaryView.swift; sourceTree = "<group>"; };
 		B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCellsViewController.swift; sourceTree = "<group>"; };
+		B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 		B43DE7FC29CD9C2B004AB4F7 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				B4A6D50E29EEF82800C7E63C /* Structs */,
 				B464D7E329EE7AD20033AC5B /* Supplementary Views */,
 				B464D7E029ED43050033AC5B /* Cells */,
 				B464D7DD29ED41C70033AC5B /* Data */,
@@ -129,6 +132,14 @@
 				B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */,
 			);
 			path = "Supplementary Views";
+			sourceTree = "<group>";
+		};
+		B4A6D50E29EEF82800C7E63C /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */,
+			);
+			path = Structs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +222,7 @@
 				B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */,
 				B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */,
 				B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */,
+				B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */,
 				B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */,
 				B464D7D829EC60000033AC5B /* NewIrregularEventControllerView.swift in Sources */,
 			);
