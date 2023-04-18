@@ -7,6 +7,8 @@
 
 import UIKit
 
+var events: [IrregularEvent] = []
+
 let emojiCollectionData = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
 
 let colorCollectionData = [

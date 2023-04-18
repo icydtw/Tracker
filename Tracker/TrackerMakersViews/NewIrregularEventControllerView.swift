@@ -171,8 +171,15 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     
     @objc
     func create() {
-        let event = IrregularEvent(name: enterNameTextField.text ?? "222")
-        print(event.name)
+        let name = enterNameTextField.text ?? ""
+        let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
+        let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
+        let colorIndex = colorCollection.indexPathsForSelectedItems?.first
+        let color = colorCollectionData[colorIndex?.row ?? 0]
+        let event = IrregularEvent(name: name, emoji: emoji, color: color)
+        events.append(event)
+        print(events)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
