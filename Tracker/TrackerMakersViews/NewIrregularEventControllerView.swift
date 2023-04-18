@@ -9,6 +9,24 @@ import UIKit
 
 final class NewIrregularEventControllerView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    let colorCollection: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.register(ColorCellsViewController.self, forCellWithReuseIdentifier: "colorCell")
+        collection.register(EmojiHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collection.allowsMultipleSelection = true
+        return collection
+    }()
+    
+    let emojiCollection: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
+        collection.register(EmojiHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collection.allowsMultipleSelection = true
+        return collection
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupIrregularViewController()
@@ -16,6 +34,8 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     
     private func setupIrregularViewController() {
         view.backgroundColor = .white
+        
+        let forSpaces = ((view.safeAreaLayoutGuide.owningView?.frame.height ?? 0) - 636) / 10
         
         let titleLabel: UILabel = {
             let label = UILabel()
@@ -54,70 +74,109 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             return button
         }()
         
-        let emojiTitle: UILabel = {
-            let title = UILabel()
-            title.text = "Emoji"
-            title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-            title.translatesAutoresizingMaskIntoConstraints = false
-            return title
+        let firstStack: UIStackView = {
+            let stack = UIStackView()
+            stack.addArrangedSubview(enterNameTextField)
+            stack.addArrangedSubview(categoriesButton)
+            stack.axis = .vertical
+            stack.alignment = .fill
+            stack.distribution = .fillEqually
+            stack.spacing = 8.0
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            return stack
         }()
         
-        let emojiCollection: UICollectionView = {
-            let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-            collection.translatesAutoresizingMaskIntoConstraints = false
-            collection.delegate = self
-            collection.dataSource = self
-            return collection
+        let cancelButton: UIButton = {
+            let button = UIButton()
+            button.setTitle("Отменить", for: .normal)
+            button.setTitleColor(UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1), for: .normal)
+            button.layer.borderColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1).cgColor
+            button.layer.borderWidth = 1
+            button.layer.cornerRadius = 16
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
         }()
         
-        let colorTitle: UILabel = {
-            let title = UILabel()
-            title.text = "Цвет"
-            title.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-            title.translatesAutoresizingMaskIntoConstraints = false
-            return title
+        let createButton: UIButton = {
+            let button = UIButton()
+            button.setTitle("Создать", for: .normal)
+            button.setTitleColor(.white, for: .normal)
+            button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+            button.layer.cornerRadius = 16
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
+        }()
+        
+        let secondStack: UIStackView = {
+            let stack = UIStackView()
+            stack.addArrangedSubview(cancelButton)
+            stack.addArrangedSubview(createButton)
+            stack.axis = .horizontal
+            stack.alignment = .fill
+            stack.distribution = .fillEqually
+            stack.spacing = forSpaces
+            stack.translatesAutoresizingMaskIntoConstraints = false
+            return stack
         }()
         
         view.addSubview(titleLabel)
-        view.addSubview(enterNameTextField)
-        view.addSubview(categoriesButton)
-        view.addSubview(emojiTitle)
+        view.addSubview(firstStack)
         view.addSubview(emojiCollection)
-        view.addSubview(colorTitle)
+        view.addSubview(colorCollection)
+        view.addSubview(secondStack)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            enterNameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            enterNameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            enterNameTextField.heightAnchor.constraint(equalToConstant: 75),
-            enterNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoriesButton.topAnchor.constraint(equalTo: enterNameTextField.bottomAnchor, constant: 24),
-            categoriesButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            categoriesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoriesButton.heightAnchor.constraint(equalToConstant: 75),
-            emojiTitle.topAnchor.constraint(equalTo: categoriesButton.bottomAnchor, constant: 32),
-            emojiTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 28),
-            emojiCollection.leadingAnchor.constraint(equalTo: emojiTitle.leadingAnchor),
-            emojiCollection.topAnchor.constraint(equalTo: emojiTitle.bottomAnchor, constant: 31),
+            
+            firstStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            firstStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            firstStack.heightAnchor.constraint(equalToConstant: 150),
+            firstStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            
+            emojiCollection.topAnchor.constraint(equalTo: firstStack.bottomAnchor, constant: 24),
+            emojiCollection.heightAnchor.constraint(equalToConstant: 200),
+            emojiCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
             emojiCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            emojiCollection.heightAnchor.constraint(equalToConstant: 150),
-            colorTitle.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor, constant: 47),
-            colorTitle.leadingAnchor.constraint(equalTo: emojiTitle.leadingAnchor)
+            
+            colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor),
+            colorCollection.heightAnchor.constraint(equalToConstant: 200),
+            colorCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            colorCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
+            
+            secondStack.heightAnchor.constraint(equalToConstant: 60),
+            secondStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
+            secondStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            secondStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        emojiCollection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
-
+        colorCollection.delegate = self
+        colorCollection.dataSource = self
+        emojiCollection.delegate = self
+        emojiCollection.dataSource = self
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        emojiCollectionData.count
+        if collectionView == colorCollection {
+            return colorCollectionData.count
+        } else {
+            return emojiCollectionData.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
-        cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
-        return cell!
+        
+        if collectionView == colorCollection {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellsViewController
+            cell?.color.backgroundColor = colorCollectionData[indexPath.row]
+            return cell!
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
+            cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
+            return cell!
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -131,5 +190,48 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if collectionView == colorCollection {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! EmojiHeaderSupplementaryView
+            header.title.text = "Цвет"
+            return header
+        } else {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! EmojiHeaderSupplementaryView
+            header.title.text = "Emoji"
+            return header
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 40)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            
+        if collectionView == colorCollection {
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+            cell?.layer.cornerRadius = 16
+            cell?.layer.masksToBounds = true
+        } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+            cell?.layer.cornerRadius = 16
+            cell?.layer.masksToBounds = true
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        if collectionView == colorCollection {
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            cell?.backgroundColor = UIColor.clear
+        } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            cell?.backgroundColor = UIColor.clear
+        }
+    }
+
     
 }

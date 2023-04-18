@@ -15,6 +15,9 @@ final class EmojiCellsViewController: UICollectionViewCell {
         super.init(frame: frame)
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(emojiLabel)
+        
+        contentView.layer.cornerRadius = 16
+        contentView.layer.masksToBounds = true
         NSLayoutConstraint.activate([
             emojiLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
