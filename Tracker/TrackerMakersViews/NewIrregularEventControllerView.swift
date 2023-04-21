@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewIrregularEventControllerView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class NewIrregularEventControllerView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate {
     
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -64,9 +64,16 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         return button
     }()
     
+    let categoriesStack: UITableView = {
+        let table = UITableView()
+        table.register(CategoryCellsViewController.self, forCellReuseIdentifier: "category")
+        table.isScrollEnabled = false
+        table.separatorStyle = .none
+        return table
+    }()
+    
     let firstStack: UIStackView = {
         let stack = UIStackView()
-        
         stack.axis = .vertical
         stack.alignment = .fill
         stack.distribution = .fillEqually
@@ -122,7 +129,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         let forSpaces = ((view.safeAreaLayoutGuide.owningView?.frame.height ?? 0) - 636) / 10
         
         firstStack.addArrangedSubview(enterNameTextField)
-        firstStack.addArrangedSubview(categoriesButton)
+        firstStack.addArrangedSubview(categoriesStack)
         secondStack.addArrangedSubview(cancelButton)
         secondStack.addArrangedSubview(createButton)
         
@@ -161,6 +168,8 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         colorCollection.dataSource = self
         emojiCollection.delegate = self
         emojiCollection.dataSource = self
+        categoriesStack.dataSource = self
+        categoriesStack.delegate = self
         
     }
     
@@ -256,6 +265,29 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
             cell?.backgroundColor = UIColor.clear
         }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
+        guard let categoryCell = cell as? CategoryCellsViewController else {
+            return UITableViewCell()
+        }
+        cell.selectionStyle = .none
+        categoryCell.categoryName.text = "Пока что нет"
+        return categoryCell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 71
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+        show(choiceOfCategoryViewController, sender: self)
     }
     
 }

@@ -21,6 +21,8 @@
 		B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */; };
 		B464D7E529EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */; };
 		B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */; };
+		B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* CategoryCellsViewController.swift */; };
+		B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */; };
 		B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +43,8 @@
 		B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellsViewController.swift; sourceTree = "<group>"; };
 		B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiHeaderSupplementaryView.swift; sourceTree = "<group>"; };
 		B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCellsViewController.swift; sourceTree = "<group>"; };
+		B486232A29F272F600B95667 /* CategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellsViewController.swift; sourceTree = "<group>"; };
+		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
 		B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,6 +109,7 @@
 				B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */,
 				B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */,
 				B464D7D929EC61630033AC5B /* NewHabitViewController.swift */,
+				B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */,
 			);
 			path = TrackerMakersViews;
 			sourceTree = "<group>";
@@ -122,6 +127,7 @@
 			children = (
 				B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */,
 				B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */,
+				B486232A29F272F600B95667 /* CategoryCellsViewController.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -215,12 +221,14 @@
 				B464D7DA29EC61630033AC5B /* NewHabitViewController.swift in Sources */,
 				B464D7E529EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift in Sources */,
 				B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */,
+				B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */,
 				B43DE80229CD9C2B004AB4F7 /* TrackersViewController.swift in Sources */,
 				B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */,
 				B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */,
 				B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */,
 				B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */,
 				B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */,
+				B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */,
 				B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */,
 				B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */,
 				B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */,
