@@ -53,14 +53,31 @@ final class ChoiceOfCategoryViewController: UIViewController {
             return stack
         }()
         
+        let addCategoryButton: UIButton = {
+            let button = UIButton()
+            button.backgroundColor = .black
+            button.setTitle("Добавить категорию", for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+            button.layer.cornerRadius = 16
+            button.translatesAutoresizingMaskIntoConstraints = false
+            //button.addTarget(nil, action: #selector(irregularTapped), for: .touchUpInside)
+            return button
+        }()
+        
         view.addSubview(titleLabel)
         view.addSubview(stackView)
+        view.addSubview(addCategoryButton)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            addCategoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            addCategoryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            addCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
