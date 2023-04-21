@@ -32,6 +32,6 @@ let colorCollectionData = [
     UIColor(red: 0.184, green: 0.816, blue: 0.345, alpha: 1)
 ]
 
-let categories = [
+var categories = [
     "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
 ]
