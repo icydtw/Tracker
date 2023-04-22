@@ -12,6 +12,7 @@ final class MainTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar() //настраиваем TabBar
+        setupData() //настраиваем данные
     }
     
 }
@@ -28,6 +29,10 @@ extension MainTabBarViewController {
         statistics.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(systemName: "hare.fill"), tag: 1)
         
         viewControllers = [trackers, statistics]
+    }
+    
+    private func setupData() {
+        
     }
     
 }

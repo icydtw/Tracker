@@ -47,23 +47,6 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         return field
     }()
     
-    let categoriesButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
-        button.layer.cornerRadius = 16
-        button.setTitle("Категория", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "arrow"), for: .normal)
-        button.semanticContentAttribute = .forceRightToLeft
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.tintColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
-        button.contentHorizontalAlignment = .left
-        return button
-    }()
-    
     let categoriesStack: UITableView = {
         let table = UITableView()
         table.register(CategoryCellsViewController.self, forCellReuseIdentifier: "category")

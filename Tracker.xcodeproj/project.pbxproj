@@ -23,6 +23,7 @@
 		B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */; };
 		B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* CategoryCellsViewController.swift */; };
 		B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */; };
+		B486232F29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */; };
 		B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCellsViewController.swift; sourceTree = "<group>"; };
 		B486232A29F272F600B95667 /* CategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellsViewController.swift; sourceTree = "<group>"; };
 		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
+		B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryCellsViewController.swift; sourceTree = "<group>"; };
 		B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,7 +80,7 @@
 		B43DE7FC29CD9C2B004AB4F7 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				B4A6D50E29EEF82800C7E63C /* Structs */,
+				B4A6D50E29EEF82800C7E63C /* Models */,
 				B464D7E329EE7AD20033AC5B /* Supplementary Views */,
 				B464D7E029ED43050033AC5B /* Cells */,
 				B464D7DD29ED41C70033AC5B /* Data */,
@@ -128,6 +130,7 @@
 				B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */,
 				B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */,
 				B486232A29F272F600B95667 /* CategoryCellsViewController.swift */,
+				B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -140,12 +143,12 @@
 			path = "Supplementary Views";
 			sourceTree = "<group>";
 		};
-		B4A6D50E29EEF82800C7E63C /* Structs */ = {
+		B4A6D50E29EEF82800C7E63C /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */,
 			);
-			path = Structs;
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,6 +225,7 @@
 				B464D7E529EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift in Sources */,
 				B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */,
 				B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */,
+				B486232F29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift in Sources */,
 				B43DE80229CD9C2B004AB4F7 /* TrackersViewController.swift in Sources */,
 				B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */,
 				B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */,
