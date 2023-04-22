@@ -27,6 +27,7 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
         table.separatorStyle = .singleLine
         table.translatesAutoresizingMaskIntoConstraints = false
         table.layer.cornerRadius = 16
+        table.allowsMultipleSelection = false
         return table
     }()
     
@@ -149,6 +150,16 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
             categoriesTable.isHidden = true
             stackView.isHidden = false
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
+        cell?.checkbox.image = UIImage(systemName: "checkmark")
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
+        cell?.checkbox.image = UIImage()
     }
     
 }
