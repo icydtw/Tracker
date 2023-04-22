@@ -10,11 +10,11 @@ import UIKit
 @objc
 class IrregularEvent: NSObject {
     var name: String
-    var category: String?
+    var category: String
     var emoji: String
     var color: UIColor
     
-    init(name: String, category: String? = nil, emoji: String, color: UIColor) {
+    init(name: String, category: String, emoji: String, color: UIColor) {
         self.name = name
         self.category = category
         self.emoji = emoji

@@ -107,6 +107,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     }
     
     private func setupIrregularViewController() {
+        enterNameTextField.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)
         
@@ -165,11 +166,12 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     @objc
     func create() {
         let name = enterNameTextField.text ?? ""
+        let category = categoryName
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
         let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
-        let event = IrregularEvent(name: name, emoji: emoji, color: color)
+        let event = IrregularEvent(name: name, category: category, emoji: emoji, color: color)
         events.append(event)
         print(events)
         
@@ -278,4 +280,12 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         categoriesTable.reloadData()
     }
     
+}
+
+extension NewIrregularEventControllerView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
