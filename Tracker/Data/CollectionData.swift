@@ -35,3 +35,5 @@ let colorCollectionData = [
 var categories = [
     "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
 ]
+
+var categoryName = ""

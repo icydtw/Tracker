@@ -47,7 +47,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         return field
     }()
     
-    let categoriesStack: UITableView = {
+    let categoriesTable: UITableView = {
         let table = UITableView()
         table.register(CategoryCellsViewController.self, forCellReuseIdentifier: "category")
         table.isScrollEnabled = false
@@ -107,12 +107,13 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     }
     
     private func setupIrregularViewController() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)
+        
         view.backgroundColor = .white
         
-        let forSpaces = ((view.safeAreaLayoutGuide.owningView?.frame.height ?? 0) - 636) / 10
-        
         firstStack.addArrangedSubview(enterNameTextField)
-        firstStack.addArrangedSubview(categoriesStack)
+        firstStack.addArrangedSubview(categoriesTable)
         secondStack.addArrangedSubview(cancelButton)
         secondStack.addArrangedSubview(createButton)
         
@@ -151,8 +152,8 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         colorCollection.dataSource = self
         emojiCollection.delegate = self
         emojiCollection.dataSource = self
-        categoriesStack.dataSource = self
-        categoriesStack.delegate = self
+        categoriesTable.dataSource = self
+        categoriesTable.delegate = self
         
     }
     
@@ -260,7 +261,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        categoryCell.categoryName.text = "Пока что нет"
+        categoryCell.categoryName.text = categoryName
         return categoryCell
     }
     
@@ -271,6 +272,10 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
         show(choiceOfCategoryViewController, sender: self)
+    }
+    
+    @objc private func myNotificationHandler() {
+        categoriesTable.reloadData()
     }
     
 }

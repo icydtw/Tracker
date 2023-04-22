@@ -155,6 +155,12 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
         cell?.checkbox.image = UIImage(systemName: "checkmark")
+        dismiss(animated: true) {
+            categoryName = cell?.title.text ?? ""
+            print(categoryName)
+            let notification = Notification(name: Notification.Name("myNotificationName"))
+            NotificationCenter.default.post(notification)
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
