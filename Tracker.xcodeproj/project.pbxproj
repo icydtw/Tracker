@@ -24,6 +24,7 @@
 		B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* CategoryCellsViewController.swift */; };
 		B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */; };
 		B486232F29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */; };
+		B486233129F66D2600B95667 /* TrackersCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486233029F66D2600B95667 /* TrackersCellsViewController.swift */; };
 		B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 		B486232A29F272F600B95667 /* CategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellsViewController.swift; sourceTree = "<group>"; };
 		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
 		B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryCellsViewController.swift; sourceTree = "<group>"; };
+		B486233029F66D2600B95667 /* TrackersCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCellsViewController.swift; sourceTree = "<group>"; };
 		B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,6 +133,7 @@
 				B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */,
 				B486232A29F272F600B95667 /* CategoryCellsViewController.swift */,
 				B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */,
+				B486233029F66D2600B95667 /* TrackersCellsViewController.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */,
 				B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */,
 				B464D7D829EC60000033AC5B /* NewIrregularEventControllerView.swift in Sources */,
+				B486233129F66D2600B95667 /* TrackersCellsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

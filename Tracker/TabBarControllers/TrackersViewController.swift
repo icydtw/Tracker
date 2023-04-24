@@ -16,7 +16,7 @@ class TrackersViewController: UIViewController {
     
 }
 
-extension TrackersViewController {
+extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     private func setupTrackers() {
         view.backgroundColor = .white
@@ -48,6 +48,8 @@ extension TrackersViewController {
             datePicker.preferredDatePickerStyle = .compact
             datePicker.datePickerMode = .date
             datePicker.translatesAutoresizingMaskIntoConstraints = false
+            datePicker.calendar = Calendar(identifier: .iso8601)
+            datePicker.maximumDate = Date()
             datePicker.locale = Locale(identifier: "ru_RU")
             return datePicker
         }()
@@ -75,10 +77,25 @@ extension TrackersViewController {
             return stack
         }()
         
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 9
+        
+        let trackersCollection: UICollectionView = {
+            let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collection.translatesAutoresizingMaskIntoConstraints = false
+            collection.register(TrackersCellsViewController.self, forCellWithReuseIdentifier: "trackers")
+            collection.dataSource = self
+            collection.delegate = self
+            return collection
+        }()
+        
         view.addSubview(plusButton)
         view.addSubview(trackersLabel)
         view.addSubview(datePicker)
         view.addSubview(stackView)
+        view.addSubview(trackersCollection)
         
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -93,6 +110,17 @@ extension TrackersViewController {
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
+        if !events.isEmpty {
+            stackView.isHidden = true
+            
+            NSLayoutConstraint.activate([
+                trackersCollection.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 34),
+                trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
+            ])
+        }
+        
     }
     
     @objc
@@ -101,4 +129,20 @@ extension TrackersViewController {
         show(selecterTrackerVC, sender: self)
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return events.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
+        cell?.contentView.backgroundColor = events[indexPath.row].color
+        cell?.emoji.text = events[indexPath.row].emoji
+        cell?.name.text = events[indexPath.row].name
+        return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (view.frame.width - 41) / 2, height: 90)
+    }
+
 }

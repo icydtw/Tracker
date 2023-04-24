@@ -14,7 +14,6 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(ColorCellsViewController.self, forCellWithReuseIdentifier: "colorCell")
         collection.register(EmojiHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        //collection.allowsMultipleSelection = true
         return collection
     }()
     
@@ -23,7 +22,6 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
         collection.register(EmojiHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        //collection.allowsMultipleSelection = true
         return collection
     }()
     
@@ -173,6 +171,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let event = IrregularEvent(name: name, category: category, emoji: emoji, color: color)
         events.append(event)
+        print(events)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
