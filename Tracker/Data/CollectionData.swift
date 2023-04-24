@@ -8,10 +8,8 @@
 import UIKit
 
 let event = IrregularEvent(name: "Уборка", category: "Домашние дела", emoji: "🙂", color: UIColor(red: 0.902, green: 0.427, blue: 0.831, alpha: 1))
-let event2 = IrregularEvent(name: "Уборка", category: "Хобби", emoji: "🙂", color: UIColor(red: 0.184, green: 0.816, blue: 0.345, alpha: 1))
-let event3 = IrregularEvent(name: "Уборка", category: "Домашние дела", emoji: "🙂", color: UIColor(red: 0.992, green: 0.298, blue: 0.286, alpha: 1))
 
-var events: [IrregularEvent] = [event, event2, event3]
+var events: [IrregularEvent] = []
 
 let emojiCollectionData = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
 

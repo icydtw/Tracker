@@ -172,6 +172,8 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         let event = IrregularEvent(name: name, category: category, emoji: emoji, color: color)
         events.append(event)
         print(events)
+        let notification = Notification(name: Notification.Name("addEvent"))
+        NotificationCenter.default.post(notification)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
