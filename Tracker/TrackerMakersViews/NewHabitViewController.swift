@@ -73,7 +73,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
-        //button.addTarget(nil, action: #selector(cancel), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(cancel), for: .touchUpInside)
         return button
     }()
     
@@ -85,7 +85,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        //button.addTarget(nil, action: #selector(create), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(create), for: .touchUpInside)
         
         return button
     }()
@@ -104,8 +104,6 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
     let scroll: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.isScrollEnabled = true
-        scroll.alwaysBounceVertical = true
         scroll.indicatorStyle = .white
         return scroll
     }()
@@ -133,7 +131,6 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         view.addSubview(scroll)
         
         scroll.contentSize = CGSize(width: view.frame.width, height: 779)
-        print(view.frame.height)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -142,7 +139,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
             scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scroll.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            scroll.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             enterNameTextField.heightAnchor.constraint(equalToConstant: 71),
 
@@ -175,7 +172,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         colorCollection.dataSource = self
         emojiCollection.delegate = self
         emojiCollection.dataSource = self
-        //scroll.delegate = self
+        enterNameTextField.delegate = self
         
     }
     
@@ -284,4 +281,32 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         }
     }
     
+    @objc
+    private func cancel() {
+        dismiss(animated: true)
+    }
+    
+    @objc
+    func create() {
+        let name = enterNameTextField.text ?? ""
+        let category = categoryName
+        let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
+        let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
+        let colorIndex = colorCollection.indexPathsForSelectedItems?.first
+        let color = colorCollectionData[colorIndex?.row ?? 0]
+        let event = IrregularEvent(name: name, category: category, emoji: emoji, color: color)
+        events.append(event)
+        let notification = Notification(name: Notification.Name("addEvent"))
+        NotificationCenter.default.post(notification)
+        categoryName = ""
+        dismiss(animated: true)
+    }
+    
+}
+
+extension NewHabitViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

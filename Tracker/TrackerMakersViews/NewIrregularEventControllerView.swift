@@ -102,7 +102,6 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     let scroll: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
-        
         scroll.indicatorStyle = .white
         return scroll
     }()
@@ -140,7 +139,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scroll.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            scroll.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             enterNameTextField.heightAnchor.constraint(equalToConstant: 71),
 
