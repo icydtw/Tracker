@@ -144,10 +144,11 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
-            set.insert(event.category)
-        }
-        return uniqueCategories.count
+//        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
+//            set.insert(event.category)
+//        }
+//        return uniqueCategories.count
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

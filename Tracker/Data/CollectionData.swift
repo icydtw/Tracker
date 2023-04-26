@@ -38,4 +38,4 @@ var categories = [
     "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
 ]
 
-var categoryName = ""
+var categoryName = "Выберите категорию"
