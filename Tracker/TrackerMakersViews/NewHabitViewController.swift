@@ -132,7 +132,6 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         
         view.addSubview(scroll)
         
-        let height = 27+19+225+200+200+60+24+24+24
         scroll.contentSize = CGSize(width: view.frame.width, height: 779)
         print(view.frame.height)
         

@@ -99,6 +99,14 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         return stack
     }()
     
+    let scroll: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        
+        scroll.indicatorStyle = .white
+        return scroll
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupIrregularViewController()
@@ -115,35 +123,48 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         secondStack.addArrangedSubview(cancelButton)
         secondStack.addArrangedSubview(createButton)
         
+        view.addSubview(scroll)
         view.addSubview(titleLabel)
-        view.addSubview(firstStack)
-        view.addSubview(emojiCollection)
-        view.addSubview(colorCollection)
-        view.addSubview(secondStack)
+        
+        scroll.addSubview(firstStack)
+        scroll.addSubview(emojiCollection)
+        scroll.addSubview(colorCollection)
+        scroll.addSubview(secondStack)
+        
+        scroll.contentSize = CGSize(width: view.frame.width, height: 708)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            firstStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            firstStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            firstStack.heightAnchor.constraint(equalToConstant: 150),
-            firstStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scroll.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            scroll.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
+            enterNameTextField.heightAnchor.constraint(equalToConstant: 71),
+
+            firstStack.topAnchor.constraint(equalTo: scroll.topAnchor, constant: 24),
+            firstStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
+            firstStack.heightAnchor.constraint(equalToConstant: 150),
+            firstStack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
+
             emojiCollection.topAnchor.constraint(equalTo: firstStack.bottomAnchor, constant: 24),
             emojiCollection.heightAnchor.constraint(equalToConstant: 200),
-            emojiCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            emojiCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            
+            emojiCollection.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
+            emojiCollection.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
+            emojiCollection.widthAnchor.constraint(equalTo: firstStack.widthAnchor),
+
             colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor),
             colorCollection.heightAnchor.constraint(equalToConstant: 200),
-            colorCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            colorCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -28),
-            
+            colorCollection.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
+            colorCollection.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
+            colorCollection.widthAnchor.constraint(equalTo: firstStack.widthAnchor),
+
             secondStack.heightAnchor.constraint(equalToConstant: 60),
-            secondStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 28),
-            secondStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            secondStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            secondStack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 28),
+            secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
+            secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
         
         colorCollection.delegate = self
