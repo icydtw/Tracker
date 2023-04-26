@@ -53,7 +53,6 @@ final class CategoryCellsViewController: UITableViewCell {
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             arrow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            //title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
         ])
         
         NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)

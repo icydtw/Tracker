@@ -114,6 +114,8 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     private func setupHabitViewController() {
+        NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("myNotificationName"), object: nil)
+        
         view.backgroundColor = .white
         
         firstStack.addArrangedSubview(enterNameTextField)
@@ -306,6 +308,18 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         NotificationCenter.default.post(notification)
         categoryName = ""
         dismiss(animated: true)
+    }
+    
+    @objc
+    func changeFirstCell() {
+        let cell = categoriesTable.cellForRow(at: [0,0]) as? HabitCategoryCellsViewController
+        cell?.title.removeFromSuperview()
+        cell?.addSubview(cell!.title)
+        cell?.categoryName.text = categoryName
+        cell?.categoryName.topAnchor.constraint(equalTo: cell!.title.bottomAnchor, constant: 2).isActive = true
+        cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
+        cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
+        cell?.title.topAnchor.constraint(equalTo: cell!.topAnchor, constant: 15).isActive = true
     }
     
 }
