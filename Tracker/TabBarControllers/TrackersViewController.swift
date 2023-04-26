@@ -9,7 +9,11 @@ import UIKit
 
 class TrackersViewController: UIViewController {
     
-    let trackersCollection: UICollectionView = {
+    var choosenDay = ""
+    
+    var localEvents = []
+    
+    var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(TrackersCellsViewController.self, forCellWithReuseIdentifier: "trackers")
@@ -47,6 +51,7 @@ class TrackersViewController: UIViewController {
         datePicker.calendar = Calendar(identifier: .iso8601)
         datePicker.maximumDate = Date()
         datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         return datePicker
     }()
     
@@ -73,8 +78,15 @@ class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTrackers()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
+    }
+    
+    @objc func datePickerValueChanged(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        let dayOfWeekString = dateFormatter.string(from: sender.date)
+        choosenDay = dayOfWeekString
+        trackersCollection.reloadData()
     }
     
 }
@@ -83,6 +95,14 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     
     private func setupTrackers() {
         view.backgroundColor = .white
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = "EEEE" // Формат дня недели
+        let dayOfWeekString = dateFormatter.string(from: datePicker.date)
+        choosenDay = dayOfWeekString
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
         
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
@@ -153,9 +173,15 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
-        cell?.contentView.backgroundColor = events[indexPath.row].color
-        cell?.emoji.text = events[indexPath.row].emoji
-        cell?.name.text = events[indexPath.row].name
+        if events[indexPath.row].day?.rawValue == choosenDay || events[indexPath.row].day?.rawValue == nil {
+            cell?.contentView.backgroundColor = events[indexPath.row].color
+            cell?.emoji.text = events[indexPath.row].emoji
+            cell?.name.text = events[indexPath.row].name
+            cell?.isHidden = false
+            return cell!
+        } else {
+            cell?.isHidden = true
+        }
         return cell!
     }
     

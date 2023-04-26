@@ -7,7 +7,7 @@
 
 import UIKit
 
-let event = IrregularEvent(name: "Уборка", category: "Домашние дела", emoji: "🙂", color: UIColor(red: 0.902, green: 0.427, blue: 0.831, alpha: 1))
+let event = IrregularEvent(name: "Уборка", category: "Домашние дела", emoji: "🙂", color: UIColor(red: 0.902, green: 0.427, blue: 0.831, alpha: 1), day: nil)
 
 var events: [IrregularEvent] = []
 
@@ -39,3 +39,14 @@ var categories = [
 ]
 
 var categoryName = "Выберите категорию"
+
+enum dayOfWeek: String {
+    case monday = "понедельник"
+    case tuesday = "вторник"
+    case wednesday = "среда"
+    case thursday = "четверг"
+    case friday = "пятница"
+    case saturday = "суббота"
+    case sunday = "воскресенье"
+}
+

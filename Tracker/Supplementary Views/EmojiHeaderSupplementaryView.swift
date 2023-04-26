@@ -11,7 +11,6 @@ final class EmojiHeaderSupplementaryView: UICollectionReusableView {
     
     var title: UILabel = {
         let label = UILabel()
-        label.text = "Emoji"
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label
     }()
