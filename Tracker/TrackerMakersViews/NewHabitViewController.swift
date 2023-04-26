@@ -284,8 +284,12 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
-        show(choiceOfCategoryViewController, sender: self)
+        if indexPath.row == 0 {
+            let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+            show(choiceOfCategoryViewController, sender: self)
+        } else {
+            print("экран в разработке")
+        }
     }
     
     @objc
