@@ -11,8 +11,6 @@ class TrackersViewController: UIViewController {
     
     var choosenDay = ""
     
-    var localEvents = []
-    
     var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false

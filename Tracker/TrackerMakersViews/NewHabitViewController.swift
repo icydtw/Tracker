@@ -281,6 +281,11 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+        show(choiceOfCategoryViewController, sender: self)
+    }
+    
     @objc
     private func cancel() {
         dismiss(animated: true)

@@ -38,7 +38,7 @@ var categories = [
     "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
 ]
 
-var categoryName = "Выберите категорию"
+var categoryName = ""
 
 enum dayOfWeek: String {
     case monday = "понедельник"

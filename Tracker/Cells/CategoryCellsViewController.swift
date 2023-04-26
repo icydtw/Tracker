@@ -19,7 +19,6 @@ final class CategoryCellsViewController: UITableViewCell {
     
     var categoryName: UILabel = {
         let label = UILabel()
-        label.text = "Выберите категорию"
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +42,6 @@ final class CategoryCellsViewController: UITableViewCell {
     }
     
     private func setupCellViewController() {
-        
         contentView.addSubview(title)
         contentView.addSubview(categoryName)
         contentView.addSubview(arrow)
@@ -51,12 +49,30 @@ final class CategoryCellsViewController: UITableViewCell {
         contentView.layer.cornerRadius = 16
         
         NSLayoutConstraint.activate([
+            title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            arrow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            //title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
+        ])
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)
+        
+    }
+    
+    @objc private func myNotificationHandler() {
+        
+        title.removeFromSuperview()
+        contentView.addSubview(title)
+        
+        NSLayoutConstraint.activate([
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
             categoryName.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 2),
             categoryName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            arrow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+
+        contentView.layoutIfNeeded()
+        contentView.updateConstraints()
     }
 }

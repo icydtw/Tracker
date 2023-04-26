@@ -191,6 +191,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let event = IrregularEvent(name: name, category: category, emoji: emoji, color: color, day: nil)
         events.append(event)
+        events = events.reversed()
         let notification = Notification(name: Notification.Name("addEvent"))
         NotificationCenter.default.post(notification)
         categoryName = ""
