@@ -19,7 +19,7 @@
 		B464D7DA29EC61630033AC5B /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D929EC61630033AC5B /* NewHabitViewController.swift */; };
 		B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7DE29ED41E70033AC5B /* CollectionData.swift */; };
 		B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */; };
-		B464D7E529EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */; };
+		B464D7E529EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E429EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift */; };
 		B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */; };
 		B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* CategoryCellsViewController.swift */; };
 		B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */; };
@@ -46,7 +46,7 @@
 		B464D7D929EC61630033AC5B /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
 		B464D7DE29ED41E70033AC5B /* CollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionData.swift; sourceTree = "<group>"; };
 		B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellsViewController.swift; sourceTree = "<group>"; };
-		B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiHeaderSupplementaryView.swift; sourceTree = "<group>"; };
+		B464D7E429EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderSupplementaryView.swift; sourceTree = "<group>"; };
 		B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCellsViewController.swift; sourceTree = "<group>"; };
 		B486232A29F272F600B95667 /* CategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellsViewController.swift; sourceTree = "<group>"; };
 		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 		B464D7E329EE7AD20033AC5B /* Supplementary Views */ = {
 			isa = PBXGroup;
 			children = (
-				B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */,
+				B464D7E429EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift */,
 			);
 			path = "Supplementary Views";
 			sourceTree = "<group>";
@@ -242,7 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B464D7DA29EC61630033AC5B /* NewHabitViewController.swift in Sources */,
-				B464D7E529EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift in Sources */,
+				B464D7E529EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift in Sources */,
 				B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */,
 				B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */,
 				B486232F29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift in Sources */,

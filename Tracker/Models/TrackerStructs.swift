@@ -1,13 +1,8 @@
-//
-//  TrackerStructs.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 18.04.2023.
-//
-
 import UIKit
 
+/// Структура для создания объектов событий (привычек или нерегулярных событий)
 struct Event {
+    
     var name: String
     var category: String
     var emoji: String
@@ -21,4 +16,5 @@ struct Event {
         self.color = color
         self.day = day
     }
+    
 }

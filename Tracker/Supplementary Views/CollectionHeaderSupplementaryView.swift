@@ -1,13 +1,7 @@
-//
-//  EmojiHeaderSupplementaryView.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 18.04.2023.
-//
-
 import UIKit
 
-final class EmojiHeaderSupplementaryView: UICollectionReusableView {
+/// Представление, определяющее header для всех коллекций
+final class CollectionHeaderSupplementaryView: UICollectionReusableView {
     
     var title: UILabel = {
         let label = UILabel()
