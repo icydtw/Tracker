@@ -288,7 +288,8 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
             let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
             show(choiceOfCategoryViewController, sender: self)
         } else {
-            print("экран в разработке")
+            let scheduleViewController = ScheduleViewController()
+            show(scheduleViewController, sender: self)
         }
     }
     

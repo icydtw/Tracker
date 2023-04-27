@@ -50,3 +50,5 @@ enum dayOfWeek: String {
     case sunday = "воскресенье"
 }
 
+let daysOfWeek: [dayOfWeek] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+
