@@ -1,14 +1,9 @@
-//
-//  ChoiceOfCategoryCellsViewController.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 22.04.2023.
-//
-
 import UIKit
 
+/// Ячейка таблицы выбора категории
 final class ChoiceOfCategoryCellsViewController: UITableViewCell {
     
+    // MARK: - Свойства
     let title: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -23,21 +18,21 @@ final class ChoiceOfCategoryCellsViewController: UITableViewCell {
         return image
     }()
     
+    // MARK: - Инициализатор
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupCellViewController()
+        setupView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupCellViewController() {
-        
+    // MARK: - Настройка внешнего вида
+    private func setupView() {
         contentView.addSubview(title)
         contentView.addSubview(checkbox)
         contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
-        
         NSLayoutConstraint.activate([
             title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),

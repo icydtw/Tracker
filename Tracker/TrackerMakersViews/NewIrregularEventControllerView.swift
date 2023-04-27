@@ -47,7 +47,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     
     let categoriesTable: UITableView = {
         let table = UITableView()
-        table.register(CategoryCellsViewController.self, forCellReuseIdentifier: "category")
+        table.register(IrregularCategoryCellsViewController.self, forCellReuseIdentifier: "category")
         table.isScrollEnabled = false
         table.separatorStyle = .none
         return table
@@ -190,6 +190,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let event = Event(name: name, category: category, emoji: emoji, color: color, day: nil)
+        events = events.reversed()
         events.append(event)
         events = events.reversed()
         let notification = Notification(name: Notification.Name("addEvent"))
@@ -280,7 +281,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
-        guard let categoryCell = cell as? CategoryCellsViewController else {
+        guard let categoryCell = cell as? IrregularCategoryCellsViewController else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none

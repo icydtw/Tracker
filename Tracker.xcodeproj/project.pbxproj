@@ -21,7 +21,7 @@
 		B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */; };
 		B464D7E529EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E429EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift */; };
 		B464D7E929EE84FA0033AC5B /* ColorCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */; };
-		B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* CategoryCellsViewController.swift */; };
+		B486232B29F272F600B95667 /* IrregularCategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* IrregularCategoryCellsViewController.swift */; };
 		B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */; };
 		B486232F29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */; };
 		B486233129F66D2600B95667 /* TrackersCellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486233029F66D2600B95667 /* TrackersCellsViewController.swift */; };
@@ -48,7 +48,7 @@
 		B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellsViewController.swift; sourceTree = "<group>"; };
 		B464D7E429EE7AED0033AC5B /* CollectionHeaderSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderSupplementaryView.swift; sourceTree = "<group>"; };
 		B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCellsViewController.swift; sourceTree = "<group>"; };
-		B486232A29F272F600B95667 /* CategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellsViewController.swift; sourceTree = "<group>"; };
+		B486232A29F272F600B95667 /* IrregularCategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularCategoryCellsViewController.swift; sourceTree = "<group>"; };
 		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
 		B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryCellsViewController.swift; sourceTree = "<group>"; };
 		B486233029F66D2600B95667 /* TrackersCellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCellsViewController.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 			children = (
 				B464D7E129ED431A0033AC5B /* EmojiCellsViewController.swift */,
 				B464D7E829EE84FA0033AC5B /* ColorCellsViewController.swift */,
-				B486232A29F272F600B95667 /* CategoryCellsViewController.swift */,
+				B486232A29F272F600B95667 /* IrregularCategoryCellsViewController.swift */,
 				B486232E29F3D02F00B95667 /* ChoiceOfCategoryCellsViewController.swift */,
 				B486233029F66D2600B95667 /* TrackersCellsViewController.swift */,
 				B486233229F8FE7C00B95667 /* HabitCategoryCellsViewController.swift */,
@@ -253,7 +253,7 @@
 				B464D7E229ED431A0033AC5B /* EmojiCellsViewController.swift in Sources */,
 				B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */,
 				B486233529FA62BB00B95667 /* ScheduleViewController.swift in Sources */,
-				B486232B29F272F600B95667 /* CategoryCellsViewController.swift in Sources */,
+				B486232B29F272F600B95667 /* IrregularCategoryCellsViewController.swift in Sources */,
 				B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */,
 				B486233329F8FE7C00B95667 /* HabitCategoryCellsViewController.swift in Sources */,
 				B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */,
