@@ -113,7 +113,7 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     
     private func setupIrregularViewController() {
         
-        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("category_changed"), object: nil)
         
         view.backgroundColor = .white
         

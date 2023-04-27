@@ -157,7 +157,7 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
         cell?.checkbox.image = UIImage(systemName: "checkmark")
         dismiss(animated: true) {
             categoryName = cell?.title.text ?? ""
-            let notification = Notification(name: Notification.Name("myNotificationName"))
+            let notification = Notification(name: Notification.Name("category_changed"))
             NotificationCenter.default.post(notification)
         }
     }

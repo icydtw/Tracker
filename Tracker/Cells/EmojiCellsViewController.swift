@@ -3,12 +3,14 @@ import UIKit
 /// Кастомная ячейка коллекции, используемая для отображения emoji
 final class EmojiCellsViewController: UICollectionViewCell {
     
+    // MARK: - Свойства
     let emojiLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    // MARK: - Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -18,7 +20,7 @@ final class EmojiCellsViewController: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Настройка внешнего вида
+    // MARK: - Настройка внешнего вида
     private func setupView() {
         contentView.addSubview(emojiLabel)
         contentView.layer.cornerRadius = 16

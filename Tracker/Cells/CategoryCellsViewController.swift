@@ -1,14 +1,9 @@
-//
-//  CategoryCells.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 21.04.2023.
-//
-
 import UIKit
 
+/// Ячейка таблицы, отображающая информацию о категории
 final class CategoryCellsViewController: UITableViewCell {
     
+    // MARK: - Свойства
     let title: UILabel = {
         let label = UILabel()
         label.text = "Категория"
@@ -32,46 +27,45 @@ final class CategoryCellsViewController: UITableViewCell {
         return image
     }()
     
+    // MARK: - Инициализатор
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupCellViewController()
+        setupView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupCellViewController() {
+    // MARK: - Настройка внешнего вида
+    private func setupView() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
         contentView.addSubview(title)
         contentView.addSubview(categoryName)
         contentView.addSubview(arrow)
         contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
         contentView.layer.cornerRadius = 16
-        
         NSLayoutConstraint.activate([
             title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             arrow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)
-        
     }
     
-    @objc private func myNotificationHandler() {
-        
+    // MARK: - Изменение констрейнтов и свойств ячейки с категорией (при срабатывании нотификации)
+    @objc
+    private func showCategory() {
         title.removeFromSuperview()
         contentView.addSubview(title)
-        
         NSLayoutConstraint.activate([
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
             categoryName.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 2),
             categoryName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
         ])
-
         contentView.layoutIfNeeded()
         contentView.updateConstraints()
     }
+    
 }

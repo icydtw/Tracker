@@ -114,7 +114,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     private func setupHabitViewController() {
-        NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("myNotificationName"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
         
         view.backgroundColor = .white
         

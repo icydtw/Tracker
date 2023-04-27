@@ -3,6 +3,7 @@ import UIKit
 /// Представление, определяющее header для всех коллекций
 final class CollectionHeaderSupplementaryView: UICollectionReusableView {
     
+    // MARK: - Свойства
     var title: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
@@ -10,6 +11,7 @@ final class CollectionHeaderSupplementaryView: UICollectionReusableView {
         return label
     }()
     
+    // MARK: - Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -19,7 +21,7 @@ final class CollectionHeaderSupplementaryView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Настройка внешнего вида
+    // MARK: - Настройка внешнего вида
     private func setupView() {
         addSubview(title)
         NSLayoutConstraint.activate([

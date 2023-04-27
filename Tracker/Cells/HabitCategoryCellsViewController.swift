@@ -55,7 +55,7 @@ final class HabitCategoryCellsViewController: UITableViewCell {
             arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("myNotificationName"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("category_changed"), object: nil)
         
     }
     
