@@ -307,7 +307,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = dayOfWeek.wednesday
-        let event = IrregularEvent(name: name, category: category, emoji: emoji, color: color, day: day)
+        let event = Event(name: name, category: category, emoji: emoji, color: color, day: day)
         events.append(event)
         let notification = Notification(name: Notification.Name("addEvent"))
         NotificationCenter.default.post(notification)

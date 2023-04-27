@@ -7,9 +7,9 @@
 
 import UIKit
 
-let event = IrregularEvent(name: "Уборка", category: "Домашние дела", emoji: "🙂", color: UIColor(red: 0.902, green: 0.427, blue: 0.831, alpha: 1), day: nil)
+let event = Event(name: "Уборка", category: "Домашние дела", emoji: "🙂", color: UIColor(red: 0.902, green: 0.427, blue: 0.831, alpha: 1), day: nil)
 
-var events: [IrregularEvent] = []
+var events: [Event] = []
 
 let emojiCollectionData = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
 

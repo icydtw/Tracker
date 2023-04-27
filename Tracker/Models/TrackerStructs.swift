@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct IrregularEvent {
+struct Event {
     var name: String
     var category: String
     var emoji: String

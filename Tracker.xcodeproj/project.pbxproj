@@ -94,10 +94,7 @@
 				B464D7DD29ED41C70033AC5B /* Data */,
 				B464D7D429EC14D70033AC5B /* TrackerMakersViews */,
 				B464D7CF29EAB6C00033AC5B /* TabBarControllers */,
-				B43DE7FD29CD9C2B004AB4F7 /* AppDelegate.swift */,
-				B43DE7FF29CD9C2B004AB4F7 /* SceneDelegate.swift */,
-				B43DE80629CD9C2B004AB4F7 /* Assets.xcassets */,
-				B43DE80829CD9C2B004AB4F7 /* LaunchScreen.storyboard */,
+				B486233929FA6ED200B95667 /* Application */,
 				B43DE80B29CD9C2B004AB4F7 /* Info.plist */,
 			);
 			path = Tracker;
@@ -153,6 +150,17 @@
 				B464D7E429EE7AED0033AC5B /* EmojiHeaderSupplementaryView.swift */,
 			);
 			path = "Supplementary Views";
+			sourceTree = "<group>";
+		};
+		B486233929FA6ED200B95667 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				B43DE7FD29CD9C2B004AB4F7 /* AppDelegate.swift */,
+				B43DE7FF29CD9C2B004AB4F7 /* SceneDelegate.swift */,
+				B43DE80829CD9C2B004AB4F7 /* LaunchScreen.storyboard */,
+				B43DE80629CD9C2B004AB4F7 /* Assets.xcassets */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 		B4A6D50E29EEF82800C7E63C /* Models */ = {
