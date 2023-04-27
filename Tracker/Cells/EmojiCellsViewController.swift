@@ -1,31 +1,32 @@
-//
-//  EmojiCellsViewController.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 17.04.2023.
-//
-
 import UIKit
 
+/// Кастомная ячейка коллекции, используемая для отображения emoji
 final class EmojiCellsViewController: UICollectionViewCell {
     
-    let emojiLabel = UILabel()
+    let emojiLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Настройка внешнего вида
+    private func setupView() {
         contentView.addSubview(emojiLabel)
-        
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
         NSLayoutConstraint.activate([
             emojiLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }
