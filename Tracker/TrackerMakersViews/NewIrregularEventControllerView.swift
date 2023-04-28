@@ -1,14 +1,8 @@
-//
-//  NewIrregularEventControllerView.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 16.04.2023.
-//
-
 import UIKit
 
 final class NewIrregularEventControllerView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - Свойства
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -106,11 +100,13 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         return scroll
     }()
     
+    // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupIrregularViewController()
     }
     
+    // MARK: - Настройка внешнего вида
     private func setupIrregularViewController() {
         
         NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("category_changed"), object: nil)
@@ -309,4 +305,8 @@ extension NewIrregularEventControllerView: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+}
+
+extension NewIrregularEventControllerView: UICollectionViewDataSource {
+    
 }
