@@ -1,17 +1,11 @@
-//
-//  choiceOfCategoryViewController.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 21.04.2023.
-//
-
 import UIKit
 
-final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+/// Экран со списком категорий
+final class ChoiceOfCategoryViewController: UIViewController {
     
+    // MARK: - Свойства
     let stackView: UIStackView = {
         let stack = UIStackView()
-        
         stack.axis = .vertical
         stack.alignment = .center
         stack.distribution = .fillProportionally
@@ -65,29 +59,27 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
-        //button.addTarget(nil, action: #selector(irregularTapped), for: .touchUpInside)
+        //button.addTarget(nil, action: #selector(), for: .touchUpInside)
         return button
     }()
     
+    // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCategoryViewController()
+        setupView()
     }
     
-    private func setupCategoryViewController() {
+    // MARK: - Настройка внешнего вида
+    private func setupView() {
         view.backgroundColor = .white
-
         view.addSubview(titleLabel)
         view.addSubview(stackView)
         view.addSubview(addCategoryButton)
         view.addSubview(categoriesTable)
-        
         categoriesTable.dataSource = self
         categoriesTable.delegate = self
-        
         stackView.addArrangedSubview(starImage)
         stackView.addArrangedSubview(questionLabel)
-        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -99,10 +91,8 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
             addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             addCategoryButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-        
         if !categories.isEmpty {
             stackView.isHidden = true
-            
             NSLayoutConstraint.activate([
                 categoriesTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 categoriesTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -110,13 +100,19 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
                 categoriesTable.heightAnchor.constraint(equalToConstant: CGFloat(75 * categories.count))
             ])
         }
-
     }
+
+}
+
+// MARK: - Расширение для UITableViewDataSource
+extension ChoiceOfCategoryViewController: UITableViewDataSource {
     
+    // MARK: Метод, возвращающий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }
     
+    // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
         guard let categoryCell = cell as? ChoiceOfCategoryCellsViewController else {
@@ -127,20 +123,12 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
         return categoryCell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
-        }
-    }
-    
+    // MARK: Метод, определяющий, может ли строка таблицы быть редактируемой
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
+    // MARK: Метод, обрабатывающий удаление строки таблицы
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             categories.remove(at: indexPath.row)
@@ -152,6 +140,24 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
         }
     }
     
+}
+
+// MARK: - Расширение для UITableViewDelegate
+extension ChoiceOfCategoryViewController: UITableViewDelegate {
+    
+    // MARK: Метод, определяющий высоту строки таблицы
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+    
+    // MARK: Метод конфигурации ячеек перед их отображением
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
+        }
+    }
+    
+    // MARK: Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
         cell?.checkbox.image = UIImage(systemName: "checkmark")
@@ -162,6 +168,7 @@ final class ChoiceOfCategoryViewController: UIViewController, UITableViewDataSou
         }
     }
     
+    // MARK: Метод, вызываемый при повторном нажатии (снятии выделения) на строку таблицы
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
         cell?.checkbox.image = UIImage()

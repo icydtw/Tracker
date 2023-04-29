@@ -1,6 +1,7 @@
 import UIKit
 
-final class NewIrregularEventControllerView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate {
+/// Экран создания нового "Нерегулярного события"
+final class NewIrregularEventControllerView: UIViewController {
     
     // MARK: - Свойства
     let colorCollection: UICollectionView = {
@@ -76,15 +77,12 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
-        
         button.addTarget(nil, action: #selector(create), for: .touchUpInside)
-        
         return button
     }()
     
     let secondStack: UIStackView = {
         let stack = UIStackView()
-        
         stack.axis = .horizontal
         stack.alignment = .fill
         stack.distribution = .fillEqually
@@ -103,65 +101,51 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupIrregularViewController()
+        setupView()
     }
     
     // MARK: - Настройка внешнего вида
-    private func setupIrregularViewController() {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(myNotificationHandler), name: Notification.Name("category_changed"), object: nil)
-        
+    private func setupView() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
         view.backgroundColor = .white
-        
         firstStack.addArrangedSubview(enterNameTextField)
         firstStack.addArrangedSubview(categoriesTable)
         secondStack.addArrangedSubview(cancelButton)
         secondStack.addArrangedSubview(createButton)
-        
         view.addSubview(scroll)
         view.addSubview(titleLabel)
-        
         scroll.addSubview(firstStack)
         scroll.addSubview(emojiCollection)
         scroll.addSubview(colorCollection)
         scroll.addSubview(secondStack)
-        
         scroll.contentSize = CGSize(width: view.frame.width, height: 708)
-        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
             scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scroll.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
             enterNameTextField.heightAnchor.constraint(equalToConstant: 71),
-
             firstStack.topAnchor.constraint(equalTo: scroll.topAnchor, constant: 24),
             firstStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             firstStack.heightAnchor.constraint(equalToConstant: 150),
             firstStack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
-
             emojiCollection.topAnchor.constraint(equalTo: firstStack.bottomAnchor, constant: 24),
             emojiCollection.heightAnchor.constraint(equalToConstant: 200),
             emojiCollection.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
             emojiCollection.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             emojiCollection.widthAnchor.constraint(equalTo: firstStack.widthAnchor),
-
             colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor),
             colorCollection.heightAnchor.constraint(equalToConstant: 200),
             colorCollection.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
             colorCollection.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             colorCollection.widthAnchor.constraint(equalTo: firstStack.widthAnchor),
-
             secondStack.heightAnchor.constraint(equalToConstant: 60),
             secondStack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 28),
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
-        
         colorCollection.delegate = self
         colorCollection.dataSource = self
         emojiCollection.delegate = self
@@ -169,16 +153,18 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         categoriesTable.dataSource = self
         categoriesTable.delegate = self
         enterNameTextField.delegate = self
-        
     }
     
+    // MARK: - Методы, вызываемые при нажатии кнопок
+    // MARK: Метод, вызываемый при нажатии на кнопку "Отмена"
     @objc
     private func cancel() {
         dismiss(animated: true)
     }
     
+    // MARK: Метод, вызываемый при нажатии на кнопку "Создать"
     @objc
-    func create() {
+    private func create() {
         let name = enterNameTextField.text ?? ""
         let category = categoryName
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
@@ -195,6 +181,29 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         dismiss(animated: true)
     }
     
+    // MARK: Метод, обновлящий название выбранной категории при срабатывании нотификации
+    @objc
+    private func showCategory() {
+        categoriesTable.reloadData()
+    }
+    
+}
+
+// MARK: - Расширение для UITextFieldDelegate
+extension NewIrregularEventControllerView: UITextFieldDelegate {
+    
+    // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+}
+
+// MARK: - Расширение для UICollectionViewDataSource
+extension NewIrregularEventControllerView: UICollectionViewDataSource {
+    
+    // MARK: Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == colorCollection {
             return colorCollectionData.count
@@ -203,8 +212,8 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         }
     }
     
+    // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if collectionView == colorCollection {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellsViewController
             cell?.color.backgroundColor = colorCollectionData[indexPath.row]
@@ -214,21 +223,9 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
             return cell!
         }
-        
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.bounds.width-56) / 6, height: 50)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
+    // MARK: Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView == colorCollection {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
@@ -241,12 +238,38 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         }
     }
     
+}
+
+// MARK: - Расширение для UICollectionViewDelegateFlowLayout
+extension NewIrregularEventControllerView: UICollectionViewDelegateFlowLayout {
+    
+    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (view.bounds.width-56) / 6, height: 50)
+    }
+    
+    // MARK: Метод, определяющий минимальное расстояние между элементами в секции коллекции
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    // MARK: Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    // MARK: Метод, определяющий размер заголовка секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: 40)
     }
+    
+}
 
+// MARK: - Расширение для UICollectionViewDelegate
+extension NewIrregularEventControllerView: UICollectionViewDelegate {
+    
+    // MARK: Метод, вызываемый при выборе ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
@@ -259,9 +282,9 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
             cell?.layer.masksToBounds = true
         }
     }
-
+    
+    // MARK: Метод, вызываемый при снятии выделения с ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
             cell?.backgroundColor = UIColor.clear
@@ -271,10 +294,17 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         }
     }
     
+}
+
+// MARK: - Расширение для UITableViewDataSource
+extension NewIrregularEventControllerView: UITableViewDataSource {
+    
+    // MARK: Метод, определяющий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
+    // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
         guard let categoryCell = cell as? IrregularCategoryCellsViewController else {
@@ -285,28 +315,20 @@ final class NewIrregularEventControllerView: UIViewController, UICollectionViewD
         return categoryCell
     }
     
+}
+
+// MARK: - Расширение для UITableViewDelegate
+extension NewIrregularEventControllerView: UITableViewDelegate {
+    
+    // MARK: Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 71
     }
     
+    // MARK: Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
         show(choiceOfCategoryViewController, sender: self)
     }
-    
-    @objc private func myNotificationHandler() {
-        categoriesTable.reloadData()
-    }
-    
-}
-
-extension NewIrregularEventControllerView: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-}
-
-extension NewIrregularEventControllerView: UICollectionViewDataSource {
     
 }

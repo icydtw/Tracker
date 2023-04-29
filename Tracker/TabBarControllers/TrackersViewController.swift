@@ -1,14 +1,9 @@
-//
-//  ViewController.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 24.03.2023.
-//
-
 import UIKit
 
+/// Экран "Трекеры" в таб-баре
 class TrackersViewController: UIViewController {
     
+    // MARK: - Свойства
     var choosenDay = ""
     
     var trackersCollection: UICollectionView = {
@@ -73,35 +68,21 @@ class TrackersViewController: UIViewController {
         return stack
     }()
     
+    // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTrackers()
+        setupView()
     }
     
-    @objc func datePickerValueChanged(sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        let dayOfWeekString = dateFormatter.string(from: sender.date)
-        choosenDay = dayOfWeekString
-        trackersCollection.reloadData()
-    }
-    
-}
-
-extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    private func setupTrackers() {
+    // MARK: - Настройка внешнего вида
+    private func setupView() {
         view.backgroundColor = .white
-        
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "EEEE" // Формат дня недели
         let dayOfWeekString = dateFormatter.string(from: datePicker.date)
         choosenDay = dayOfWeekString
-        
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
-        
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
@@ -109,22 +90,17 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
             layout.minimumLineSpacing = 9
             return layout
         }()
-        
         trackersCollection.collectionViewLayout = layout
         starImage.translatesAutoresizingMaskIntoConstraints = false
-        
         stackView.addArrangedSubview(starImage)
         stackView.addArrangedSubview(questionLabel)
-        
         view.addSubview(plusButton)
         view.addSubview(trackersLabel)
         view.addSubview(datePicker)
         view.addSubview(stackView)
         view.addSubview(trackersCollection)
-        
         trackersCollection.dataSource = self
         trackersCollection.delegate = self
-        
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -137,10 +113,8 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-        
         if !events.isEmpty {
             stackView.isHidden = true
-            
             NSLayoutConstraint.activate([
                 trackersCollection.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 34),
                 trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -148,19 +122,49 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
                 trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
             ])
         }
-        
     }
     
+    // MARK: - Метод, вызываемый когда меняется дата в Date Picker
+    @objc
+    func datePickerValueChanged(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        let dayOfWeekString = dateFormatter.string(from: sender.date)
+        choosenDay = dayOfWeekString
+        trackersCollection.reloadData()
+    }
+    
+    // MARK: - Метод, вызываемый при нажатии на "+"
     @objc
     private func plusTapped() {
         let selecterTrackerVC = SelectingTrackerViewController()
         show(selecterTrackerVC, sender: self)
     }
     
+    // MARK: - Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
+    @objc private func addEvent() {
+        stackView.isHidden = true
+        NSLayoutConstraint.activate([
+            trackersCollection.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 34),
+            trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
+        ])
+        trackersCollection.reloadData()
+    }
+    
+}
+
+// MARK: - Расширение для UICollectionViewDataSource
+extension TrackersViewController: UICollectionViewDataSource {
+    
+    // MARK: Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return events.count
     }
     
+    // MARK: Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
 //        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
 //            set.insert(event.category)
@@ -169,6 +173,7 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         return 1
     }
     
+    // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
         if events[indexPath.row].day?.rawValue == choosenDay || events[indexPath.row].day?.rawValue == nil {
@@ -183,32 +188,31 @@ extension TrackersViewController: UICollectionViewDataSource, UICollectionViewDe
         return cell!
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width - 41) / 2, height: 90)
-    }
-    
+    // MARK: Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
         header.title.text = events[indexPath.row].category
         return header
     }
     
+}
+
+// MARK: - Расширение для UICollectionViewDelegateFlowLayout
+extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    
+    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (view.frame.width - 41) / 2, height: 90)
+    }
+    
+    // MARK: Метод, определяющий размер заголовка секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
     
-    @objc private func addEvent() {
-        stackView.isHidden = true
-        
-        NSLayoutConstraint.activate([
-            trackersCollection.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 34),
-            trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
-        ])
-        
-        trackersCollection.reloadData()
-    }
-    
+}
+
+// MARK: - Расширение для UICollectionViewDelegate
+extension TrackersViewController: UICollectionViewDelegate {
     
 }

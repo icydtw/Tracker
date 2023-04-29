@@ -1,14 +1,9 @@
-//
-//  ScheduleViewController.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 27.04.2023.
-//
-
 import UIKit
 
+/// Экран с выбором расписания
 final class ScheduleViewController: UIViewController {
     
+    // MARK: - Свойства
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Расписание"
@@ -27,21 +22,19 @@ final class ScheduleViewController: UIViewController {
         return table
     }()
     
+    // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupScheduleViewController()
+        setupView()
     }
     
-    private func setupScheduleViewController() {
-        
+    // MARK: - Настройка внешнего вида
+    private func setupView() {
         view.backgroundColor = .white
-        
         scheduleTable.dataSource = self
         scheduleTable.delegate = self
-        
         view.addSubview(titleLabel)
         view.addSubview(scheduleTable)
-        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -50,13 +43,14 @@ final class ScheduleViewController: UIViewController {
             scheduleTable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
             scheduleTable.heightAnchor.constraint(equalToConstant: CGFloat(75 * daysOfWeek.count))
         ])
-        
     }
     
 }
 
+// MARK: - Расширение для UITableViewDataSource
 extension ScheduleViewController: UITableViewDataSource {
     
+    // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "schedule", for: indexPath)
         guard let scheduleCell = cell as? ScheduleCellsViewController else {
@@ -67,22 +61,25 @@ extension ScheduleViewController: UITableViewDataSource {
         return scheduleCell
     }
     
+    // MARK: Метод, возвращающий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 7
     }
+
+}
+
+extension ScheduleViewController: UITableViewDelegate {
     
+    // MARK: Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
+    // MARK: Метод конфигурации ячеек перед их отображением
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
         }
     }
-    
-}
-
-extension ScheduleViewController: UITableViewDelegate {
     
 }

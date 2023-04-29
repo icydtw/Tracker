@@ -1,14 +1,9 @@
-//
-//  NewHabitViewController.swift
-//  Tracker
-//
-//  Created by Илья Тимченко on 16.04.2023.
-//
-
 import UIKit
 
-final class NewHabitViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate {
+/// Экран создания новой "Привычки"
+final class NewHabitViewController: UIViewController {
 
+    // MARK: - Свойства
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -84,15 +79,12 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
-        
         button.addTarget(nil, action: #selector(create), for: .touchUpInside)
-        
         return button
     }()
     
     let secondStack: UIStackView = {
         let stack = UIStackView()
-        
         stack.axis = .horizontal
         stack.alignment = .fill
         stack.distribution = .fillEqually
@@ -108,66 +100,54 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         return scroll
     }()
     
+    // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupHabitViewController()
+        setupView()
     }
     
-    private func setupHabitViewController() {
+    // MARK: - Настройка внешнего вида
+    private func setupView() {
         NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
-        
         view.backgroundColor = .white
-        
         firstStack.addArrangedSubview(enterNameTextField)
         firstStack.addArrangedSubview(categoriesTable)
         secondStack.addArrangedSubview(cancelButton)
         secondStack.addArrangedSubview(createButton)
-        
         scroll.addSubview(firstStack)
         scroll.addSubview(emojiCollection)
         scroll.addSubview(colorCollection)
         scroll.addSubview(secondStack)
-        
         view.addSubview(titleLabel)
-        
         view.addSubview(scroll)
-        
         scroll.contentSize = CGSize(width: view.frame.width, height: 779)
-        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
             scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scroll.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
             enterNameTextField.heightAnchor.constraint(equalToConstant: 71),
-
             firstStack.topAnchor.constraint(equalTo: scroll.topAnchor, constant: 24),
             firstStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             firstStack.heightAnchor.constraint(equalToConstant: 225),
             firstStack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
-
             emojiCollection.topAnchor.constraint(equalTo: firstStack.bottomAnchor, constant: 24),
             emojiCollection.heightAnchor.constraint(equalToConstant: 200),
             emojiCollection.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
             emojiCollection.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             emojiCollection.widthAnchor.constraint(equalTo: firstStack.widthAnchor),
-
             colorCollection.topAnchor.constraint(equalTo: emojiCollection.bottomAnchor),
             colorCollection.heightAnchor.constraint(equalToConstant: 200),
             colorCollection.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 16),
             colorCollection.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             colorCollection.widthAnchor.constraint(equalTo: firstStack.widthAnchor),
-
             secondStack.heightAnchor.constraint(equalToConstant: 60),
             secondStack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor, constant: 28),
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
-        
         categoriesTable.dataSource = self
         categoriesTable.delegate = self
         colorCollection.delegate = self
@@ -175,131 +155,18 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         emojiCollection.delegate = self
         emojiCollection.dataSource = self
         enterNameTextField.delegate = self
-        
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
-        guard let categoryCell = cell as? HabitCategoryCellsViewController else {
-            return UITableViewCell()
-        }
-        cell.selectionStyle = .none
-        switch indexPath.row {
-        case 0:
-            categoryCell.title.text = "Категория"
-        default:
-            categoryCell.title.text = "Расписание"
-        }
-        return categoryCell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 71
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == colorCollection {
-            return colorCollectionData.count
-        } else {
-            return emojiCollectionData.count
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if collectionView == colorCollection {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellsViewController
-            cell?.color.backgroundColor = colorCollectionData[indexPath.row]
-            return cell!
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
-            cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
-            return cell!
-        }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.bounds.width-56) / 6, height: 50)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if collectionView == colorCollection {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-            header.title.text = "Цвет"
-            return header
-        } else {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-            header.title.text = "Emoji"
-            return header
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 40)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            
-        if collectionView == colorCollection {
-            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
-            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
-            cell?.layer.cornerRadius = 16
-            cell?.layer.masksToBounds = true
-        } else {
-            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
-            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
-            cell?.layer.cornerRadius = 16
-            cell?.layer.masksToBounds = true
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        if collectionView == colorCollection {
-            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
-            cell?.backgroundColor = UIColor.clear
-        } else {
-            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
-            cell?.backgroundColor = UIColor.clear
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
-            show(choiceOfCategoryViewController, sender: self)
-        } else {
-            let scheduleViewController = ScheduleViewController()
-            show(scheduleViewController, sender: self)
-        }
-    }
-    
+    // MARK: - Методы, вызываемые при нажатии кнопок
+    // MARK: Метод, вызываемый при нажатии на кнопку "Отмена"
     @objc
     private func cancel() {
         dismiss(animated: true)
     }
     
+    // MARK: Метод, вызываемый при нажатии на кнопку "Создать"
     @objc
-    func create() {
+    private func create() {
         let name = enterNameTextField.text ?? ""
         let category = categoryName
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
@@ -315,6 +182,7 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
         dismiss(animated: true)
     }
     
+    // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
     @objc
     func changeFirstCell() {
         let cell = categoriesTable.cellForRow(at: [0,0]) as? HabitCategoryCellsViewController
@@ -329,9 +197,163 @@ final class NewHabitViewController: UIViewController, UICollectionViewDelegate, 
     
 }
 
+// MARK: - Расширение для UITextFieldDelegate
 extension NewHabitViewController: UITextFieldDelegate {
+    
+    // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+}
+
+// MARK: - Расширение для UITableViewDataSource
+extension NewHabitViewController: UITableViewDataSource {
+    
+    // MARK: Метод, возвращающий количество строк в секции таблицы
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    // MARK: Метод создания и настройки ячейки таблицы
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
+        guard let categoryCell = cell as? HabitCategoryCellsViewController else {
+            return UITableViewCell()
+        }
+        cell.selectionStyle = .none
+        switch indexPath.row {
+        case 0:
+            categoryCell.title.text = "Категория"
+        default:
+            categoryCell.title.text = "Расписание"
+        }
+        return categoryCell
+    }
+    
+}
+
+// MARK: - Расширение для UITableViewDelegate
+extension NewHabitViewController: UITableViewDelegate {
+    
+    // MARK: Метод, определяющий высоту строки таблицы
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 71
+    }
+    
+    // MARK: Метод конфигурации ячеек перед их отображением
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
+        }
+    }
+    
+    // MARK: Метод, вызываемый при нажатии на строку таблицы
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+            show(choiceOfCategoryViewController, sender: self)
+        } else {
+            let scheduleViewController = ScheduleViewController()
+            show(scheduleViewController, sender: self)
+        }
+    }
+    
+}
+
+// MARK: - Расширение для UICollectionViewDataSource
+extension NewHabitViewController: UICollectionViewDataSource {
+    
+    // MARK: Метод, определяющий количество ячеек в секции коллекции
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == colorCollection {
+            return colorCollectionData.count
+        } else {
+            return emojiCollectionData.count
+        }
+    }
+    
+    // MARK: Метод создания и настройки ячейки для indexPath
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == colorCollection {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellsViewController
+            cell?.color.backgroundColor = colorCollectionData[indexPath.row]
+            return cell!
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
+            cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
+            return cell!
+        }
+    }
+    
+    // MARK: Метод создания и настройки Supplementary View
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if collectionView == colorCollection {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
+            header.title.text = "Цвет"
+            return header
+        } else {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
+            header.title.text = "Emoji"
+            return header
+        }
+    }
+    
+}
+
+// MARK: - Расширение для UICollectionViewDelegateFlowLayout
+extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
+    
+    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: (view.bounds.width-56) / 6, height: 50)
+    }
+    
+    // MARK: Метод, определяющий минимальное расстояние между элементами в секции коллекции
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    // MARK: Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    // MARK: Метод, определяющий размер заголовка секции
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 40)
+    }
+    
+}
+
+// MARK: - Расширение для UICollectionViewDelegate
+extension NewHabitViewController: UICollectionViewDelegate {
+    
+    // MARK: Метод, вызываемый при выборе ячейки коллекции
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == colorCollection {
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+            cell?.layer.cornerRadius = 16
+            cell?.layer.masksToBounds = true
+        } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+            cell?.layer.cornerRadius = 16
+            cell?.layer.masksToBounds = true
+        }
+    }
+    
+    // MARK: Метод, вызываемый при снятии выделения с ячейки коллекции
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if collectionView == colorCollection {
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            cell?.backgroundColor = UIColor.clear
+        } else {
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            cell?.backgroundColor = UIColor.clear
+        }
+    }
+    
 }
