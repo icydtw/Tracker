@@ -22,6 +22,17 @@ final class ScheduleViewController: UIViewController {
         return table
     }()
     
+    let doneButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .black
+        button.setTitle("Готово", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.layer.cornerRadius = 16
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,14 +46,26 @@ final class ScheduleViewController: UIViewController {
         scheduleTable.delegate = self
         view.addSubview(titleLabel)
         view.addSubview(scheduleTable)
+        view.addSubview(doneButton)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scheduleTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             scheduleTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             scheduleTable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            scheduleTable.heightAnchor.constraint(equalToConstant: CGFloat(75 * daysOfWeek.count))
+            scheduleTable.heightAnchor.constraint(equalToConstant: CGFloat(75 * daysOfWeek.count)),
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            doneButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    // MARK: - Метод, вызываемый при нажатии на кнопку "Готово"
+    @objc
+    private func doneButtonTapped() {
+        dismiss(animated: true)
     }
     
 }

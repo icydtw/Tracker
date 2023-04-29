@@ -176,7 +176,8 @@ extension TrackersViewController: UICollectionViewDataSource {
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
-        if events[indexPath.row].day?.rawValue == choosenDay || events[indexPath.row].day?.rawValue == nil {
+        let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
+        if day == choosenDay || events[indexPath.row].day == nil {
             cell?.contentView.backgroundColor = events[indexPath.row].color
             cell?.emoji.text = events[indexPath.row].emoji
             cell?.name.text = events[indexPath.row].name

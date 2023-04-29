@@ -173,7 +173,7 @@ final class NewHabitViewController: UIViewController {
         let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
-        let day = dayOfWeek.wednesday
+        let day = selectedDays
         let event = Event(name: name, category: category, emoji: emoji, color: color, day: day)
         events.append(event)
         let notification = Notification(name: Notification.Name("addEvent"))

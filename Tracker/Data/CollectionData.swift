@@ -52,3 +52,5 @@ enum dayOfWeek: String {
 // MARK: - Массив дней недели
 let daysOfWeek: [dayOfWeek] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
 
+// MARK: - Массив с выбранными пользователем днями недели для события
+var selectedDays: [String] = []

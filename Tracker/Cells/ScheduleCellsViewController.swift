@@ -17,6 +17,7 @@ final class ScheduleCellsViewController: UITableViewCell {
         switcher.thumbTintColor = .white
         switcher.onTintColor = UIColor(red: 0.216, green: 0.447, blue: 0.906, alpha: 1)
         switcher.translatesAutoresizingMaskIntoConstraints = false
+        switcher.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
         return switcher
     }()
     
@@ -41,6 +42,17 @@ final class ScheduleCellsViewController: UITableViewCell {
             switcher.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             switcher.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+    }
+    
+    // MARK: - Метод, добавляющий и удаляющий из selectedDays элементы при активации/деактивации switcher
+    @objc
+    private func switchChanged() {
+        if switcher.isOn {
+            selectedDays.append(title.text ?? "")
+            print("MADE: \(selectedDays)")
+        } else {
+            selectedDays.removeAll { $0 == title.text }
+        }
     }
     
 }
