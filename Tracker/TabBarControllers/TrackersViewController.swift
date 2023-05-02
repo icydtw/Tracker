@@ -1,7 +1,7 @@
 import UIKit
 
 /// Экран "Трекеры" в таб-баре
-class TrackersViewController: UIViewController {
+class TrackersViewController: UIViewController, UISearchBarDelegate {
     
     // MARK: - Свойства
     var choosenDay = ""
@@ -68,6 +68,14 @@ class TrackersViewController: UIViewController {
         return stack
     }()
     
+    let searchBar: UISearchBar = {
+        let search = UISearchBar()
+        search.placeholder = "Поиск"
+        search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        search.translatesAutoresizingMaskIntoConstraints = false
+        return search
+    }()
+    
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,8 +107,10 @@ class TrackersViewController: UIViewController {
         view.addSubview(datePicker)
         view.addSubview(stackView)
         view.addSubview(trackersCollection)
+        view.addSubview(searchBar)
         trackersCollection.dataSource = self
         trackersCollection.delegate = self
+        searchBar.delegate = self
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -110,13 +120,16 @@ class TrackersViewController: UIViewController {
             trackersLabel.leadingAnchor.constraint(equalTo: plusButton.leadingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             datePicker.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13),
+            searchBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
+            searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         if !events.isEmpty {
             stackView.isHidden = true
             NSLayoutConstraint.activate([
-                trackersCollection.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 34),
+                trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
                 trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
                 trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
@@ -146,7 +159,7 @@ class TrackersViewController: UIViewController {
     @objc private func addEvent() {
         stackView.isHidden = true
         NSLayoutConstraint.activate([
-            trackersCollection.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 34),
+            trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
             trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
@@ -177,7 +190,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
         let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
-        if day == choosenDay || events[indexPath.row].day == nil {
+        if day == choosenDay || events[indexPath.row].day == nil || day == "" {
             cell?.contentView.backgroundColor = events[indexPath.row].color
             cell?.emoji.text = events[indexPath.row].emoji
             cell?.name.text = events[indexPath.row].name

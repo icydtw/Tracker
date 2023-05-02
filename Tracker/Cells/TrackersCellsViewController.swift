@@ -11,6 +11,14 @@ final class TrackersCellsViewController: UICollectionViewCell {
         return label
     }()
     
+    var textBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.3)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 12
+        return view
+    }()
+    
     var name: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -33,11 +41,17 @@ final class TrackersCellsViewController: UICollectionViewCell {
     private func setupView() {
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
-        contentView.addSubview(emoji)
+        //contentView.addSubview(emoji)
         contentView.addSubview(name)
+        textBackground.addSubview(emoji)
+        contentView.addSubview(textBackground)
         NSLayoutConstraint.activate([
-            emoji.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            emoji.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            textBackground.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            textBackground.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            textBackground.heightAnchor.constraint(equalToConstant: 24),
+            textBackground.widthAnchor.constraint(equalToConstant: 24),
+            emoji.centerXAnchor.constraint(equalTo: textBackground.centerXAnchor),
+            emoji.centerYAnchor.constraint(equalTo: textBackground.centerYAnchor),
             name.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             name.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             name.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
