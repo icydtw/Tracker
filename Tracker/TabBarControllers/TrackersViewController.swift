@@ -1,7 +1,7 @@
 import UIKit
 
 /// Экран "Трекеры" в таб-баре
-class TrackersViewController: UIViewController, UISearchBarDelegate {
+class TrackersViewController: UIViewController {
     
     // MARK: - Свойства
     var choosenDay = ""
@@ -115,6 +115,9 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
         trackersCollection.dataSource = self
         trackersCollection.delegate = self
         searchBar.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -173,6 +176,10 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
         trackersCollection.reloadData()
     }
     
+    @objc func dismissKeyboard() {
+        searchBar.resignFirstResponder()
+    }
+    
 }
 
 // MARK: - Расширение для UICollectionViewDataSource
@@ -185,28 +192,28 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     // MARK: Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
-//            set.insert(event.category)
-//        }
-//        return uniqueCategories.count
+        //        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
+        //            set.insert(event.category)
+        //        }
+        //        return uniqueCategories.count
         return 1
     }
     
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
-//        let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
-//        if day == choosenDay || events[indexPath.row].day == nil || day == "" {
-//            cell?.viewBackground.backgroundColor = events[indexPath.row].color
-//            cell?.emoji.text = events[indexPath.row].emoji
-//            cell?.name.text = events[indexPath.row].name
-//            cell?.plusButton.backgroundColor = events[indexPath.row].color
-//            cell?.isHidden = false
-//            return cell!
-//        } else {
-//            cell?.isHidden = true
-//        }
-//        return cell!
+        //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
+        //        let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
+        //        if day == choosenDay || events[indexPath.row].day == nil || day == "" {
+        //            cell?.viewBackground.backgroundColor = events[indexPath.row].color
+        //            cell?.emoji.text = events[indexPath.row].emoji
+        //            cell?.name.text = events[indexPath.row].name
+        //            cell?.plusButton.backgroundColor = events[indexPath.row].color
+        //            cell?.isHidden = false
+        //            return cell!
+        //        } else {
+        //            cell?.isHidden = true
+        //        }
+        //        return cell!
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
         cell?.viewBackground.backgroundColor = localTrackers[indexPath.row].color
@@ -221,7 +228,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-        header.title.text = events[indexPath.row].category
+        header.title.text = localTrackers[indexPath.row].category
         return header
     }
     
@@ -244,5 +251,24 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - Расширение для UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
+    
+}
+
+// MARK: - Расширение для UISearchBarDelegate
+extension TrackersViewController: UISearchBarDelegate {
+    
+    // MARK: Метод, отслеживающий ввод текста в поисковую строку
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        localTrackers = events.filter({$0.name.hasPrefix(searchText)})
+        trackersCollection.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
     
 }
