@@ -191,9 +191,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
         let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
         if day == choosenDay || events[indexPath.row].day == nil || day == "" {
-            cell?.contentView.backgroundColor = events[indexPath.row].color
+            cell?.viewBackground.backgroundColor = events[indexPath.row].color
             cell?.emoji.text = events[indexPath.row].emoji
             cell?.name.text = events[indexPath.row].name
+            cell?.plusButton.backgroundColor = events[indexPath.row].color
             cell?.isHidden = false
             return cell!
         } else {
@@ -216,7 +217,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     // MARK: Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width - 41) / 2, height: 90)
+        return CGSize(width: (view.frame.width - 41) / 2, height: 148)
     }
     
     // MARK: Метод, определяющий размер заголовка секции
