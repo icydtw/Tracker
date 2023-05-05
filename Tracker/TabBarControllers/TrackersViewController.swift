@@ -13,6 +13,7 @@ class TrackersViewController: UIViewController {
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(TrackersCellsViewController.self, forCellWithReuseIdentifier: "trackers")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "defaultCell")
         return collection
     }()
     
@@ -81,6 +82,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         setupView()
         localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
     }
@@ -176,7 +178,9 @@ class TrackersViewController: UIViewController {
         trackersCollection.reloadData()
     }
     
-    @objc func dismissKeyboard() {
+    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    @objc
+    func dismissKeyboard() {
         searchBar.resignFirstResponder()
     }
     
@@ -192,29 +196,14 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     // MARK: Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        //        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
-        //            set.insert(event.category)
-        //        }
-        //        return uniqueCategories.count
-        return 1
+        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
+            set.insert(event.category)
+        }
+        return uniqueCategories.count
     }
     
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
-        //        let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
-        //        if day == choosenDay || events[indexPath.row].day == nil || day == "" {
-        //            cell?.viewBackground.backgroundColor = events[indexPath.row].color
-        //            cell?.emoji.text = events[indexPath.row].emoji
-        //            cell?.name.text = events[indexPath.row].name
-        //            cell?.plusButton.backgroundColor = events[indexPath.row].color
-        //            cell?.isHidden = false
-        //            return cell!
-        //        } else {
-        //            cell?.isHidden = true
-        //        }
-        //        return cell!
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
         cell?.viewBackground.backgroundColor = localTrackers[indexPath.row].color
         cell?.emoji.text = localTrackers[indexPath.row].emoji
@@ -228,7 +217,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-        header.title.text = localTrackers[indexPath.row].category
+        header.title.text = localTrackers.first(where: {$0.category == localTrackers[indexPath.section].category})?.category
         return header
     }
     
@@ -263,10 +252,12 @@ extension TrackersViewController: UISearchBarDelegate {
         trackersCollection.reloadData()
     }
     
+    // MARK: Метод, прячущий клавиатуру при нажатии Enter
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     
+    //MARK: Метод, прячущий клавиатуру при нажатии Cancel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
