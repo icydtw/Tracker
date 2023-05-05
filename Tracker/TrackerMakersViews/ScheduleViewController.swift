@@ -86,6 +86,11 @@ extension ScheduleViewController: UITableViewDataSource {
     
     // MARK: Метод, возвращающий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    // MARK: Метод, возвращающий количество секций таблицы
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 7
     }
 
