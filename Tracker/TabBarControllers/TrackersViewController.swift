@@ -6,6 +6,8 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Свойства
     var choosenDay = ""
     
+    var localTrackers: [Event] = events
+    
     var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -80,6 +82,7 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
     }
     
     // MARK: - Настройка внешнего вида
@@ -90,6 +93,7 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
         dateFormatter.dateFormat = "EEEE" // Формат дня недели
         let dayOfWeekString = dateFormatter.string(from: datePicker.date)
         choosenDay = dayOfWeekString
+        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
@@ -145,6 +149,7 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
         dateFormatter.locale = Locale(identifier: "ru_RU")
         let dayOfWeekString = dateFormatter.string(from: sender.date)
         choosenDay = dayOfWeekString
+        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         trackersCollection.reloadData()
     }
     
@@ -158,6 +163,7 @@ class TrackersViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
     @objc private func addEvent() {
         stackView.isHidden = true
+        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         NSLayoutConstraint.activate([
             trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
             trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -174,7 +180,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     // MARK: Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return events.count
+        return localTrackers.count
     }
     
     // MARK: Метод, определяющий количество секций в коллекции
@@ -188,23 +194,32 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
+//        let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
+//        if day == choosenDay || events[indexPath.row].day == nil || day == "" {
+//            cell?.viewBackground.backgroundColor = events[indexPath.row].color
+//            cell?.emoji.text = events[indexPath.row].emoji
+//            cell?.name.text = events[indexPath.row].name
+//            cell?.plusButton.backgroundColor = events[indexPath.row].color
+//            cell?.isHidden = false
+//            return cell!
+//        } else {
+//            cell?.isHidden = true
+//        }
+//        return cell!
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
-        let day = events[indexPath.row].day?.first(where: {$0 == choosenDay})
-        if day == choosenDay || events[indexPath.row].day == nil || day == "" {
-            cell?.viewBackground.backgroundColor = events[indexPath.row].color
-            cell?.emoji.text = events[indexPath.row].emoji
-            cell?.name.text = events[indexPath.row].name
-            cell?.plusButton.backgroundColor = events[indexPath.row].color
-            cell?.isHidden = false
-            return cell!
-        } else {
-            cell?.isHidden = true
-        }
+        cell?.viewBackground.backgroundColor = localTrackers[indexPath.row].color
+        cell?.emoji.text = localTrackers[indexPath.row].emoji
+        cell?.name.text = localTrackers[indexPath.row].name
+        cell?.plusButton.backgroundColor = localTrackers[indexPath.row].color
+        cell?.isHidden = false
         return cell!
     }
     
     // MARK: Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
         header.title.text = events[indexPath.row].category
         return header
