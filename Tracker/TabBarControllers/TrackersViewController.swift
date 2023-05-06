@@ -6,7 +6,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Свойства
     var choosenDay = ""
     
-    var localTrackers: [Event] = events
+    var localTrackers: [TrackerCategory] = trackers
     
     var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -82,9 +82,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         setupView()
-        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
     }
     
     // MARK: - Настройка внешнего вида
@@ -95,7 +93,6 @@ class TrackersViewController: UIViewController {
         dateFormatter.dateFormat = "EEEE" // Формат дня недели
         let dayOfWeekString = dateFormatter.string(from: datePicker.date)
         choosenDay = dayOfWeekString
-        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
         let layout: UICollectionViewFlowLayout = {
             let layout = UICollectionViewFlowLayout()
@@ -154,7 +151,6 @@ class TrackersViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "ru_RU")
         let dayOfWeekString = dateFormatter.string(from: sender.date)
         choosenDay = dayOfWeekString
-        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         trackersCollection.reloadData()
     }
     
@@ -168,13 +164,13 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
     @objc private func addEvent() {
         stackView.isHidden = true
-        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         NSLayoutConstraint.activate([
             trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
             trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
         ])
+        localTrackers = trackers
         trackersCollection.reloadData()
     }
     
@@ -191,33 +187,28 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     // MARK: Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return localTrackers.count
+        return localTrackers[section].trackers.count
     }
     
     // MARK: Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let uniqueCategories = events.reduce(into: Set<String>()) { set, event in
-            set.insert(event.category)
-        }
-        return uniqueCategories.count
+        return localTrackers.count
     }
     
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
-        cell?.viewBackground.backgroundColor = localTrackers[indexPath.row].color
-        cell?.emoji.text = localTrackers[indexPath.row].emoji
-        cell?.name.text = localTrackers[indexPath.row].name
-        cell?.plusButton.backgroundColor = localTrackers[indexPath.row].color
-        cell?.isHidden = false
+        cell?.viewBackground.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
+        cell?.emoji.text = localTrackers[indexPath.section].trackers[indexPath.row].emoji
+        cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
+        cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
         return cell!
     }
     
     // MARK: Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-        header.title.text = localTrackers.first(where: {$0.category == localTrackers[indexPath.section].category})?.category
+        header.title.text = localTrackers[indexPath.section].label
         return header
     }
     
@@ -248,7 +239,6 @@ extension TrackersViewController: UISearchBarDelegate {
     
     // MARK: Метод, отслеживающий ввод текста в поисковую строку
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        localTrackers = events.filter({$0.name.hasPrefix(searchText)})
         trackersCollection.reloadData()
     }
     

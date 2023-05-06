@@ -80,7 +80,7 @@ extension ScheduleViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        scheduleCell.title.text = daysOfWeek[indexPath.row].rawValue
+        scheduleCell.title.text = daysOfWeek[indexPath.section].rawValue
         return scheduleCell
     }
     

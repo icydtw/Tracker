@@ -4,16 +4,16 @@ import UIKit
 struct Event {
     
     // MARK: - Свойства
+    let id: UUID
     var name: String
-    var category: String
     var emoji: String
     var color: UIColor
     var day: [String]?
     
     // MARK: - Инициализатор
-    init(name: String, category: String, emoji: String, color: UIColor, day: [String]?) {
+    init(id: UUID = UUID(), name: String, emoji: String, color: UIColor, day: [String]?) {
+        self.id = id
         self.name = name
-        self.category = category
         self.emoji = emoji
         self.color = color
         self.day = day
@@ -25,6 +25,7 @@ struct TrackerCategory {
     let label: String
     let trackers: [Event]
     
+    // MARK: - Инициализатор
     init(label: String, trackers: [Event]) {
         self.label = label
         self.trackers = trackers
