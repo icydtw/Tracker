@@ -143,6 +143,18 @@ class TrackersViewController: UIViewController {
         }
     }
     
+    private func updateCollection() {
+        //localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
+        localTrackers = []
+        for tracker in trackers {
+            for event in tracker.trackers {
+                if event.day?.contains(choosenDay) ?? false || event.day == nil {
+                    localTrackers.append(tracker)
+                }
+            }
+        }
+    }
+    
     // MARK: - Метод, вызываемый когда меняется дата в Date Picker
     @objc
     func datePickerValueChanged(sender: UIDatePicker) {
@@ -151,6 +163,7 @@ class TrackersViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "ru_RU")
         let dayOfWeekString = dateFormatter.string(from: sender.date)
         choosenDay = dayOfWeekString
+        updateCollection()
         trackersCollection.reloadData()
     }
     
@@ -171,6 +184,7 @@ class TrackersViewController: UIViewController {
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
         ])
         localTrackers = trackers
+        updateCollection()
         trackersCollection.reloadData()
     }
     
@@ -239,6 +253,14 @@ extension TrackersViewController: UISearchBarDelegate {
     
     // MARK: Метод, отслеживающий ввод текста в поисковую строку
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        localTrackers = []
+        for tracker in trackers {
+            for event in tracker.trackers {
+                if event.name.hasPrefix(searchText) {
+                    localTrackers.append(tracker)
+                }
+            }
+        }
         trackersCollection.reloadData()
     }
     
