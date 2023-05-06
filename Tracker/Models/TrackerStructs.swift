@@ -22,6 +22,8 @@ struct Event {
 }
 
 struct TrackerCategory {
+    
+    // MARK: - Свойства
     let label: String
     let trackers: [Event]
     
@@ -29,5 +31,19 @@ struct TrackerCategory {
     init(label: String, trackers: [Event]) {
         self.label = label
         self.trackers = trackers
+    }
+    
+}
+
+struct TrackerRecord {
+    
+    // MARK: - Свойства
+    let id: UUID
+    var days: [Date]
+    
+    // MARK: - Инициализатор
+    init(id: UUID, days: [Date]) {
+        self.id = id
+        self.days = days
     }
 }

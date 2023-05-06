@@ -58,3 +58,6 @@ var selectedDays: [String] = []
 
 // MARK: - Массив существующих на экране "Трекеры" заголовков
 var titles: [String] = []
+
+// MARK: - Массив, хранящий в какие дни какие трекеры выполнялись
+var trackerRecords: [TrackerRecord] = []

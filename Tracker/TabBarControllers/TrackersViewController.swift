@@ -82,6 +82,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideCollection()
         setupView()
     }
     
@@ -154,7 +155,7 @@ class TrackersViewController: UIViewController {
         for tracker in trackers { // категория
             newCategory = tracker.label
             for event in tracker.trackers { // трекер
-                if event.day?.contains(choosenDay) ?? false {
+                if event.day?.contains(choosenDay) ?? false || event.day == nil {
                     newEvents.append(event)
                     isGood = true
                 }
@@ -169,6 +170,23 @@ class TrackersViewController: UIViewController {
         localTrackers = newTrackers
     }
     
+    // MARK: - Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку
+    private func hideCollection() {
+        if !localTrackers.isEmpty {
+            stackView.isHidden = true
+            trackersCollection.isHidden = false
+            NSLayoutConstraint.activate([
+                trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
+                trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
+            ])
+        } else {
+            stackView.isHidden = false
+            trackersCollection.isHidden = true
+        }
+    }
+    
     // MARK: - Метод, вызываемый когда меняется дата в Date Picker
     @objc
     func datePickerValueChanged(sender: UIDatePicker) {
@@ -178,6 +196,7 @@ class TrackersViewController: UIViewController {
         let dayOfWeekString = dateFormatter.string(from: sender.date)
         choosenDay = dayOfWeekString
         updateCollection()
+        hideCollection()
         trackersCollection.reloadData()
     }
     
@@ -190,16 +209,10 @@ class TrackersViewController: UIViewController {
     
     // MARK: - Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
     @objc private func addEvent() {
-        stackView.isHidden = true
-        NSLayoutConstraint.activate([
-            trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
-            trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
-        ])
         localTrackers = trackers
         updateCollection()
         trackersCollection.reloadData()
+        hideCollection()
     }
     
     // MARK: Метод, прячущий клавиатуру при нажатии вне её области
