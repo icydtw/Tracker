@@ -106,6 +106,9 @@ final class NewIrregularEventControllerView: UIViewController {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
         view.backgroundColor = .white
         firstStack.addArrangedSubview(enterNameTextField)
@@ -160,6 +163,12 @@ final class NewIrregularEventControllerView: UIViewController {
     @objc
     private func cancel() {
         dismiss(animated: true)
+    }
+    
+    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    @objc
+    func dismissKeyboard() {
+        enterNameTextField.resignFirstResponder()
     }
     
     // MARK: Метод, вызываемый при нажатии на кнопку "Создать"

@@ -143,16 +143,30 @@ class TrackersViewController: UIViewController {
         }
     }
     
+    //Метод, обновляющий коллекцию в соответствии с выбранным днём
     private func updateCollection() {
         //localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
+        var newEvents: [Event] = []
+        var newCategory: String = ""
+        var newTrackers: [TrackerCategory] = []
         localTrackers = []
-        for tracker in trackers {
-            for event in tracker.trackers {
-                if event.day?.contains(choosenDay) ?? false || event.day == nil {
-                    localTrackers.append(tracker)
+        var isGood = false
+        for tracker in trackers { // категория
+            newCategory = tracker.label
+            for event in tracker.trackers { // трекер
+                if event.day?.contains(choosenDay) ?? false {
+                    newEvents.append(event)
+                    isGood = true
                 }
             }
+            if isGood {
+                newTrackers.append(TrackerCategory(label: newCategory, trackers: newEvents))
+                newEvents = []
+                isGood = false
+                newCategory = ""
+            }
         }
+        localTrackers = newTrackers
     }
     
     // MARK: - Метод, вызываемый когда меняется дата в Date Picker

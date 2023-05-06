@@ -108,6 +108,9 @@ final class NewHabitViewController: UIViewController {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
         view.backgroundColor = .white
         firstStack.addArrangedSubview(enterNameTextField)
@@ -188,6 +191,7 @@ final class NewHabitViewController: UIViewController {
         let notification = Notification(name: Notification.Name("addEvent"))
         NotificationCenter.default.post(notification)
         categoryName = ""
+        selectedDays = []
         dismiss(animated: true)
     }
     
@@ -202,6 +206,12 @@ final class NewHabitViewController: UIViewController {
         cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.topAnchor.constraint(equalTo: cell!.topAnchor, constant: 15).isActive = true
+    }
+    
+    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    @objc
+    func dismissKeyboard() {
+        enterNameTextField.resignFirstResponder()
     }
     
 }
