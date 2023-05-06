@@ -20,3 +20,13 @@ struct Event {
     }
     
 }
+
+struct TrackerCategory {
+    let label: String
+    let trackers: [Event]
+    
+    init(label: String, trackers: [Event]) {
+        self.label = label
+        self.trackers = trackers
+    }
+}
