@@ -299,9 +299,10 @@ extension TrackersViewController: UISearchBarDelegate {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
+        var searchingTrackers = localTrackers
         localTrackers = []
         var isGood = false
-        for tracker in trackers { // категория
+        for tracker in searchingTrackers { // категория
             newCategory = tracker.label
             for event in tracker.trackers { // трекер
                 if event.name.hasPrefix(searchText) {
