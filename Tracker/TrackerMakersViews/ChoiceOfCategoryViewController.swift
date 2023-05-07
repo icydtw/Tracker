@@ -174,4 +174,9 @@ extension ChoiceOfCategoryViewController: UITableViewDelegate {
         cell?.checkbox.image = UIImage()
     }
     
+    // MARK: Метод, определяющий заголовок для удаления строки таблицы
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "Удалить"
+    }
+    
 }
