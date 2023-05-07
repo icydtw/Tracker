@@ -39,11 +39,11 @@ struct TrackerRecord {
     
     // MARK: - Свойства
     let id: UUID
-    var days: [String]
+    var day: String
     
     // MARK: - Инициализатор
-    init(id: UUID, days: [String]) {
+    init(id: UUID, day: String) {
         self.id = id
-        self.days = days
+        self.day = day
     }
 }

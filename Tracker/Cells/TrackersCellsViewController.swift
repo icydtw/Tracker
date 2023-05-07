@@ -52,37 +52,33 @@ final class TrackersCellsViewController: UICollectionViewCell {
         button.layer.cornerRadius = button.bounds.size.width / 2
         button.layer.masksToBounds = true
         let image = UIImage(systemName: "plus")
-        let imageView = UIImageView(image: image)
-        imageView.tintColor = .white
-        imageView.contentMode = .center
-        imageView.clipsToBounds = true
-        imageView.frame = button.bounds
-        button.addSubview(imageView)
+        button.setImage(image, for: .normal)
+        button.tintColor = .white
         button.addTarget(self, action: #selector(plusTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    var checkboxButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        button.layer.cornerRadius = button.bounds.size.width / 2
-        button.layer.masksToBounds = true
-        let image = UIImage(systemName: "checkmark")
-        let imageView = UIImageView(image: image)
-        imageView.tintColor = .white
-        imageView.contentMode = .center
-        imageView.clipsToBounds = true
-        imageView.frame = button.bounds
-        button.addSubview(imageView)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+//    var checkboxButton: UIButton = {
+//        let button = UIButton(type: .custom)
+//        button.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+//        button.layer.cornerRadius = button.bounds.size.width / 2
+//        button.layer.masksToBounds = true
+//        let image = UIImage(systemName: "checkmark")
+//        let imageView = UIImageView(image: image)
+//        imageView.tintColor = .white
+//        imageView.contentMode = .center
+//        imageView.clipsToBounds = true
+//        imageView.frame = button.bounds
+//        button.addSubview(imageView)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
     
     // MARK: - Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
-        delegate = TrackersViewController()
+        //delegate = TrackersViewController()
         setupView()
     }
     
@@ -131,7 +127,7 @@ final class TrackersCellsViewController: UICollectionViewCell {
         }
         var tappedID = trackers[indexPath.section].trackers[indexPath.row].id
         delegate?.saveDoneEvent(id: tappedID)
-        quantity.text = "\(trackerRecords.filter({$0.id == tappedID}).count) дней"
+        collectionView.reloadData()
 //        let colorOfButton = plusButton.backgroundColor
 //        plusButton.removeFromSuperview()
 //        checkboxButton.backgroundColor = colorOfButton

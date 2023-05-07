@@ -245,20 +245,27 @@ extension TrackersViewController: UICollectionViewDataSource {
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCellsViewController
+        cell?.delegate = self
         cell?.viewBackground.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
         cell?.emoji.text = localTrackers[indexPath.section].trackers[indexPath.row].emoji
         cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
         cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
+        cell?.quantity.text = "\(trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
         
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
         dateString = dateFormatter.string(from: datePicker.date)
         
-        if trackerRecords.contains(where: {$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id})
-            && trackerRecords.contains(where: {$0.days.contains(dateString)}){
-            cell?.plusButton.backgroundColor = cell?.plusButton.backgroundColor?.withAlphaComponent(0.5)
+        for record in trackerRecords {
+            if record.id == localTrackers[indexPath.section].trackers[indexPath.row].id
+                && record.day == dateString {
+                cell?.plusButton.backgroundColor = cell?.plusButton.backgroundColor?.withAlphaComponent(0.5)
+            } else {
+                
+            }
         }
+        
         return cell!
     }
     
@@ -329,7 +336,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
         dateString = dateFormatter.string(from: datePicker.date)
-        trackerRecords.append(TrackerRecord(id: id, days: [dateString]))
+        trackerRecords.append(TrackerRecord(id: id, day: dateString))
         print(trackerRecords)
         trackersCollection.reloadData()
     }
