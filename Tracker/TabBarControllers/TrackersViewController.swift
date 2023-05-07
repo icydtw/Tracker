@@ -1,5 +1,9 @@
 import UIKit
 
+protocol TrackersViewControllerProtocol {
+    func saveDoneEvent(id: UUID)
+}
+
 /// Экран "Трекеры" в таб-баре
 class TrackersViewController: UIViewController {
     
@@ -218,6 +222,7 @@ class TrackersViewController: UIViewController {
     // MARK: Метод, прячущий клавиатуру при нажатии вне её области
     @objc
     func dismissKeyboard() {
+        updateCollection()
         searchBar.resignFirstResponder()
     }
     
@@ -243,6 +248,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell?.emoji.text = localTrackers[indexPath.section].trackers[indexPath.row].emoji
         cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
         cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
+        if trackerRecords.contains(where: {$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}) {
+            print("ferferfrf")
+        }
         return cell!
     }
     
@@ -280,8 +288,9 @@ extension TrackersViewController: UISearchBarDelegate {
     
     // MARK: Метод, отслеживающий ввод текста в поисковую строку
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        var searchingTrackers = localTrackers
         localTrackers = []
-        for tracker in trackers {
+        for tracker in searchingTrackers {
             for event in tracker.trackers {
                 if event.name.hasPrefix(searchText) {
                     localTrackers.append(tracker)
@@ -296,9 +305,25 @@ extension TrackersViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
     }
     
-    //MARK: Метод, прячущий клавиатуру при нажатии Cancel
+    // MARK: Метод, прячущий клавиатуру при нажатии Cancel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+    
+}
+
+// MARK: - Расширение для TrackersViewControllerProtocol
+extension TrackersViewController: TrackersViewControllerProtocol {
+    
+    // MARK: Метод, добавляющий информацию о выполненном трекере в trackerRecords
+    func saveDoneEvent(id: UUID) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
+        let dateString = dateFormatter.string(from: datePicker.date)
+        trackerRecords.append(TrackerRecord(id: id, days: [dateString]))
+        print(trackerRecords)
+        trackersCollection.reloadData()
     }
     
 }

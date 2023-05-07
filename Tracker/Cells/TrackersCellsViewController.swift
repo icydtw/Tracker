@@ -4,6 +4,8 @@ import UIKit
 final class TrackersCellsViewController: UICollectionViewCell {
     
     // MARK: - Свойства
+    var delegate: TrackersViewControllerProtocol?
+    
     var emoji: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -80,6 +82,7 @@ final class TrackersCellsViewController: UICollectionViewCell {
     // MARK: - Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
+        delegate = TrackersViewController()
         setupView()
     }
     
@@ -134,6 +137,12 @@ final class TrackersCellsViewController: UICollectionViewCell {
 //            checkboxButton.heightAnchor.constraint(equalToConstant: 34),
 //            checkboxButton.widthAnchor.constraint(equalToConstant: 34),
 //        ])
+        guard let collectionView = superview as? UICollectionView,
+              let indexPath = collectionView.indexPath(for: self) else {
+            return
+        }
+        var tappedID = trackers[indexPath.section].trackers[indexPath.row].id
+        delegate?.saveDoneEvent(id: tappedID)
     }
     
 }
