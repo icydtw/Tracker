@@ -257,13 +257,11 @@ extension TrackersViewController: UICollectionViewDataSource {
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
         dateString = dateFormatter.string(from: datePicker.date)
         
-        for record in trackerRecords {
-            if record.id == localTrackers[indexPath.section].trackers[indexPath.row].id
-                && record.day == dateString {
-                cell?.plusButton.backgroundColor = cell?.plusButton.backgroundColor?.withAlphaComponent(0.5)
-            } else {
-                
-            }
+        if trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
+            cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
+            cell?.plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        } else {
+            cell?.plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
         }
         
         return cell!
@@ -303,15 +301,27 @@ extension TrackersViewController: UISearchBarDelegate {
     
     // MARK: Метод, отслеживающий ввод текста в поисковую строку
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        var searchingTrackers = localTrackers
+        var newEvents: [Event] = []
+        var newCategory: String = ""
+        var newTrackers: [TrackerCategory] = []
         localTrackers = []
-        for tracker in searchingTrackers {
-            for event in tracker.trackers {
+        var isGood = false
+        for tracker in trackers { // категория
+            newCategory = tracker.label
+            for event in tracker.trackers { // трекер
                 if event.name.hasPrefix(searchText) {
-                    localTrackers.append(tracker)
+                    newEvents.append(event)
+                    isGood = true
                 }
             }
+            if isGood {
+                newTrackers.append(TrackerCategory(label: newCategory, trackers: newEvents))
+                newEvents = []
+                isGood = false
+                newCategory = ""
+            }
         }
+        localTrackers = newTrackers
         trackersCollection.reloadData()
     }
     
