@@ -112,6 +112,7 @@ final class NewHabitViewController: UIViewController {
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeSchedule), name: Notification.Name("schedule_changed"), object: nil)
         view.backgroundColor = .white
         firstStack.addArrangedSubview(enterNameTextField)
         firstStack.addArrangedSubview(categoriesTable)
@@ -197,11 +198,23 @@ final class NewHabitViewController: UIViewController {
     
     // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
     @objc
-    func changeFirstCell() {
+    private func changeFirstCell() {
         let cell = categoriesTable.cellForRow(at: [0,0]) as? HabitCategoryCellsViewController
         cell?.title.removeFromSuperview()
         cell?.addSubview(cell!.title)
         cell?.categoryName.text = categoryName
+        cell?.categoryName.topAnchor.constraint(equalTo: cell!.title.bottomAnchor, constant: 2).isActive = true
+        cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
+        cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
+        cell?.title.topAnchor.constraint(equalTo: cell!.topAnchor, constant: 15).isActive = true
+    }
+    
+    @objc
+    private func changeSchedule() {
+        let cell = categoriesTable.cellForRow(at: [0,1]) as? HabitCategoryCellsViewController
+        cell?.title.removeFromSuperview()
+        cell?.addSubview(cell!.title)
+        cell?.categoryName.text = shortSelectedDays.joined(separator: ", ")
         cell?.categoryName.topAnchor.constraint(equalTo: cell!.title.bottomAnchor, constant: 2).isActive = true
         cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true

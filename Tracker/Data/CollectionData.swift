@@ -55,6 +55,7 @@ let daysOfWeek: [dayOfWeek] = [.monday, .tuesday, .wednesday, .thursday, .friday
 
 // MARK: - Массив с выбранными пользователем днями недели для события
 var selectedDays: [String] = []
+var shortSelectedDays: [String] = []
 
 // MARK: - Массив существующих на экране "Трекеры" заголовков
 var titles: [String] = []

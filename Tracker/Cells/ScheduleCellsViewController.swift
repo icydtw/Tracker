@@ -49,7 +49,21 @@ final class ScheduleCellsViewController: UITableViewCell {
     private func switchChanged() {
         if switcher.isOn {
             selectedDays.append(title.text ?? "")
-            print("MADE: \(selectedDays)")
+            switch title.text {
+            case "понедельник": shortSelectedDays.append("ПН")
+            case "вторник": shortSelectedDays.append("ВТ")
+            case "среда": shortSelectedDays.append("СР")
+            case "четверг": shortSelectedDays.append("ЧТ")
+            case "пятница": shortSelectedDays.append("ПТ")
+            case "суббота": shortSelectedDays.append("СБ")
+            case "воскресенье": shortSelectedDays.append("ВС")
+            case .none:
+                return
+            case .some(_):
+                return
+            }
+            let notification = Notification(name: Notification.Name("schedule_changed"))
+            NotificationCenter.default.post(notification)
         } else {
             selectedDays.removeAll { $0 == title.text }
         }
