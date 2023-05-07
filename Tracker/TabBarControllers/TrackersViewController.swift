@@ -1,7 +1,7 @@
 import UIKit
 
 protocol TrackersViewControllerProtocol {
-    func saveDoneEvent(id: UUID)
+    func saveDoneEvent(id: UUID, index: IndexPath)
 }
 
 /// Экран "Трекеры" в таб-баре
@@ -336,13 +336,17 @@ extension TrackersViewController: UISearchBarDelegate {
 extension TrackersViewController: TrackersViewControllerProtocol {
     
     // MARK: Метод, добавляющий информацию о выполненном трекере в trackerRecords
-    func saveDoneEvent(id: UUID) {
+    func saveDoneEvent(id: UUID, index: IndexPath) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
         dateString = dateFormatter.string(from: datePicker.date)
-        trackerRecords.append(TrackerRecord(id: id, day: dateString))
-        print(trackerRecords)
+        
+        if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
+            trackerRecords.removeAll(where: {$0.id == id && $0.day == dateString})
+        } else {
+            trackerRecords.append(TrackerRecord(id: id, day: dateString))
+        }
         trackersCollection.reloadData()
     }
     
