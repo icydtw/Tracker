@@ -25,13 +25,8 @@ class TrackersViewController: UIViewController {
     
     let plusButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 19, height: 18))
-        let image = UIImage(systemName: "plus")
-        let imageView = UIImageView(image: image)
-        imageView.tintColor = .black
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.frame = button.bounds
-        button.addSubview(imageView)
+        button.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)), for: .normal)
+        button.tintColor = .black
         button.addTarget(nil, action: #selector(plusTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -125,7 +120,7 @@ class TrackersViewController: UIViewController {
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         NSLayoutConstraint.activate([
-            plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             plusButton.widthAnchor.constraint(equalToConstant: 19),
             plusButton.heightAnchor.constraint(equalToConstant: 18),
