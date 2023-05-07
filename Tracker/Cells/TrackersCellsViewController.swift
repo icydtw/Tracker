@@ -125,7 +125,13 @@ final class TrackersCellsViewController: UICollectionViewCell {
     // MARK: - Метод, вызываемый при нажатии на "+" в ячейке
     @objc
     private func plusTapped() {
-//        quantity.text = "1 день"
+        guard let collectionView = superview as? UICollectionView,
+              let indexPath = collectionView.indexPath(for: self) else {
+            return
+        }
+        var tappedID = trackers[indexPath.section].trackers[indexPath.row].id
+        delegate?.saveDoneEvent(id: tappedID)
+        quantity.text = "\(trackerRecords.filter({$0.id == tappedID}).count) дней"
 //        let colorOfButton = plusButton.backgroundColor
 //        plusButton.removeFromSuperview()
 //        checkboxButton.backgroundColor = colorOfButton
@@ -137,12 +143,5 @@ final class TrackersCellsViewController: UICollectionViewCell {
 //            checkboxButton.heightAnchor.constraint(equalToConstant: 34),
 //            checkboxButton.widthAnchor.constraint(equalToConstant: 34),
 //        ])
-        guard let collectionView = superview as? UICollectionView,
-              let indexPath = collectionView.indexPath(for: self) else {
-            return
-        }
-        var tappedID = trackers[indexPath.section].trackers[indexPath.row].id
-        delegate?.saveDoneEvent(id: tappedID)
     }
-    
 }

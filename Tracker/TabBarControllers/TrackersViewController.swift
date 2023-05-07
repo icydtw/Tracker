@@ -8,7 +8,9 @@ protocol TrackersViewControllerProtocol {
 class TrackersViewController: UIViewController {
     
     // MARK: - Свойства
-    var choosenDay = ""
+    var choosenDay = "" // день в формате "понедельник"
+    
+    var dateString = "" // день в формате "2023/05/07"
     
     var localTrackers: [TrackerCategory] = trackers
     
@@ -150,7 +152,6 @@ class TrackersViewController: UIViewController {
     
     //Метод, обновляющий коллекцию в соответствии с выбранным днём
     private func updateCollection() {
-        //localTrackers = events.filter({$0.day?.contains(choosenDay) ?? false || $0.day == nil})
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
@@ -248,8 +249,15 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell?.emoji.text = localTrackers[indexPath.section].trackers[indexPath.row].emoji
         cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
         cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
-        if trackerRecords.contains(where: {$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}) {
-            print("ferferfrf")
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
+        dateString = dateFormatter.string(from: datePicker.date)
+        
+        if trackerRecords.contains(where: {$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id})
+            && trackerRecords.contains(where: {$0.days.contains(dateString)}){
+            cell?.plusButton.backgroundColor = cell?.plusButton.backgroundColor?.withAlphaComponent(0.5)
         }
         return cell!
     }
@@ -320,7 +328,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
-        let dateString = dateFormatter.string(from: datePicker.date)
+        dateString = dateFormatter.string(from: datePicker.date)
         trackerRecords.append(TrackerRecord(id: id, days: [dateString]))
         print(trackerRecords)
         trackersCollection.reloadData()
