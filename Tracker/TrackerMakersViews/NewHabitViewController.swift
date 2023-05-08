@@ -109,6 +109,7 @@ final class NewHabitViewController: UIViewController {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
+        categoryName = ""
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
@@ -179,7 +180,6 @@ final class NewHabitViewController: UIViewController {
     // MARK: Метод, вызываемый при нажатии на кнопку "Создать"
     @objc
     private func create() {
-        categoryName = ""
         let name = enterNameTextField.text ?? ""
         let category = categoryName
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
