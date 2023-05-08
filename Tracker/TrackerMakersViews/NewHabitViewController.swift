@@ -80,6 +80,7 @@ final class NewHabitViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(nil, action: #selector(create), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
@@ -161,6 +162,13 @@ final class NewHabitViewController: UIViewController {
         enterNameTextField.delegate = self
     }
     
+    private func activateButton() {
+        if enterNameTextField.hasText && !categoryName.isEmpty && !selectedDays.isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+            createButton.backgroundColor = .black
+            createButton.isEnabled = true
+        }
+    }
+    
     // MARK: - Методы, вызываемые при нажатии кнопок
     // MARK: Метод, вызываемый при нажатии на кнопку "Отмена"
     @objc
@@ -171,6 +179,7 @@ final class NewHabitViewController: UIViewController {
     // MARK: Метод, вызываемый при нажатии на кнопку "Создать"
     @objc
     private func create() {
+        categoryName = ""
         let name = enterNameTextField.text ?? ""
         let category = categoryName
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
@@ -208,6 +217,7 @@ final class NewHabitViewController: UIViewController {
         cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.topAnchor.constraint(equalTo: cell!.topAnchor, constant: 15).isActive = true
+        activateButton()
     }
     
     @objc
@@ -220,6 +230,7 @@ final class NewHabitViewController: UIViewController {
         cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.topAnchor.constraint(equalTo: cell!.topAnchor, constant: 15).isActive = true
+        activateButton()
     }
     
     // MARK: Метод, прячущий клавиатуру при нажатии вне её области
@@ -236,6 +247,14 @@ extension NewHabitViewController: UITextFieldDelegate {
     // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        return true
+    }
+    
+    // MARK: Метод, используемый для проверки наличия текста в UITextField
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField.hasText {
+            activateButton()
+        }
         return true
     }
     
@@ -370,11 +389,13 @@ extension NewHabitViewController: UICollectionViewDelegate {
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
+            activateButton()
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
+            activateButton()
         }
     }
     

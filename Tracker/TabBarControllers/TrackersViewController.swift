@@ -247,19 +247,16 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
         cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
         cell?.quantity.text = "\(trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
-        
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
         dateString = dateFormatter.string(from: datePicker.date)
-        
         if trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
             cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
             cell?.plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
         } else {
             cell?.plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
         }
-        
         return cell!
     }
     

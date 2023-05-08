@@ -78,6 +78,7 @@ final class NewIrregularEventControllerView: UIViewController {
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(nil, action: #selector(create), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
@@ -106,6 +107,7 @@ final class NewIrregularEventControllerView: UIViewController {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
+        categoryName = ""
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
@@ -198,10 +200,18 @@ final class NewIrregularEventControllerView: UIViewController {
         dismiss(animated: true)
     }
     
+    private func activateButton() {
+        if enterNameTextField.hasText && !categoryName.isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+            createButton.backgroundColor = .black
+            createButton.isEnabled = true
+        }
+    }
+    
     // MARK: Метод, обновлящий название выбранной категории при срабатывании нотификации
     @objc
     private func showCategory() {
         categoriesTable.reloadData()
+        activateButton()
     }
     
 }
@@ -212,6 +222,14 @@ extension NewIrregularEventControllerView: UITextFieldDelegate {
     // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        return true
+    }
+    
+    // MARK: Метод, используемый для проверки наличия текста в UITextField
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField.hasText {
+            activateButton()
+        }
         return true
     }
     
@@ -292,11 +310,13 @@ extension NewIrregularEventControllerView: UICollectionViewDelegate {
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
+            activateButton()
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
+            activateButton()
         }
     }
     
