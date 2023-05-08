@@ -131,8 +131,8 @@ class TrackersViewController: UIViewController {
             datePicker.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13),
             datePicker.widthAnchor.constraint(equalToConstant: 120),
             searchBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
-            searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
