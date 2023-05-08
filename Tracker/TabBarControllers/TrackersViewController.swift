@@ -21,6 +21,7 @@ class TrackersViewController: UIViewController {
         collection.register(TrackersCellsViewController.self, forCellWithReuseIdentifier: "trackers")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "defaultCell")
+        collection.backgroundColor = .red
         return collection
     }()
     
@@ -142,7 +143,7 @@ class TrackersViewController: UIViewController {
                 trackersCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 7),
                 trackersCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 trackersCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34)
+                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             ])
         }
     }
