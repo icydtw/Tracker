@@ -104,17 +104,12 @@ final class NewHabitViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupProperties()
         setupView()
     }
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
-        categoryName = ""
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeSchedule), name: Notification.Name("schedule_changed"), object: nil)
         view.backgroundColor = .white
         firstStack.addArrangedSubview(enterNameTextField)
         firstStack.addArrangedSubview(categoriesTable)
@@ -161,6 +156,16 @@ final class NewHabitViewController: UIViewController {
         emojiCollection.delegate = self
         emojiCollection.dataSource = self
         enterNameTextField.delegate = self
+    }
+    
+    // MARK: - Настройка свойств, жестов и нотификаций
+    private func setupProperties() {
+        categoryName = ""
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeSchedule), name: Notification.Name("schedule_changed"), object: nil)
     }
     
     private func activateButton() {

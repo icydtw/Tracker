@@ -102,16 +102,12 @@ final class NewIrregularEventControllerView: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupProperties()
         setupView()
     }
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
-        categoryName = ""
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-        NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
         view.backgroundColor = .white
         firstStack.addArrangedSubview(enterNameTextField)
         firstStack.addArrangedSubview(categoriesTable)
@@ -158,6 +154,15 @@ final class NewIrregularEventControllerView: UIViewController {
         categoriesTable.dataSource = self
         categoriesTable.delegate = self
         enterNameTextField.delegate = self
+    }
+    
+    // MARK: - Настройка свойств, жестов и нотификаций
+    private func setupProperties() {
+        categoryName = ""
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
     }
     
     // MARK: - Методы, вызываемые при нажатии кнопок

@@ -340,12 +340,10 @@ extension TrackersViewController: TrackersViewControllerProtocol {
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
         dateString = dateFormatter.string(from: datePicker.date)
-        
         if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
             trackerRecords.removeAll(where: {$0.id == id && $0.day == dateString})
         } else {
             trackerRecords.append(TrackerRecord(id: id, day: dateString))
-            print(id)
         }
         trackersCollection.reloadData()
     }
