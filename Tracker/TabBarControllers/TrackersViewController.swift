@@ -20,6 +20,7 @@ class TrackersViewController: UIViewController {
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(TrackersCellsViewController.self, forCellWithReuseIdentifier: "trackers")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collection.showsVerticalScrollIndicator = false
         return collection
     }()
     
