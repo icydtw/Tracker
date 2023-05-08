@@ -129,6 +129,7 @@ class TrackersViewController: UIViewController {
             trackersLabel.leadingAnchor.constraint(equalTo: plusButton.leadingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             datePicker.topAnchor.constraint(equalTo: plusButton.bottomAnchor, constant: 13),
+            datePicker.widthAnchor.constraint(equalToConstant: 120),
             searchBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
             searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
