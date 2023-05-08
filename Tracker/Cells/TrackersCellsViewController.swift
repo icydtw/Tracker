@@ -125,7 +125,7 @@ final class TrackersCellsViewController: UICollectionViewCell {
               let indexPath = collectionView.indexPath(for: self) else {
             return
         }
-        var tappedID = trackers[indexPath.section].trackers[indexPath.row].id
+        var tappedID = (delegate?.localTrackers[indexPath.section].trackers[indexPath.row].id)!
         delegate?.saveDoneEvent(id: tappedID, index: indexPath)
         collectionView.reloadData()
 //        let colorOfButton = plusButton.backgroundColor

@@ -2,6 +2,7 @@ import UIKit
 
 protocol TrackersViewControllerProtocol {
     func saveDoneEvent(id: UUID, index: IndexPath)
+    var localTrackers: [TrackerCategory] {get set }
 }
 
 /// Экран "Трекеры" в таб-баре
@@ -347,6 +348,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
             trackerRecords.removeAll(where: {$0.id == id && $0.day == dateString})
         } else {
             trackerRecords.append(TrackerRecord(id: id, day: dateString))
+            print(id)
         }
         trackersCollection.reloadData()
     }
