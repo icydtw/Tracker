@@ -193,6 +193,7 @@ final class NewHabitViewController: UIViewController {
         NotificationCenter.default.post(notification)
         categoryName = ""
         selectedDays = []
+        shortSelectedDays = []
         dismiss(animated: true)
     }
     
