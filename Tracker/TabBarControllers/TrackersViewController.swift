@@ -133,11 +133,7 @@ class TrackersViewController: UIViewController {
     
     // MARK: - Настройка свойств, жестов и нотификаций
     private func setupProperties() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        dateFormatter.dateFormat = "EEEE" // Формат дня недели
-        let dayOfWeekString = dateFormatter.string(from: datePicker.date)
-        choosenDay = dayOfWeekString
+        makeDate(dateFormat: "EEEE")
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
         stackView.addArrangedSubview(starImage)
         stackView.addArrangedSubview(questionLabel)
@@ -194,11 +190,7 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод, вызываемый когда меняется дата в Date Picker
     @objc
     func datePickerValueChanged(sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        let dayOfWeekString = dateFormatter.string(from: sender.date)
-        choosenDay = dayOfWeekString
+        makeDate(dateFormat: "EEEE")
         updateCollection()
         hideCollection()
         trackersCollection.reloadData()
@@ -250,10 +242,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
         cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
         cell?.quantity.text = "\(trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
-        dateString = dateFormatter.string(from: datePicker.date)
+        makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
             cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
             cell?.plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
@@ -340,10 +329,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
     
     // MARK: Метод, добавляющий информацию о выполненном трекере в trackerRecords
     func saveDoneEvent(id: UUID, index: IndexPath) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        dateFormatter.dateFormat = "yyyy/MM/dd" // Формат год/месяц/день
-        dateString = dateFormatter.string(from: datePicker.date)
+        makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
             trackerRecords.removeAll(where: {$0.id == id && $0.day == dateString})
         } else {
@@ -352,4 +338,19 @@ extension TrackersViewController: TrackersViewControllerProtocol {
         trackersCollection.reloadData()
     }
     
+}
+
+// MARK: - Расширение, упрощающее работу с DatePicker
+extension TrackersViewController {
+    private func makeDate(dateFormat: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = dateFormat
+        var dateFormatterString = dateFormatter.string(from: datePicker.date)
+        if dateFormat == "EEEE" {
+            choosenDay = dateFormatterString
+        } else if dateFormat == "yyyy/MM/dd" {
+            dateString = dateFormatterString
+        }
+    }
 }
