@@ -125,7 +125,7 @@ class TrackersViewController: UIViewController {
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         trackersCollection.isHidden = true
-        if !events.isEmpty {
+        if !localTrackers.isEmpty {
             stackView.isHidden = true
             trackersCollection.isHidden = false
         }
