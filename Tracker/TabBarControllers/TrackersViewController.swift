@@ -292,6 +292,7 @@ extension TrackersViewController: UISearchBarDelegate {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
+        datePickerValueChanged(sender: datePicker)
         var searchingTrackers = localTrackers
         localTrackers = []
         var isGood = false
