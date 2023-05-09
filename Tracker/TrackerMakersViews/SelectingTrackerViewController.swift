@@ -75,7 +75,7 @@ final class SelectingTrackerViewController: UIViewController {
     //MARK: Метод, вызываемый при выборе пользователем "Нерегулярного события"
     @objc
     private func irregularTapped() {
-        let irregularEventVC = NewIrregularEventControllerView()
+        let irregularEventVC = NewIrregularEventViewController()
         show(irregularEventVC, sender: self)
     }
     

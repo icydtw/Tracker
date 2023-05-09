@@ -1,7 +1,7 @@
 import UIKit
 
 /// Экран создания нового "Нерегулярного события"
-final class NewIrregularEventControllerView: UIViewController {
+final class NewIrregularEventViewController: UIViewController {
     
     // MARK: - Свойства
     let colorCollection: UICollectionView = {
@@ -221,7 +221,7 @@ final class NewIrregularEventControllerView: UIViewController {
 }
 
 // MARK: - Расширение для UITextFieldDelegate
-extension NewIrregularEventControllerView: UITextFieldDelegate {
+extension NewIrregularEventViewController: UITextFieldDelegate {
     
     // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -240,7 +240,7 @@ extension NewIrregularEventControllerView: UITextFieldDelegate {
 }
 
 // MARK: - Расширение для UICollectionViewDataSource
-extension NewIrregularEventControllerView: UICollectionViewDataSource {
+extension NewIrregularEventViewController: UICollectionViewDataSource {
     
     // MARK: Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -284,7 +284,7 @@ extension NewIrregularEventControllerView: UICollectionViewDataSource {
 }
 
 // MARK: - Расширение для UICollectionViewDelegateFlowLayout
-extension NewIrregularEventControllerView: UICollectionViewDelegateFlowLayout {
+extension NewIrregularEventViewController: UICollectionViewDelegateFlowLayout {
     
     // MARK: Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -309,7 +309,7 @@ extension NewIrregularEventControllerView: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - Расширение для UICollectionViewDelegate
-extension NewIrregularEventControllerView: UICollectionViewDelegate {
+extension NewIrregularEventViewController: UICollectionViewDelegate {
     
     // MARK: Метод, вызываемый при выборе ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -342,7 +342,7 @@ extension NewIrregularEventControllerView: UICollectionViewDelegate {
 }
 
 // MARK: - Расширение для UITableViewDataSource
-extension NewIrregularEventControllerView: UITableViewDataSource {
+extension NewIrregularEventViewController: UITableViewDataSource {
     
     // MARK: Метод, определяющий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -363,7 +363,7 @@ extension NewIrregularEventControllerView: UITableViewDataSource {
 }
 
 // MARK: - Расширение для UITableViewDelegate
-extension NewIrregularEventControllerView: UITableViewDelegate {
+extension NewIrregularEventViewController: UITableViewDelegate {
     
     // MARK: Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -15,7 +15,7 @@
 		B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */; };
 		B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */; };
 		B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */; };
-		B464D7D829EC60000033AC5B /* NewIrregularEventControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */; };
+		B464D7D829EC60000033AC5B /* NewIrregularEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D729EC60000033AC5B /* NewIrregularEventViewController.swift */; };
 		B464D7DA29EC61630033AC5B /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D929EC61630033AC5B /* NewHabitViewController.swift */; };
 		B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7DE29ED41E70033AC5B /* CollectionData.swift */; };
 		B464D7E229ED431A0033AC5B /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E129ED431A0033AC5B /* EmojiCell.swift */; };
@@ -42,7 +42,7 @@
 		B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectingTrackerViewController.swift; sourceTree = "<group>"; };
-		B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewIrregularEventControllerView.swift; sourceTree = "<group>"; };
+		B464D7D729EC60000033AC5B /* NewIrregularEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewIrregularEventViewController.swift; sourceTree = "<group>"; };
 		B464D7D929EC61630033AC5B /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
 		B464D7DE29ED41E70033AC5B /* CollectionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionData.swift; sourceTree = "<group>"; };
 		B464D7E129ED431A0033AC5B /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */,
-				B464D7D729EC60000033AC5B /* NewIrregularEventControllerView.swift */,
+				B464D7D729EC60000033AC5B /* NewIrregularEventViewController.swift */,
 				B464D7D929EC61630033AC5B /* NewHabitViewController.swift */,
 				B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */,
 				B486233429FA62BB00B95667 /* ScheduleViewController.swift */,
@@ -259,7 +259,7 @@
 				B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */,
 				B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */,
 				B486233729FA659000B95667 /* ScheduleCell.swift in Sources */,
-				B464D7D829EC60000033AC5B /* NewIrregularEventControllerView.swift in Sources */,
+				B464D7D829EC60000033AC5B /* NewIrregularEventViewController.swift in Sources */,
 				B486233129F66D2600B95667 /* TrackersCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
