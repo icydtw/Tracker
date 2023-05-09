@@ -109,17 +109,6 @@ final class NewIrregularEventViewController: UIViewController {
     // MARK: - Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
-        firstStack.addArrangedSubview(enterNameTextField)
-        firstStack.addArrangedSubview(categoriesTable)
-        secondStack.addArrangedSubview(cancelButton)
-        secondStack.addArrangedSubview(createButton)
-        view.addSubview(scroll)
-        view.addSubview(titleLabel)
-        scroll.addSubview(firstStack)
-        scroll.addSubview(emojiCollection)
-        scroll.addSubview(colorCollection)
-        scroll.addSubview(secondStack)
-        scroll.contentSize = CGSize(width: view.frame.width, height: 708)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -147,13 +136,6 @@ final class NewIrregularEventViewController: UIViewController {
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
-        colorCollection.delegate = self
-        colorCollection.dataSource = self
-        emojiCollection.delegate = self
-        emojiCollection.dataSource = self
-        categoriesTable.dataSource = self
-        categoriesTable.delegate = self
-        enterNameTextField.delegate = self
     }
     
     // MARK: - Настройка свойств, жестов и нотификаций
@@ -163,6 +145,24 @@ final class NewIrregularEventViewController: UIViewController {
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
+        firstStack.addArrangedSubview(enterNameTextField)
+        firstStack.addArrangedSubview(categoriesTable)
+        secondStack.addArrangedSubview(cancelButton)
+        secondStack.addArrangedSubview(createButton)
+        view.addSubview(scroll)
+        view.addSubview(titleLabel)
+        scroll.addSubview(firstStack)
+        scroll.addSubview(emojiCollection)
+        scroll.addSubview(colorCollection)
+        scroll.addSubview(secondStack)
+        scroll.contentSize = CGSize(width: view.frame.width, height: 708)
+        colorCollection.delegate = self
+        colorCollection.dataSource = self
+        emojiCollection.delegate = self
+        emojiCollection.dataSource = self
+        categoriesTable.dataSource = self
+        categoriesTable.delegate = self
+        enterNameTextField.delegate = self
     }
     
     // MARK: - Методы, вызываемые при нажатии кнопок
