@@ -334,13 +334,17 @@ extension NewHabitViewController: UICollectionViewDataSource {
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == colorCollection {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell
-            cell?.color.backgroundColor = colorCollectionData[indexPath.row]
-            return cell!
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell else {
+                return UICollectionViewCell()
+            }
+            cell.color.backgroundColor = colorCollectionData[indexPath.row]
+            return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell
-            cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
-            return cell!
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell else {
+                return UICollectionViewCell()
+            }
+            cell.emojiLabel.text = emojiCollectionData[indexPath.row]
+            return cell
         }
     }
     
