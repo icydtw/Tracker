@@ -69,4 +69,5 @@ final class ScheduleCell: UITableViewCell {
         }
     }
     
+    //уауауаукаук
 }
