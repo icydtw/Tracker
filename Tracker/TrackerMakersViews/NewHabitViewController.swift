@@ -351,11 +351,15 @@ extension NewHabitViewController: UICollectionViewDataSource {
     // MARK: Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView == colorCollection {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView else {
+                fatalError("Unable to dequeue CollectionHeaderSupplementaryView")
+            }
             header.title.text = "Цвет"
             return header
         } else {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView else {
+                fatalError("Unable to dequeue CollectionHeaderSupplementaryView")
+            }
             header.title.text = "Emoji"
             return header
         }
