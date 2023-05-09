@@ -1,7 +1,7 @@
 import UIKit
 
 /// Ячейка трекеров, отображающаяся на вкладке "Трекеры"
-final class TrackersCellsViewController: UICollectionViewCell {
+final class TrackersCell: UICollectionViewCell {
     
     // MARK: - Свойства
     var delegate: TrackersViewControllerProtocol?
@@ -128,16 +128,5 @@ final class TrackersCellsViewController: UICollectionViewCell {
         var tappedID = (delegate?.localTrackers[indexPath.section].trackers[indexPath.row].id)!
         delegate?.saveDoneEvent(id: tappedID, index: indexPath)
         collectionView.reloadData()
-//        let colorOfButton = plusButton.backgroundColor
-//        plusButton.removeFromSuperview()
-//        checkboxButton.backgroundColor = colorOfButton
-//        checkboxButton.alpha = 0.5
-//        contentView.addSubview(checkboxButton)
-//        NSLayoutConstraint.activate([
-//            checkboxButton.topAnchor.constraint(equalTo: viewBackground.bottomAnchor, constant: 8),
-//            checkboxButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-//            checkboxButton.heightAnchor.constraint(equalToConstant: 34),
-//            checkboxButton.widthAnchor.constraint(equalToConstant: 34),
-//        ])
     }
 }

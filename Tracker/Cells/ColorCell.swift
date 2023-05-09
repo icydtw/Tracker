@@ -1,7 +1,7 @@
 import UIKit
 
 /// Кастомная ячейка коллекции, используемая для отображения цветов
-final class ColorCellsViewController: UICollectionViewCell {
+final class ColorCell: UICollectionViewCell {
     
     // MARK: - Свойства
     let color: UIImageView = {

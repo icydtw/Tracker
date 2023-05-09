@@ -26,7 +26,7 @@ final class NewHabitViewController: UIViewController {
     
     let categoriesTable: UITableView = {
         let table = UITableView()
-        table.register(HabitCategoryCellsViewController.self, forCellReuseIdentifier: "category")
+        table.register(HabitCategoryCell.self, forCellReuseIdentifier: "category")
         table.isScrollEnabled = false
         table.separatorStyle = .singleLine
         table.layer.cornerRadius = 16
@@ -47,7 +47,7 @@ final class NewHabitViewController: UIViewController {
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(ColorCellsViewController.self, forCellWithReuseIdentifier: "colorCell")
+        collection.register(ColorCell.self, forCellWithReuseIdentifier: "colorCell")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collection
     }()
@@ -55,7 +55,7 @@ final class NewHabitViewController: UIViewController {
     let emojiCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
+        collection.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collection
     }()
@@ -214,7 +214,7 @@ final class NewHabitViewController: UIViewController {
     // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
     @objc
     private func changeFirstCell() {
-        let cell = categoriesTable.cellForRow(at: [0,0]) as? HabitCategoryCellsViewController
+        let cell = categoriesTable.cellForRow(at: [0,0]) as? HabitCategoryCell
         cell?.title.removeFromSuperview()
         cell?.addSubview(cell!.title)
         cell?.categoryName.text = categoryName
@@ -227,7 +227,7 @@ final class NewHabitViewController: UIViewController {
     
     @objc
     private func changeSchedule() {
-        let cell = categoriesTable.cellForRow(at: [0,1]) as? HabitCategoryCellsViewController
+        let cell = categoriesTable.cellForRow(at: [0,1]) as? HabitCategoryCell
         cell?.title.removeFromSuperview()
         cell?.addSubview(cell!.title)
         cell?.categoryName.text = shortSelectedDays.joined(separator: ", ")
@@ -276,7 +276,7 @@ extension NewHabitViewController: UITableViewDataSource {
     // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
-        guard let categoryCell = cell as? HabitCategoryCellsViewController else {
+        guard let categoryCell = cell as? HabitCategoryCell else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
@@ -334,11 +334,11 @@ extension NewHabitViewController: UICollectionViewDataSource {
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == colorCollection {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellsViewController
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell
             cell?.color.backgroundColor = colorCollectionData[indexPath.row]
             return cell!
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell
             cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
             return cell!
         }
@@ -390,13 +390,13 @@ extension NewHabitViewController: UICollectionViewDelegate {
     // MARK: Метод, вызываемый при выборе ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
-            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
             activateButton()
         } else {
-            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
@@ -407,10 +407,10 @@ extension NewHabitViewController: UICollectionViewDelegate {
     // MARK: Метод, вызываемый при снятии выделения с ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
-            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
             cell?.backgroundColor = UIColor.clear
         } else {
-            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell
             cell?.backgroundColor = UIColor.clear
         }
     }

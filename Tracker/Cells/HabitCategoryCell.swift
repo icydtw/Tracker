@@ -1,7 +1,7 @@
 import UIKit
 
-/// Ячейка таблицы выбора категории
-final class ChoiceOfCategoryCellsViewController: UITableViewCell {
+/// Ячейка таблицы, отображающая информацию о категории при создании привычки
+final class HabitCategoryCell: UITableViewCell {
     
     // MARK: - Свойства
     let title: UILabel = {
@@ -11,11 +11,19 @@ final class ChoiceOfCategoryCellsViewController: UITableViewCell {
         return label
     }()
     
-    let checkbox: UIImageView = {
+    let arrow: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage()
+        image.image = UIImage(named: "arrow")
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
+    }()
+    
+    var categoryName: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     // MARK: - Инициализатор
@@ -31,13 +39,14 @@ final class ChoiceOfCategoryCellsViewController: UITableViewCell {
     // MARK: - Настройка внешнего вида
     private func setupView() {
         contentView.addSubview(title)
-        contentView.addSubview(checkbox)
+        contentView.addSubview(arrow)
+        contentView.addSubview(categoryName)
         contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
         NSLayoutConstraint.activate([
             title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            checkbox.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            checkbox.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            arrow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     

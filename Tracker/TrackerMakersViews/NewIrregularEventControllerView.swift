@@ -7,7 +7,7 @@ final class NewIrregularEventControllerView: UIViewController {
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(ColorCellsViewController.self, forCellWithReuseIdentifier: "colorCell")
+        collection.register(ColorCell.self, forCellWithReuseIdentifier: "colorCell")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collection
     }()
@@ -15,7 +15,7 @@ final class NewIrregularEventControllerView: UIViewController {
     let emojiCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(EmojiCellsViewController.self, forCellWithReuseIdentifier: "emojiCell")
+        collection.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         return collection
     }()
@@ -42,7 +42,7 @@ final class NewIrregularEventControllerView: UIViewController {
     
     let categoriesTable: UITableView = {
         let table = UITableView()
-        table.register(IrregularCategoryCellsViewController.self, forCellReuseIdentifier: "category")
+        table.register(IrregularCategoryCell.self, forCellReuseIdentifier: "category")
         table.isScrollEnabled = false
         table.separatorStyle = .none
         return table
@@ -255,11 +255,11 @@ extension NewIrregularEventControllerView: UICollectionViewDataSource {
     // MARK: Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == colorCollection {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCellsViewController
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell
             cell?.color.backgroundColor = colorCollectionData[indexPath.row]
             return cell!
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCellsViewController
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell
             cell?.emojiLabel.text = emojiCollectionData[indexPath.row]
             return cell!
         }
@@ -311,13 +311,13 @@ extension NewIrregularEventControllerView: UICollectionViewDelegate {
     // MARK: Метод, вызываемый при выборе ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
-            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
             activateButton()
         } else {
-            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell
             cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
             cell?.layer.cornerRadius = 16
             cell?.layer.masksToBounds = true
@@ -328,10 +328,10 @@ extension NewIrregularEventControllerView: UICollectionViewDelegate {
     // MARK: Метод, вызываемый при снятии выделения с ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
-            let cell = collectionView.cellForItem(at: indexPath) as? ColorCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
             cell?.backgroundColor = UIColor.clear
         } else {
-            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCellsViewController
+            let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell
             cell?.backgroundColor = UIColor.clear
         }
     }
@@ -349,7 +349,7 @@ extension NewIrregularEventControllerView: UITableViewDataSource {
     // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
-        guard let categoryCell = cell as? IrregularCategoryCellsViewController else {
+        guard let categoryCell = cell as? IrregularCategoryCell else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none

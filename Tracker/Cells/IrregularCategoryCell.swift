@@ -1,7 +1,7 @@
 import UIKit
 
 /// Ячейка таблицы, отображающая информацию о категории при создании нерегулярного события
-final class IrregularCategoryCellsViewController: UITableViewCell {
+final class IrregularCategoryCell: UITableViewCell {
     
     // MARK: - Свойства
     let title: UILabel = {

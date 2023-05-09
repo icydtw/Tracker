@@ -1,7 +1,7 @@
 import UIKit
 
 /// Ячейка таблицы выбора расписания
-final class ScheduleCellsViewController: UITableViewCell {
+final class ScheduleCell: UITableViewCell {
     
     // MARK: - Свойства
     let title: UILabel = {

@@ -14,7 +14,7 @@ final class ScheduleViewController: UIViewController {
     
     let scheduleTable: UITableView = {
         let table = UITableView()
-        table.register(ScheduleCellsViewController.self, forCellReuseIdentifier: "schedule")
+        table.register(ScheduleCell.self, forCellReuseIdentifier: "schedule")
         table.isScrollEnabled = false
         table.separatorStyle = .singleLine
         table.layer.cornerRadius = 16
@@ -76,7 +76,7 @@ extension ScheduleViewController: UITableViewDataSource {
     // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "schedule", for: indexPath)
-        guard let scheduleCell = cell as? ScheduleCellsViewController else {
+        guard let scheduleCell = cell as? ScheduleCell else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none

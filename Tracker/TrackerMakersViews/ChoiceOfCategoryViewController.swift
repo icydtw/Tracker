@@ -16,7 +16,7 @@ final class ChoiceOfCategoryViewController: UIViewController {
     
     let categoriesTable: UITableView = {
         let table = UITableView()
-        table.register(ChoiceOfCategoryCellsViewController.self, forCellReuseIdentifier: "category")
+        table.register(ChoiceOfCategoryCell.self, forCellReuseIdentifier: "category")
         table.isScrollEnabled = true
         table.separatorStyle = .singleLine
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -115,7 +115,7 @@ extension ChoiceOfCategoryViewController: UITableViewDataSource {
     // MARK: Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
-        guard let categoryCell = cell as? ChoiceOfCategoryCellsViewController else {
+        guard let categoryCell = cell as? ChoiceOfCategoryCell else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
@@ -159,7 +159,7 @@ extension ChoiceOfCategoryViewController: UITableViewDelegate {
     
     // MARK: Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
+        let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCell
         cell?.checkbox.image = UIImage(systemName: "checkmark")
         dismiss(animated: true) {
             categoryName = cell?.title.text ?? ""
@@ -170,7 +170,7 @@ extension ChoiceOfCategoryViewController: UITableViewDelegate {
     
     // MARK: Метод, вызываемый при повторном нажатии (снятии выделения) на строку таблицы
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCellsViewController
+        let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCell
         cell?.checkbox.image = UIImage()
     }
     

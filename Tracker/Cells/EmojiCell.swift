@@ -1,7 +1,7 @@
 import UIKit
 
 /// Кастомная ячейка коллекции, используемая для отображения emoji
-final class EmojiCellsViewController: UICollectionViewCell {
+final class EmojiCell: UICollectionViewCell {
     
     // MARK: - Свойства
     let emojiLabel: UILabel = {
