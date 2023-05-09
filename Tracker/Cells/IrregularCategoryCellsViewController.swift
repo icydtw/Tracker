@@ -30,6 +30,7 @@ final class IrregularCategoryCellsViewController: UITableViewCell {
     // MARK: - Инициализатор
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupProperties()
         setupView()
     }
     
@@ -39,18 +40,22 @@ final class IrregularCategoryCellsViewController: UITableViewCell {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
-        NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
-        contentView.addSubview(title)
-        contentView.addSubview(categoryName)
-        contentView.addSubview(arrow)
-        contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
-        contentView.layer.cornerRadius = 16
         NSLayoutConstraint.activate([
             title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             arrow.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             arrow.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
+    }
+    
+    // MARK: - Настройка свойств, жестов и нотификаций
+    private func setupProperties() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
+        contentView.addSubview(title)
+        contentView.addSubview(categoryName)
+        contentView.addSubview(arrow)
+        contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
+        contentView.layer.cornerRadius = 16
     }
     
     // MARK: - Изменение констрейнтов и свойств ячейки с категорией (при срабатывании нотификации)

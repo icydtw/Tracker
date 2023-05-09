@@ -110,18 +110,6 @@ final class NewHabitViewController: UIViewController {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
-        view.backgroundColor = .white
-        firstStack.addArrangedSubview(enterNameTextField)
-        firstStack.addArrangedSubview(categoriesTable)
-        secondStack.addArrangedSubview(cancelButton)
-        secondStack.addArrangedSubview(createButton)
-        scroll.addSubview(firstStack)
-        scroll.addSubview(emojiCollection)
-        scroll.addSubview(colorCollection)
-        scroll.addSubview(secondStack)
-        view.addSubview(titleLabel)
-        view.addSubview(scroll)
-        scroll.contentSize = CGSize(width: view.frame.width, height: 779)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -149,13 +137,6 @@ final class NewHabitViewController: UIViewController {
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
-        categoriesTable.dataSource = self
-        categoriesTable.delegate = self
-        colorCollection.delegate = self
-        colorCollection.dataSource = self
-        emojiCollection.delegate = self
-        emojiCollection.dataSource = self
-        enterNameTextField.delegate = self
     }
     
     // MARK: - Настройка свойств, жестов и нотификаций
@@ -163,9 +144,28 @@ final class NewHabitViewController: UIViewController {
         categoryName = ""
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeSchedule), name: Notification.Name("schedule_changed"), object: nil)
+        view.backgroundColor = .white
+        firstStack.addArrangedSubview(enterNameTextField)
+        firstStack.addArrangedSubview(categoriesTable)
+        secondStack.addArrangedSubview(cancelButton)
+        secondStack.addArrangedSubview(createButton)
+        scroll.addSubview(firstStack)
+        scroll.addSubview(emojiCollection)
+        scroll.addSubview(colorCollection)
+        scroll.addSubview(secondStack)
+        view.addSubview(titleLabel)
+        view.addSubview(scroll)
+        view.addGestureRecognizer(tapGesture)
+        scroll.contentSize = CGSize(width: view.frame.width, height: 779)
+        categoriesTable.dataSource = self
+        categoriesTable.delegate = self
+        colorCollection.delegate = self
+        colorCollection.dataSource = self
+        emojiCollection.delegate = self
+        emojiCollection.dataSource = self
+        enterNameTextField.delegate = self
     }
     
     private func activateButton() {

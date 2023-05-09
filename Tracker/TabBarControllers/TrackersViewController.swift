@@ -21,6 +21,14 @@ class TrackersViewController: UIViewController {
         collection.register(TrackersCellsViewController.self, forCellWithReuseIdentifier: "trackers")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collection.showsVerticalScrollIndicator = false
+        let layout: UICollectionViewFlowLayout = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            layout.minimumInteritemSpacing = 0
+            layout.minimumLineSpacing = 9
+            return layout
+        }()
+        collection.collectionViewLayout = layout
         return collection
     }()
     
@@ -53,7 +61,11 @@ class TrackersViewController: UIViewController {
         return datePicker
     }()
     
-    let starImage = UIImageView(image: UIImage(named: "star"))
+    let starImage: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "star"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
     let questionLabel: UILabel = {
         let label = UILabel()
@@ -85,41 +97,13 @@ class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideCollection()
+        setupProperties()
         setupView()
     }
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        dateFormatter.dateFormat = "EEEE" // Формат дня недели
-        let dayOfWeekString = dateFormatter.string(from: datePicker.date)
-        choosenDay = dayOfWeekString
-        NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
-        let layout: UICollectionViewFlowLayout = {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .vertical
-            layout.minimumInteritemSpacing = 0
-            layout.minimumLineSpacing = 9
-            return layout
-        }()
-        trackersCollection.collectionViewLayout = layout
-        starImage.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(starImage)
-        stackView.addArrangedSubview(questionLabel)
-        view.addSubview(plusButton)
-        view.addSubview(trackersLabel)
-        view.addSubview(datePicker)
-        view.addSubview(stackView)
-        view.addSubview(trackersCollection)
-        view.addSubview(searchBar)
-        trackersCollection.dataSource = self
-        trackersCollection.delegate = self
-        searchBar.delegate = self
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -145,6 +129,30 @@ class TrackersViewController: UIViewController {
             stackView.isHidden = true
             trackersCollection.isHidden = false
         }
+    }
+    
+    // MARK: - Настройка свойств, жестов и нотификаций
+    private func setupProperties() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.dateFormat = "EEEE" // Формат дня недели
+        let dayOfWeekString = dateFormatter.string(from: datePicker.date)
+        choosenDay = dayOfWeekString
+        NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
+        stackView.addArrangedSubview(starImage)
+        stackView.addArrangedSubview(questionLabel)
+        view.addSubview(plusButton)
+        view.addSubview(trackersLabel)
+        view.addSubview(datePicker)
+        view.addSubview(stackView)
+        view.addSubview(trackersCollection)
+        view.addSubview(searchBar)
+        trackersCollection.dataSource = self
+        trackersCollection.delegate = self
+        searchBar.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     //Метод, обновляющий коллекцию в соответствии с выбранным днём

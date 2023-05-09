@@ -45,16 +45,13 @@ final class SelectingTrackerViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupProperties()
         setupView()
     }
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
-        stackView.addArrangedSubview(habitButton)
-        stackView.addArrangedSubview(irregularEventButton)
-        view.addSubview(titleLabel)
-        view.addSubview(stackView)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -64,6 +61,14 @@ final class SelectingTrackerViewController: UIViewController {
             habitButton.heightAnchor.constraint(equalToConstant: 60),
             irregularEventButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    // MARK: - Настройка свойств, жестов и нотификаций
+    private func setupProperties() {
+        stackView.addArrangedSubview(habitButton)
+        stackView.addArrangedSubview(irregularEventButton)
+        view.addSubview(titleLabel)
+        view.addSubview(stackView)
     }
     
     // MARK: - Методы, вызываемые при нажатии кнопок
