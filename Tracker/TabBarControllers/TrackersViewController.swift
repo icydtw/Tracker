@@ -290,7 +290,7 @@ extension TrackersViewController: UISearchBarDelegate {
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
         datePickerValueChanged(sender: datePicker)
-        var searchingTrackers = localTrackers
+        let searchingTrackers = localTrackers
         localTrackers = []
         var isGood = false
         for tracker in searchingTrackers { // категория
@@ -342,6 +342,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
 
 // MARK: - Расширение, упрощающее работу с DatePicker
 extension TrackersViewController {
+    
     private func makeDate(dateFormat: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
@@ -353,4 +354,5 @@ extension TrackersViewController {
             dateString = dateFormatterString
         }
     }
+    
 }
