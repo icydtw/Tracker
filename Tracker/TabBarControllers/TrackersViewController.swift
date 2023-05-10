@@ -346,7 +346,7 @@ extension TrackersViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = dateFormat
-        var dateFormatterString = dateFormatter.string(from: datePicker.date)
+        let dateFormatterString = dateFormatter.string(from: datePicker.date)
         if dateFormat == "EEEE" {
             choosenDay = dateFormatterString
         } else if dateFormat == "yyyy/MM/dd" {
