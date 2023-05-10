@@ -59,22 +59,6 @@ final class TrackersCell: UICollectionViewCell {
         return button
     }()
     
-//    var checkboxButton: UIButton = {
-//        let button = UIButton(type: .custom)
-//        button.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-//        button.layer.cornerRadius = button.bounds.size.width / 2
-//        button.layer.masksToBounds = true
-//        let image = UIImage(systemName: "checkmark")
-//        let imageView = UIImageView(image: image)
-//        imageView.tintColor = .white
-//        imageView.contentMode = .center
-//        imageView.clipsToBounds = true
-//        imageView.frame = button.bounds
-//        button.addSubview(imageView)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
-//    }()
-    
     // MARK: - Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
