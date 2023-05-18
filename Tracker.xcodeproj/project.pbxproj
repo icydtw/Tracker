@@ -69,6 +69,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B435BB022A166DB3009639CA /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
 		B43DE7F129CD9C2B004AB4F7 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +95,7 @@
 		B43DE7FC29CD9C2B004AB4F7 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				B435BB022A166DB3009639CA /* Domain */,
 				B4A6D50E29EEF82800C7E63C /* Models */,
 				B464D7E329EE7AD20033AC5B /* Supplementary Views */,
 				B464D7E029ED43050033AC5B /* Cells */,
