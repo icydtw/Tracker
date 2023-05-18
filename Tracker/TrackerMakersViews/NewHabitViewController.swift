@@ -4,6 +4,8 @@ import UIKit
 final class NewHabitViewController: UIViewController {
 
     // MARK: - Свойства
+    let trackerStore = TrackerStore()
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -209,6 +211,7 @@ final class NewHabitViewController: UIViewController {
         selectedDays = []
         shortSelectedDays = []
         dismiss(animated: true)
+        try! trackerStore.addTracker(event: event)
     }
     
     // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации

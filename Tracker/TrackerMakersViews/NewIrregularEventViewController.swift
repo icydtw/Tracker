@@ -4,6 +4,8 @@ import UIKit
 final class NewIrregularEventViewController: UIViewController {
     
     // MARK: - Свойства
+    let trackerStore = TrackerStore()
+    
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -202,6 +204,7 @@ final class NewIrregularEventViewController: UIViewController {
         NotificationCenter.default.post(notification)
         categoryName = ""
         dismiss(animated: true)
+        try! trackerStore.addTracker(event: event)
     }
     
     private func activateButton() {
