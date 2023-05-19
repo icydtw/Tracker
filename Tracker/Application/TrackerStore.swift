@@ -42,3 +42,34 @@ final class TrackerStore {
     }
     
 }
+
+final class DataProvider: NSObject, NSFetchedResultsControllerDelegate {
+    let appDelegate: AppDelegate
+    let context: NSManagedObjectContext
+    lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        let controller = NSFetchedResultsController<TrackerCoreData>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        controller.delegate = self
+        try? controller.performFetch()
+        return controller
+    }()
+    
+    override init() {
+        self.appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.coreDataContainer.viewContext
+        
+    }
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("1")
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("1")
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("1")
+    }
+}
