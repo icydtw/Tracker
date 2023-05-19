@@ -15,6 +15,8 @@ class TrackersViewController: UIViewController {
     
     var localTrackers: [TrackerCategory] = trackers
     
+    var dataProvider = DataProvider()
+    
     var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -96,13 +98,17 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataProvider.delegate = self
         hideCollection()
         setupProperties()
         setupView()
+        dataProvider.updateCollectionView()
+        try! dataProvider.fetchedResultsController.performFetch()
     }
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
+        datePickerValueChanged(sender: datePicker)
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
@@ -149,10 +155,29 @@ class TrackersViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        trackersCollection.addGestureRecognizer(longPressGestureRecognizer)
+
+    }
+    
+    @objc
+    func handleLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        let touchPoint = gestureRecognizer.location(in: trackersCollection)
+        if let indexPath = trackersCollection.indexPathForItem(at: touchPoint) {
+            let cell = trackersCollection.cellForItem(at: indexPath) as? TrackersCell
+            dataProvider.delete(index: indexPath)
+            datePickerValueChanged(sender: datePicker)
+        }
+    }
+
+    func hello() {
+        trackersCollection.performBatchUpdates {
+            print("HIIIII")
+        }
     }
     
     //Метод, обновляющий коллекцию в соответствии с выбранным днём
-    private func updateCollection() {
+    func updateCollection() {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []

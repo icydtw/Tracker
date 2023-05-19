@@ -13,8 +13,9 @@ final class TrackerStore {
     
     func addTracker(event: Event, category: String) throws {
         let tracker = TrackerCoreData(context: context)
+        let colorMarshall = UIColorMarshalling()
         tracker.id = event.id
-        tracker.color = event.color.description
+        tracker.color = colorMarshall.hexString(from: event.color)
         tracker.day = event.day?.joined(separator: " ")
         tracker.emoji = event.emoji
         tracker.name = event.name
@@ -43,33 +44,30 @@ final class TrackerStore {
     
 }
 
-final class DataProvider: NSObject, NSFetchedResultsControllerDelegate {
-    let appDelegate: AppDelegate
-    let context: NSManagedObjectContext
-    lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
-        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        let controller = NSFetchedResultsController<TrackerCoreData>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        controller.delegate = self
-        try? controller.performFetch()
-        return controller
-    }()
+final class UIColorMarshalling {
     
-    override init() {
-        self.appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.context = appDelegate.coreDataContainer.viewContext
-        
+    func hexString(from color: UIColor) -> String {
+        let components = color.cgColor.components
+        let r: CGFloat = components?[0] ?? 0.0
+        let g: CGFloat = components?[1] ?? 0.0
+        let b: CGFloat = components?[2] ?? 0.0
+        return String.init(
+            format: "%02lX%02lX%02lX",
+            lroundf(Float(r * 255)),
+            lroundf(Float(g * 255)),
+            lroundf(Float(b * 255))
+        )
+    }
+
+    func color(from hex: String) -> UIColor {
+        var rgbValue:UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&rgbValue)
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("1")
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("1")
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("1")
-    }
 }
