@@ -204,7 +204,7 @@ final class NewIrregularEventViewController: UIViewController {
         NotificationCenter.default.post(notification)
         categoryName = ""
         dismiss(animated: true)
-        try! trackerStore.addTracker(event: event)
+        try! trackerStore.addTracker(event: event, category: category)
     }
     
     private func activateButton() {

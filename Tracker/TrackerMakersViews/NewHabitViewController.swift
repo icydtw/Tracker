@@ -211,7 +211,7 @@ final class NewHabitViewController: UIViewController {
         selectedDays = []
         shortSelectedDays = []
         dismiss(animated: true)
-        try! trackerStore.addTracker(event: event)
+        try! trackerStore.addTracker(event: event, category: category)
     }
     
     // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
