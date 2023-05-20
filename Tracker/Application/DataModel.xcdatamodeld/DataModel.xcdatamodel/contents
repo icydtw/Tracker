@@ -9,8 +9,12 @@
         <attribute name="color" attributeType="String" valueTransformerName="[String]"/>
         <attribute name="day" optional="YES" attributeType="String" valueTransformerName="NSSecureUnarchiveFromDataTransformerName"/>
         <attribute name="emoji" attributeType="String"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="trackerID" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryCoreData" inverseName="trackers" inverseEntity="TrackerCategoryCoreData"/>
+    </entity>
+    <entity name="TrackerRecordCoreData" representedClassName="TrackerRecordCoreData" syncable="YES" codeGenerationType="class">
+        <attribute name="day" optional="YES" attributeType="String"/>
+        <attribute name="recordID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
 </model>

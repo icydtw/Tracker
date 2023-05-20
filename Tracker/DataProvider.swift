@@ -37,32 +37,28 @@ final class DataProvider: NSObject, NSFetchedResultsControllerDelegate {
             let colorMarshall = UIColorMarshalling()
             trackersCD.forEach { track in
                 if track.category?.name == newCategoryName {
-                    events.append(Event(name: track.name ?? "", emoji: track.emoji ?? "", color: colorMarshall.color(from: track.color ?? ""), day: track.day?.components(separatedBy: " ")))
+                    events.append(Event(id: track.trackerID ?? UUID(), name: track.name ?? "", emoji: track.emoji ?? "", color: colorMarshall.color(from: track.color ?? ""), day: track.day?.components(separatedBy: " ")))
                 }
             }
             let neeeew = [TrackerCategory(label: newCategoryName ?? "", trackers: events)]
-            trackers.append(contentsOf: neeeew)
+            trackers.append(contentsOf: neeeew.sorted(by: {$0.label > $1.label}))
         }
         delegate?.updateCollection()
     }
     
-    func delete(index: IndexPath) {
-        print("INDEX", index)
-        context.delete(fetchedResultsController.object(at: IndexPath(row: index.row + index.section, section: 0)))
+    func delete(id inID: UUID) {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.returnsObjectsAsFaults = false
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
+        request.predicate = predicate
+        let result = try! context.fetch(request)
+        context.delete(result.first ?? TrackerCoreData())
         try! context.save()
-        updateCollectionView()
-    }
-    
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         updateCollectionView()
+        delegate?.datePickerValueChanged(sender: delegate?.datePicker ?? UIDatePicker())
     }
     
 }
