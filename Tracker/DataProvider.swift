@@ -1,10 +1,21 @@
 import UIKit
 import CoreData
 
-final class DataProvider: NSObject, NSFetchedResultsControllerDelegate {
+final class DataProvider: NSObject {
+    
+    // MARK: - Свойства
     let appDelegate: AppDelegate
+    
     let context: NSManagedObjectContext
+    
     var delegate: TrackersViewController?
+    
+    let trackerStore = TrackerStore()
+    
+    let trackerCategoryStore = TrackerCategoryStore()
+    
+    let trackerRecordStore = TrackerRecordStore()
+    
     lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -14,22 +25,41 @@ final class DataProvider: NSObject, NSFetchedResultsControllerDelegate {
         return controller
     }()
     
+    // MARK: - Инициализатор
     override init() {
-        self.delegate = nil
         self.appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.context = appDelegate.coreDataContainer.viewContext
+        self.delegate = nil
     }
     
+    // MARK: - Метод, добавляющий в БД новый трекер
+    func addTracker(event: Event, category: String) {
+        trackerStore.addTracker(event: event, category: category, context: context, trackerCategoryStore: trackerCategoryStore)
+    }
+    
+    // MARK: - Метод, удаляющий трекер из БД
+    func deleteTracker(id inID: UUID) {
+        trackerStore.deleteTracker(id: inID, context: context)
+    }
+    
+    // MARK: - Метод, добавляющий +1 к счётчику выполненных трекеров
+    func addRecord(id: UUID, day: String) {
+        trackerRecordStore.addRecord(id: id, day: day, context: context)
+    }
+    
+    // MARK: - Метод, снимающий -1 от счётчика трекеров
+    func deleteRecord(id: UUID, day: String) {
+        trackerRecordStore.deleteRecord(id: id, day: day, context: context)
+    }
+    
+    // MARK: - Метод, обновляющий массивы, из которых UICollection берёт данные
     func updateCollectionView() {
-        //Список категорий
-        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
-        request.returnsObjectsAsFaults = false
-        let trackerCategories = try! context.fetch(request)
-        
-        //Список ивентов
-        let requestTwo = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        requestTwo.returnsObjectsAsFaults = false
-        let trackersCD = try! context.fetch(requestTwo)
+        let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        categoryRequest.returnsObjectsAsFaults = false
+        let trackerCategories = try! context.fetch(categoryRequest)
+        let trackerRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        trackerRequest.returnsObjectsAsFaults = false
+        let trackersCD = try! context.fetch(trackerRequest)
         trackers = []
         trackerCategories.forEach { category in
             let newCategoryName = category.name
@@ -43,19 +73,22 @@ final class DataProvider: NSObject, NSFetchedResultsControllerDelegate {
             let neeeew = [TrackerCategory(label: newCategoryName ?? "", trackers: events)]
             trackers.append(contentsOf: neeeew.sorted(by: {$0.label > $1.label}))
         }
+        trackerRecords = []
+        let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        recordRequest.returnsObjectsAsFaults = false
+        let trackerRecordCD = try! context.fetch(recordRequest)
+        trackerRecordCD.forEach { record in
+            trackerRecords.append(TrackerRecord(id: record.tracker?.trackerID ?? UUID(), day: record.day ?? ""))
+        }
         delegate?.updateCollection()
     }
     
-    func delete(id inID: UUID) {
-        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        request.returnsObjectsAsFaults = false
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
-        request.predicate = predicate
-        let result = try! context.fetch(request)
-        context.delete(result.first ?? TrackerCoreData())
-        try! context.save()
-    }
+}
+
+// MARK: - Расширение для NSFetchedResultsControllerDelegate
+extension DataProvider: NSFetchedResultsControllerDelegate {
     
+    // MARK: Метод, вызываемый автоматически при изменении данных в БД
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         updateCollectionView()
         delegate?.datePickerValueChanged(sender: delegate?.datePicker ?? UIDatePicker())

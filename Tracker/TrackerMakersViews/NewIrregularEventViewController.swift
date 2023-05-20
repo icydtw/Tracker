@@ -4,7 +4,7 @@ import UIKit
 final class NewIrregularEventViewController: UIViewController {
     
     // MARK: - Свойства
-    let trackerStore = TrackerStore()
+    let dataProvider = DataProvider()
     
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -191,7 +191,8 @@ final class NewIrregularEventViewController: UIViewController {
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let event = Event(name: name, emoji: emoji, color: color, day: nil)
         dismiss(animated: true)
-        try! trackerStore.addTracker(event: event, category: category)
+        categoryName = ""
+        dataProvider.addTracker(event: event, category: category)
     }
     
     private func activateButton() {

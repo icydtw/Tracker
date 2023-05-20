@@ -15,7 +15,7 @@ class TrackersViewController: UIViewController {
     
     var localTrackers: [TrackerCategory] = trackers
     
-    var trackerStore = TrackerStore()
+    var dataProvider = DataProvider()
     
     var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -98,12 +98,12 @@ class TrackersViewController: UIViewController {
     // MARK: - Метод жизненного цикла viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        trackerStore.delegate = self
+        dataProvider.delegate = self
         hideCollection()
         setupProperties()
         setupView()
-        trackerStore.updateCollectionView()
-        try! trackerStore.fetchedResultsController.performFetch()
+        dataProvider.updateCollectionView()
+        try! dataProvider.fetchedResultsController.performFetch()
     }
     
     // MARK: - Настройка внешнего вида
@@ -173,7 +173,7 @@ class TrackersViewController: UIViewController {
         let action1 = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
             let id = self.localTrackers[indexPath.section].trackers[indexPath.row].id
-            self.trackerStore.deleteTracker(id: id)
+            self.dataProvider.deleteTracker(id: id)
             self.datePickerValueChanged(sender: self.datePicker)
         }
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
@@ -363,9 +363,9 @@ extension TrackersViewController: TrackersViewControllerProtocol {
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
-            trackerStore.deleteRecord(id: id, day: dateString)
+            dataProvider.deleteRecord(id: id, day: dateString)
         } else {
-            trackerStore.addRecord(id: id, day: dateString)
+            dataProvider.addRecord(id: id, day: dateString)
         }
         trackersCollection.reloadData()
     }

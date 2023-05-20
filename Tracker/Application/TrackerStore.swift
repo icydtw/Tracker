@@ -1,28 +1,11 @@
 import UIKit
 import CoreData
 
-final class TrackerStore: NSObject {
+/// Класс, работающий с трекерами в БД
+final class TrackerStore {
     
-    let appDelegate: AppDelegate
-    let context: NSManagedObjectContext
-    var delegate: TrackersViewController?
-    
-    lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
-        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        let controller = NSFetchedResultsController<TrackerCoreData>(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        controller.delegate = self
-        try? controller.performFetch()
-        return controller
-    }()
-    
-    override init() {
-        self.appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.context = appDelegate.coreDataContainer.viewContext
-        self.delegate = nil
-    }
-    
-    func addTracker(event: Event, category: String) throws {
+    // MARK: - Метод, добавляющий в БД новый трекер
+    func addTracker(event: Event, category: String, context: NSManagedObjectContext, trackerCategoryStore: TrackerCategoryStore) {
         let tracker = TrackerCoreData(context: context)
         let colorMarshall = UIColorMarshalling()
         tracker.trackerID = event.id
@@ -31,77 +14,11 @@ final class TrackerStore: NSObject {
         tracker.emoji = event.emoji
         tracker.name = event.name
         try! context.save()
-        addCategory(category: category, tracker: tracker)
+        trackerCategoryStore.addCategory(category: category, tracker: tracker, context: context)
     }
     
-    func addCategory(category: String, tracker: TrackerCoreData) {
-        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
-        request.returnsObjectsAsFaults = false
-        let trackerCategories = try! context.fetch(request)
-        if !trackerCategories.filter({$0.name == category}).isEmpty {
-            trackerCategories.forEach { trackerCategory in
-                if trackerCategory.name == category {
-                    trackerCategory.addToTrackers(tracker)
-                }
-            }
-        } else {
-            let newCategory = TrackerCategoryCoreData(context: context)
-            newCategory.name = category
-            newCategory.id = UUID()
-            newCategory.addToTrackers(tracker)
-        }
-        try! context.save()
-    }
-    
-    func addRecord(id: UUID, day: String) {
-        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        request.returnsObjectsAsFaults = false
-        let trackers = try! context.fetch(request)
-        let newRecord = TrackerRecordCoreData(context: context)
-        newRecord.day = day
-        newRecord.tracker = trackers.filter({$0.trackerID == id}).first
-        try! context.save()
-    }
-    
-    func deleteRecord(id: UUID, day: String) {
-        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        request.returnsObjectsAsFaults = false
-        let records = try! context.fetch(request)
-        context.delete(records.filter({$0.tracker?.trackerID == id && $0.day == day}).first ?? NSManagedObject())
-        try! context.save()
-    }
-    
-    func updateCollectionView() {
-        let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
-        categoryRequest.returnsObjectsAsFaults = false
-        let trackerCategories = try! context.fetch(categoryRequest)
-        let trackerRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        trackerRequest.returnsObjectsAsFaults = false
-        let trackersCD = try! context.fetch(trackerRequest)
-        trackers = []
-        trackerCategories.forEach { category in
-            let newCategoryName = category.name
-            var events: [Event] = []
-            let colorMarshall = UIColorMarshalling()
-            trackersCD.forEach { track in
-                if track.category?.name == newCategoryName {
-                    events.append(Event(id: track.trackerID ?? UUID(), name: track.name ?? "", emoji: track.emoji ?? "", color: colorMarshall.color(from: track.color ?? ""), day: track.day?.components(separatedBy: " ")))
-                }
-            }
-            let neeeew = [TrackerCategory(label: newCategoryName ?? "", trackers: events)]
-            trackers.append(contentsOf: neeeew.sorted(by: {$0.label > $1.label}))
-        }
-        trackerRecords = []
-        let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        recordRequest.returnsObjectsAsFaults = false
-        let trackerRecordCD = try! context.fetch(recordRequest)
-        trackerRecordCD.forEach { record in
-            trackerRecords.append(TrackerRecord(id: record.tracker?.trackerID ?? UUID(), day: record.day ?? ""))
-        }
-        delegate?.updateCollection()
-    }
-    
-    func deleteTracker(id inID: UUID) {
+    // MARK: - Метод, удаляющий трекер из БД
+    func deleteTracker(id inID: UUID, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
         let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
@@ -110,20 +27,13 @@ final class TrackerStore: NSObject {
         context.delete(result.first ?? TrackerCoreData())
         try! context.save()
     }
-    
+
 }
 
-extension TrackerStore: NSFetchedResultsControllerDelegate {
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        updateCollectionView()
-        delegate?.datePickerValueChanged(sender: delegate?.datePicker ?? UIDatePicker())
-    }
-    
-}
-
+/// Класс, необходимый для конвертации цвета в строку и наоборот
 final class UIColorMarshalling {
     
+    // MARK: - Метод для конвертации цвета в строку
     func hexString(from color: UIColor) -> String {
         let components = color.cgColor.components
         let r: CGFloat = components?[0] ?? 0.0
@@ -137,6 +47,7 @@ final class UIColorMarshalling {
         )
     }
 
+    // MARK: - Метод для конвертации строки обратно в цвет
     func color(from hex: String) -> UIColor {
         var rgbValue:UInt64 = 0
         Scanner(string: hex).scanHexInt64(&rgbValue)
