@@ -54,14 +54,20 @@ final class TrackerStore: NSObject {
     }
     
     func addRecord(id: UUID, day: String) {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.returnsObjectsAsFaults = false
+        let trackers = try! context.fetch(request)
+        let newRecord = TrackerRecordCoreData(context: context)
+        newRecord.day = day
+        newRecord.tracker = trackers.filter({$0.trackerID == id}).first
+        try! context.save()
+    }
+    
+    func deleteRecord(id: UUID, day: String) {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.returnsObjectsAsFaults = false
-        let trackerRecords = try! context.fetch(request)
-        if trackerRecords.filter({$0.day == day}).isEmpty {
-            let record = TrackerRecordCoreData(context: context)
-            record.recordID = id
-            record.day = day
-        }
+        let records = try! context.fetch(request)
+        context.delete(records.filter({$0.tracker?.trackerID == id && $0.day == day}).first ?? NSManagedObject())
         try! context.save()
     }
     
@@ -85,12 +91,12 @@ final class TrackerStore: NSObject {
             let neeeew = [TrackerCategory(label: newCategoryName ?? "", trackers: events)]
             trackers.append(contentsOf: neeeew.sorted(by: {$0.label > $1.label}))
         }
+        trackerRecords = []
         let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         recordRequest.returnsObjectsAsFaults = false
-        let recordsCD = try! context.fetch(recordRequest)
-        trackerRecords = []
-        recordsCD.forEach { record in
-            trackerRecords.append(TrackerRecord(id: record.recordID ?? UUID(), day: record.day ?? ""))
+        let trackerRecordCD = try! context.fetch(recordRequest)
+        trackerRecordCD.forEach { record in
+            trackerRecords.append(TrackerRecord(id: record.tracker?.trackerID ?? UUID(), day: record.day ?? ""))
         }
         delegate?.updateCollection()
     }
@@ -102,20 +108,6 @@ final class TrackerStore: NSObject {
         request.predicate = predicate
         let result = try! context.fetch(request)
         context.delete(result.first ?? TrackerCoreData())
-        let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        recordRequest.returnsObjectsAsFaults = false
-        let recordPredicate = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.recordID), inID.uuidString)
-        recordRequest.predicate = recordPredicate
-        let records = try! context.fetch(recordRequest)
-        context.delete(records.first ?? TrackerRecordCoreData())
-        try! context.save()
-    }
-    
-    func deleteRecord(id: UUID, day: String) {
-        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        request.returnsObjectsAsFaults = false
-        let trackerRecords = try! context.fetch(request)
-        context.delete(trackerRecords.filter({$0.day == day}).first ?? TrackerRecordCoreData())
         try! context.save()
     }
     

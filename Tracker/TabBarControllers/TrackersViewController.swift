@@ -363,10 +363,8 @@ extension TrackersViewController: TrackersViewControllerProtocol {
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
-            trackerRecords.removeAll(where: {$0.id == id && $0.day == dateString})
             trackerStore.deleteRecord(id: id, day: dateString)
         } else {
-            trackerRecords.append(TrackerRecord(id: id, day: dateString))
             trackerStore.addRecord(id: id, day: dateString)
         }
         trackersCollection.reloadData()

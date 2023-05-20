@@ -195,21 +195,6 @@ final class NewHabitViewController: UIViewController {
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = selectedDays
         let event = Event(name: name, emoji: emoji, color: color, day: day)
-        var allTrackersInCategory: [Event] = []
-        for tracker in trackers {
-            if tracker.label == category {
-                allTrackersInCategory = tracker.trackers
-                trackers.removeAll(where: {$0.label == category})
-            }
-        }
-        allTrackersInCategory.append(event)
-        let newTrackersElement = TrackerCategory(label: category, trackers: allTrackersInCategory)
-        trackers.append(newTrackersElement)
-        let notification = Notification(name: Notification.Name("addEvent"))
-        NotificationCenter.default.post(notification)
-        categoryName = ""
-        selectedDays = []
-        shortSelectedDays = []
         dismiss(animated: true)
         try! trackerStore.addTracker(event: event, category: category)
     }
