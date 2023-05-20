@@ -102,6 +102,12 @@ final class TrackerStore: NSObject {
         request.predicate = predicate
         let result = try! context.fetch(request)
         context.delete(result.first ?? TrackerCoreData())
+        let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        recordRequest.returnsObjectsAsFaults = false
+        let recordPredicate = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.recordID), inID.uuidString)
+        recordRequest.predicate = recordPredicate
+        let records = try! context.fetch(recordRequest)
+        context.delete(records.first ?? TrackerRecordCoreData())
         try! context.save()
     }
     
