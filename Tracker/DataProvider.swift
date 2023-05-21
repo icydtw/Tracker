@@ -74,10 +74,9 @@ final class DataProvider: NSObject {
         trackerCategories.forEach { category in
             let newCategoryName = category.name
             var events: [Event] = []
-            let colorMarshall = UIColorMarshalling()
             trackersCD.forEach { track in
                 if track.category?.name == newCategoryName {
-                    events.append(Event(id: track.trackerID ?? UUID(), name: track.name ?? "", emoji: track.emoji ?? "", color: colorMarshall.color(from: track.color ?? ""), day: track.day?.components(separatedBy: " ")))
+                    events.append(Event(id: track.trackerID ?? UUID(), name: track.name ?? "", emoji: track.emoji ?? "", color: UIColor.color(from: track.color ?? ""), day: track.day?.components(separatedBy: " ")))
                 }
             }
             let neeeew = [TrackerCategory(label: newCategoryName ?? "", trackers: events)]
