@@ -28,8 +28,8 @@ final class ColorCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             color.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             color.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            color.heightAnchor.constraint(equalToConstant: 30),
-            color.widthAnchor.constraint(equalToConstant: 30)
+            color.heightAnchor.constraint(equalToConstant: 40),
+            color.widthAnchor.constraint(equalToConstant: 40)
         ])
     }
     
