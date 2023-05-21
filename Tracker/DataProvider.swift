@@ -8,7 +8,7 @@ final class DataProvider: NSObject {
     
     let context: NSManagedObjectContext
     
-    var delegate: TrackersViewController?
+    weak var delegate: TrackersViewController?
     
     let trackerStore = TrackerStore()
     
