@@ -103,7 +103,11 @@ class TrackersViewController: UIViewController {
         setupProperties()
         setupView()
         dataProvider.updateCollectionView()
-        try! dataProvider.fetchedResultsController.performFetch()
+        do {
+            try dataProvider.fetchedResultsController.performFetch()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка запроса")
+        }
     }
     
     // MARK: - Настройка внешнего вида

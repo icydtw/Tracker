@@ -56,10 +56,20 @@ final class DataProvider: NSObject {
     func updateCollectionView() {
         let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         categoryRequest.returnsObjectsAsFaults = false
-        let trackerCategories = try! context.fetch(categoryRequest)
+        var trackerCategories: [TrackerCategoryCoreData] = []
+        do {
+            trackerCategories = try context.fetch(categoryRequest)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
+        }
         let trackerRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         trackerRequest.returnsObjectsAsFaults = false
-        let trackersCD = try! context.fetch(trackerRequest)
+        var trackersCD: [TrackerCoreData] = []
+        do {
+            trackersCD = try context.fetch(trackerRequest)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
+        }
         trackers = []
         trackerCategories.forEach { category in
             let newCategoryName = category.name
@@ -76,7 +86,12 @@ final class DataProvider: NSObject {
         trackerRecords = []
         let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         recordRequest.returnsObjectsAsFaults = false
-        let trackerRecordCD = try! context.fetch(recordRequest)
+        var trackerRecordCD: [TrackerRecordCoreData] = []
+        do {
+            trackerRecordCD = try context.fetch(recordRequest)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
+        }
         trackerRecordCD.forEach { record in
             trackerRecords.append(TrackerRecord(id: record.tracker?.trackerID ?? UUID(), day: record.day ?? ""))
         }

@@ -8,7 +8,12 @@ final class TrackerCategoryStore {
     func addCategory(category: String, tracker: TrackerCoreData, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
-        let trackerCategories = try! context.fetch(request)
+        var trackerCategories: [TrackerCategoryCoreData] = []
+        do {
+            trackerCategories = try context.fetch(request)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
+        }
         if !trackerCategories.filter({$0.name == category}).isEmpty {
             trackerCategories.forEach { trackerCategory in
                 if trackerCategory.name == category {
@@ -21,7 +26,11 @@ final class TrackerCategoryStore {
             newCategory.id = UUID()
             newCategory.addToTrackers(tracker)
         }
-        try! context.save()
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+        }
     }
     
 }

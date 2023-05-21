@@ -13,7 +13,11 @@ final class TrackerStore {
         tracker.day = event.day?.joined(separator: " ")
         tracker.emoji = event.emoji
         tracker.name = event.name
-        try! context.save()
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+        }
         trackerCategoryStore.addCategory(category: category, tracker: tracker, context: context)
     }
     
@@ -23,9 +27,18 @@ final class TrackerStore {
         request.returnsObjectsAsFaults = false
         let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
         request.predicate = predicate
-        let result = try! context.fetch(request)
+        var result: [TrackerCoreData] = []
+        do {
+            result = try context.fetch(request)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
+        }
         context.delete(result.first ?? TrackerCoreData())
-        try! context.save()
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+        }
     }
 
 }

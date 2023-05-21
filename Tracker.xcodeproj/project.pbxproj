@@ -10,6 +10,7 @@
 		B41946C72A19153300D0EEFE /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41946C62A19153300D0EEFE /* TrackerCategoryStore.swift */; };
 		B41946C92A19154200D0EEFE /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41946C82A19154200D0EEFE /* TrackerRecordStore.swift */; };
 		B41946CB2A19195100D0EEFE /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41946CA2A19195100D0EEFE /* DataProvider.swift */; };
+		B41946CE2A1A66A200D0EEFE /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41946CD2A1A66A200D0EEFE /* AlertMessage.swift */; };
 		B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DE7FD29CD9C2B004AB4F7 /* AppDelegate.swift */; };
 		B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DE7FF29CD9C2B004AB4F7 /* SceneDelegate.swift */; };
 		B43DE80229CD9C2B004AB4F7 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DE80129CD9C2B004AB4F7 /* TrackersViewController.swift */; };
@@ -40,6 +41,7 @@
 		B41946C62A19153300D0EEFE /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackerCategoryStore.swift; path = Tracker/TrackerCategoryStore.swift; sourceTree = SOURCE_ROOT; };
 		B41946C82A19154200D0EEFE /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackerRecordStore.swift; path = Tracker/TrackerRecordStore.swift; sourceTree = SOURCE_ROOT; };
 		B41946CA2A19195100D0EEFE /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DataProvider.swift; path = Tracker/DataProvider.swift; sourceTree = SOURCE_ROOT; };
+		B41946CD2A1A66A200D0EEFE /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		B43DE7FA29CD9C2B004AB4F7 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43DE7FD29CD9C2B004AB4F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B43DE7FF29CD9C2B004AB4F7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +81,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B41946CC2A1A669100D0EEFE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B41946CD2A1A66A200D0EEFE /* AlertMessage.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		B435BB022A166DB3009639CA /* Domain */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +119,7 @@
 		B43DE7FC29CD9C2B004AB4F7 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				B41946CC2A1A669100D0EEFE /* Helpers */,
 				B435BB022A166DB3009639CA /* Domain */,
 				B4A6D50E29EEF82800C7E63C /* Models */,
 				B464D7E329EE7AD20033AC5B /* Supplementary Views */,
@@ -276,6 +287,7 @@
 				B41946C72A19153300D0EEFE /* TrackerCategoryStore.swift in Sources */,
 				B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */,
 				B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */,
+				B41946CE2A1A66A200D0EEFE /* AlertMessage.swift in Sources */,
 				B464D7E229ED431A0033AC5B /* EmojiCell.swift in Sources */,
 				B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */,
 				B486233529FA62BB00B95667 /* ScheduleViewController.swift in Sources */,

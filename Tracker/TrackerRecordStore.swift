@@ -7,20 +7,38 @@ final class TrackerRecordStore {
     func addRecord(id: UUID, day: String, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
-        let trackers = try! context.fetch(request)
+        var trackers: [TrackerCoreData] = []
+        do {
+            trackers = try context.fetch(request)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
+        }
         let newRecord = TrackerRecordCoreData(context: context)
         newRecord.day = day
         newRecord.tracker = trackers.filter({$0.trackerID == id}).first
-        try! context.save()
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+        }
     }
     
     // MARK: - Метод, снимающий -1 от счётчика трекеров
     func deleteRecord(id: UUID, day: String, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.returnsObjectsAsFaults = false
-        let records = try! context.fetch(request)
+        var records: [TrackerRecordCoreData] = []
+        do {
+            records = try context.fetch(request)
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+        }
         context.delete(records.filter({$0.tracker?.trackerID == id && $0.day == day}).first ?? NSManagedObject())
-        try! context.save()
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+        }
     }
     
 }
