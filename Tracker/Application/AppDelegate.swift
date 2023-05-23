@@ -6,9 +6,20 @@
 //
 
 import UIKit
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    let coreDataContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "DataModel")
+        container.loadPersistentStores { description, error in
+            if let error {
+                print(error.localizedDescription)
+            }
+        }
+        return container
+    }()
 
     var window: UIWindow?
 

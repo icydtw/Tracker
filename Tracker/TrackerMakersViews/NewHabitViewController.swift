@@ -4,6 +4,8 @@ import UIKit
 final class NewHabitViewController: UIViewController {
 
     // MARK: - Свойства
+    let dataProvider = DataProvider()
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -193,22 +195,11 @@ final class NewHabitViewController: UIViewController {
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = selectedDays
         let event = Event(name: name, emoji: emoji, color: color, day: day)
-        var allTrackersInCategory: [Event] = []
-        for tracker in trackers {
-            if tracker.label == category {
-                allTrackersInCategory = tracker.trackers
-                trackers.removeAll(where: {$0.label == category})
-            }
-        }
-        allTrackersInCategory.append(event)
-        let newTrackersElement = TrackerCategory(label: category, trackers: allTrackersInCategory)
-        trackers.append(newTrackersElement)
-        let notification = Notification(name: Notification.Name("addEvent"))
-        NotificationCenter.default.post(notification)
+        dismiss(animated: true)
         categoryName = ""
         selectedDays = []
         shortSelectedDays = []
-        dismiss(animated: true)
+        dataProvider.addTracker(event: event, category: category)
     }
     
     // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
@@ -374,12 +365,12 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     
     // MARK: Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.bounds.width-56) / 6, height: 50)
+        return CGSize(width: 50, height: 50)
     }
     
     // MARK: Метод, определяющий минимальное расстояние между элементами в секции коллекции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return (collectionView.bounds.width - 300) / 6
     }
     
     // MARK: Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
@@ -401,8 +392,9 @@ extension NewHabitViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
-            cell?.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
-            cell?.layer.cornerRadius = 16
+            cell?.layer.borderWidth = 3
+            cell?.layer.borderColor = cell?.color.backgroundColor?.cgColor.copy(alpha: 0.3)
+            cell?.layer.cornerRadius = 8
             cell?.layer.masksToBounds = true
             activateButton()
         } else {
@@ -418,7 +410,7 @@ extension NewHabitViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
-            cell?.backgroundColor = UIColor.clear
+            cell?.layer.borderColor = CGColor(gray: 0, alpha: 0)
         } else {
             let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell
             cell?.backgroundColor = UIColor.clear

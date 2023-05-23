@@ -7,6 +7,7 @@ final class EmojiCell: UICollectionViewCell {
     let emojiLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 38)
         return label
     }()
     
