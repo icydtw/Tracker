@@ -15,7 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
-        window.rootViewController = MainTabBarViewController()
+        if UserDefaults.standard.bool(forKey: "isLogged") {
+            window.rootViewController = MainTabBarViewController()
+        } else {
+            window.rootViewController = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        }
         window.makeKeyAndVisible()
         self.window = window
     }

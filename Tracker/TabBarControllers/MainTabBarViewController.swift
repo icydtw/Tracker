@@ -7,6 +7,7 @@ final class MainTabBarViewController: UITabBarController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setupTabBar()
+        UserDefaults.standard.set(true, forKey: "isLogged")
     }
     
     required init?(coder: NSCoder) {

@@ -112,6 +112,7 @@ class TrackersViewController: UIViewController {
     
     // MARK: - Настройка внешнего вида
     private func setupView() {
+        dataProvider.updateCollectionView()
         datePickerValueChanged(sender: datePicker)
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
