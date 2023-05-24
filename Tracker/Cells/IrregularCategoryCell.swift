@@ -27,7 +27,8 @@ final class IrregularCategoryCell: UITableViewCell {
         return image
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupProperties()
@@ -38,7 +39,7 @@ final class IrregularCategoryCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         NSLayoutConstraint.activate([
             title.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -48,7 +49,7 @@ final class IrregularCategoryCell: UITableViewCell {
         ])
     }
     
-    // MARK: - Настройка свойств, жестов и нотификаций
+    /// Настройка свойств и нотификаций
     private func setupProperties() {
         NotificationCenter.default.addObserver(self, selector: #selector(showCategory), name: Notification.Name("category_changed"), object: nil)
         contentView.addSubview(title)
@@ -58,7 +59,7 @@ final class IrregularCategoryCell: UITableViewCell {
         contentView.layer.cornerRadius = 16
     }
     
-    // MARK: - Изменение констрейнтов и свойств ячейки с категорией (при срабатывании нотификации)
+    /// Изменение констрейнтов и свойств ячейки с категорией (при срабатывании нотификации)
     @objc
     private func showCategory() {
         title.removeFromSuperview()

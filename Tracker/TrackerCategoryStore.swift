@@ -4,7 +4,7 @@ import CoreData
 /// Класс, работающий с категориями в БД
 final class TrackerCategoryStore {
     
-    // MARK: - Метод, добавляющий категорию в БД
+    /// Метод, добавляющий категорию в БД
     func addCategory(category: String, tracker: TrackerCoreData, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false

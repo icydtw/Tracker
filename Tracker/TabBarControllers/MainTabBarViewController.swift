@@ -3,7 +3,7 @@ import UIKit
 /// Вью-контроллер таб-бара
 final class MainTabBarViewController: UITabBarController {
     
-    // MARK: - Инициализатор
+    /// Инициализатор
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setupTabBar()
@@ -14,7 +14,7 @@ final class MainTabBarViewController: UITabBarController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupTabBar() {
         tabBar.backgroundColor = .white
         let trackers = TrackersViewController() //первая вкладка "Трекеры"

@@ -1,10 +1,13 @@
 import UIKit
 
+/// Класс-окошко с ошибкой
 final class AlertMessage {
     
+    // MARK: - Свойства
     /// Статическое свойство
     static var shared = AlertMessage()
     
+    // MARK: - Методы
     /// Приватный инициализатор
     private init() {}
     

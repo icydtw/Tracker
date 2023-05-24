@@ -3,7 +3,7 @@ import CoreData
 
 final class TrackerRecordStore {
     
-    // MARK: - Метод, добавляющий +1 к счётчику выполненных трекеров
+    /// Метод, добавляющий +1 к счётчику выполненных трекеров
     func addRecord(id: UUID, day: String, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
@@ -23,7 +23,7 @@ final class TrackerRecordStore {
         }
     }
     
-    // MARK: - Метод, снимающий -1 от счётчика трекеров
+    /// Метод, снимающий -1 от счётчика трекеров
     func deleteRecord(id: UUID, day: String, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.returnsObjectsAsFaults = false

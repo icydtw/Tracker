@@ -95,7 +95,7 @@ class TrackersViewController: UIViewController {
         return search
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider.delegate = self
@@ -110,7 +110,7 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         dataProvider.updateCollectionView()
         datePickerValueChanged(sender: datePicker)
@@ -142,7 +142,7 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    // MARK: - Настройка свойств, жестов и нотификаций
+    /// Настройка свойств, жестов и нотификаций
     private func setupProperties() {
         makeDate(dateFormat: "EEEE")
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
@@ -213,7 +213,7 @@ class TrackersViewController: UIViewController {
         localTrackers = newTrackers.sorted(by: {$0.label < $1.label})
     }
     
-    // MARK: - Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку
+    /// Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку
     private func hideCollection() {
         if !localTrackers.isEmpty {
             stackView.isHidden = true
@@ -224,7 +224,7 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    // MARK: - Метод, вызываемый когда меняется дата в Date Picker
+    /// Метод, вызываемый когда меняется дата в Date Picker
     @objc
     func datePickerValueChanged(sender: UIDatePicker) {
         makeDate(dateFormat: "EEEE")
@@ -233,14 +233,14 @@ class TrackersViewController: UIViewController {
         trackersCollection.reloadData()
     }
     
-    // MARK: - Метод, вызываемый при нажатии на "+"
+    /// Метод, вызываемый при нажатии на "+"
     @objc
     private func plusTapped() {
         let selecterTrackerVC = SelectingTrackerViewController()
         show(selecterTrackerVC, sender: self)
     }
     
-    // MARK: - Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
+    /// Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
     @objc private func addEvent() {
         localTrackers = trackers
         updateCollection()
@@ -248,7 +248,7 @@ class TrackersViewController: UIViewController {
         hideCollection()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    /// Метод, прячущий клавиатуру при нажатии вне её области
     @objc
     func dismissKeyboard() {
         updateCollection()
@@ -260,17 +260,17 @@ class TrackersViewController: UIViewController {
 // MARK: - Расширение для UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     
-    // MARK: Метод, определяющий количество ячеек в секции коллекции
+    /// Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return localTrackers[section].trackers.count
     }
     
-    // MARK: Метод, определяющий количество секций в коллекции
+    /// Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return localTrackers.count
     }
     
-    // MARK: Метод создания и настройки ячейки для indexPath
+    /// Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCell
         cell?.delegate = self
@@ -289,7 +289,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         return cell!
     }
     
-    // MARK: Метод создания и настройки Supplementary View
+    /// Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
         header.title.text = localTrackers[indexPath.section].label
@@ -301,12 +301,12 @@ extension TrackersViewController: UICollectionViewDataSource {
 // MARK: - Расширение для UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
-    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    /// Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (view.frame.width - 41) / 2, height: 148)
     }
     
-    // MARK: Метод, определяющий размер заголовка секции
+    /// Метод, определяющий размер заголовка секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
@@ -321,7 +321,7 @@ extension TrackersViewController: UICollectionViewDelegate {
 // MARK: - Расширение для UISearchBarDelegate
 extension TrackersViewController: UISearchBarDelegate {
     
-    // MARK: Метод, отслеживающий ввод текста в поисковую строку
+    /// Метод, отслеживающий ввод текста в поисковую строку
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         var newEvents: [Event] = []
         var newCategory: String = ""
@@ -349,12 +349,12 @@ extension TrackersViewController: UISearchBarDelegate {
         trackersCollection.reloadData()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии Enter
+    /// Метод, прячущий клавиатуру при нажатии Enter
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии Cancel
+    /// Метод, прячущий клавиатуру при нажатии Cancel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -364,7 +364,7 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - Расширение для TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewControllerProtocol {
     
-    // MARK: Метод, добавляющий информацию о выполненном трекере в trackerRecords
+    /// Метод, добавляющий информацию о выполненном трекере в trackerRecords
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
@@ -380,6 +380,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
 // MARK: - Расширение, упрощающее работу с DatePicker
 extension TrackersViewController {
     
+    /// Метод, заполняющий переменные с датами в том или ином формате
     private func makeDate(dateFormat: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")

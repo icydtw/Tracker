@@ -63,13 +63,13 @@ final class ChoiceOfCategoryViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
         view.addSubview(titleLabel)
@@ -107,12 +107,12 @@ final class ChoiceOfCategoryViewController: UIViewController {
 // MARK: - Расширение для UITableViewDataSource
 extension ChoiceOfCategoryViewController: UITableViewDataSource {
     
-    // MARK: Метод, возвращающий количество строк в секции таблицы
+    /// Метод, возвращающий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }
     
-    // MARK: Метод создания и настройки ячейки таблицы
+    /// Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
         guard let categoryCell = cell as? ChoiceOfCategoryCell else {
@@ -123,12 +123,12 @@ extension ChoiceOfCategoryViewController: UITableViewDataSource {
         return categoryCell
     }
     
-    // MARK: Метод, определяющий, может ли строка таблицы быть редактируемой
+    /// Метод, определяющий, может ли строка таблицы быть редактируемой
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    // MARK: Метод, обрабатывающий удаление строки таблицы
+    /// Метод, обрабатывающий удаление строки таблицы
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             categories.remove(at: indexPath.row)
@@ -145,19 +145,19 @@ extension ChoiceOfCategoryViewController: UITableViewDataSource {
 // MARK: - Расширение для UITableViewDelegate
 extension ChoiceOfCategoryViewController: UITableViewDelegate {
     
-    // MARK: Метод, определяющий высоту строки таблицы
+    /// Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
-    // MARK: Метод конфигурации ячеек перед их отображением
+    /// Метод конфигурации ячеек перед их отображением
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
         }
     }
     
-    // MARK: Метод, вызываемый при нажатии на строку таблицы
+    /// Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCell
         cell?.checkbox.image = UIImage(systemName: "checkmark")
@@ -168,13 +168,13 @@ extension ChoiceOfCategoryViewController: UITableViewDelegate {
         }
     }
     
-    // MARK: Метод, вызываемый при повторном нажатии (снятии выделения) на строку таблицы
+    /// Метод, вызываемый при повторном нажатии (снятии выделения) на строку таблицы
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? ChoiceOfCategoryCell
         cell?.checkbox.image = UIImage()
     }
     
-    // MARK: Метод, определяющий заголовок для удаления строки таблицы
+    /// Метод, определяющий заголовок для удаления строки таблицы
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         return "Удалить"
     }

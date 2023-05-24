@@ -1,5 +1,6 @@
 import UIKit
 
+/// Класс, отвечающий за онбординг
 final class OnboardingViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     // MARK: - Свойства
@@ -30,7 +31,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         return label
     }()
     
-    var button: UIButton = {
+    lazy var button: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
         button.setTitle("Вот это технологии!", for: .normal)
@@ -48,6 +49,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         setupView()
     }
     
+    /// Настройка внешнего вида
     private func setupView() {
         NSLayoutConstraint.activate([
             pageControl.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -24),
@@ -62,32 +64,43 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         ])
     }
     
+    /// Настройка свойств
     private func setupProperties() {
         dataSource = self
         delegate = self
-        if let first = pages.first {
-            setViewControllers([first], direction: .forward, animated: true)
-        }
         view.addSubview(pageControl)
         view.addSubview(button)
         view.addSubview(label)
+        if let first = pages.first {
+            setViewControllers([first], direction: .forward, animated: true)
+        }
     }
     
+    /// Метод, срабатывающий после нажатия на button
     @objc
     private func buttonTapped() {
         let tabBar = MainTabBarViewController()
         tabBar.modalPresentationStyle = .fullScreen
         tabBar.modalTransitionStyle = .crossDissolve
+        vibrate()
         present(tabBar, animated: true)
     }
     
+    /// Анимированное изменение текста label
     func animateTextChange(for label: UILabel, newText: String) {
         UIView.transition(with: label, duration: 0.3, options: .transitionCrossDissolve, animations: {
             label.text = newText
         }, completion: nil)
     }
 
+    /// Метод, нужный для включения вибрации
+    private func vibrate() {
+        let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedbackGenerator.prepare()
+        impactFeedbackGenerator.impactOccurred()
+    }
     
+    /// Метод для получения предыдущего представления UIPageViewController
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
         let previousIndex = viewControllerIndex - 1
@@ -95,6 +108,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         return pages[previousIndex]
     }
     
+    /// Метод для получения следующего представления UIPageViewController
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
         let nextIndex = viewControllerIndex + 1
@@ -102,6 +116,7 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
         return pages[nextIndex]
     }
     
+    /// Метод, вызываемый после переключения между контроллерами в UIPageViewController
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let currentViewController = pageViewController.viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currentViewController) {

@@ -4,7 +4,7 @@ import CoreData
 /// Класс, работающий с трекерами в БД
 final class TrackerStore {
     
-    // MARK: - Метод, добавляющий в БД новый трекер
+    /// Метод, добавляющий в БД новый трекер
     func addTracker(event: Event, category: String, context: NSManagedObjectContext, trackerCategoryStore: TrackerCategoryStore) {
         let tracker = TrackerCoreData(context: context)
         tracker.trackerID = event.id
@@ -20,7 +20,7 @@ final class TrackerStore {
         trackerCategoryStore.addCategory(category: category, tracker: tracker, context: context)
     }
     
-    // MARK: - Метод, удаляющий трекер из БД
+    /// Метод, удаляющий трекер из БД
     func deleteTracker(id inID: UUID, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false

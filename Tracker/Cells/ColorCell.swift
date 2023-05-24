@@ -12,7 +12,8 @@ final class ColorCell: UICollectionViewCell {
         return imageView
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -22,7 +23,7 @@ final class ColorCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         contentView.addSubview(color)
         NSLayoutConstraint.activate([

@@ -59,7 +59,8 @@ final class TrackersCell: UICollectionViewCell {
         return button
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
         //delegate = TrackersViewController()
@@ -70,7 +71,7 @@ final class TrackersCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         textBackground.addSubview(emoji)
         viewBackground.addSubview(name)
@@ -102,7 +103,7 @@ final class TrackersCell: UICollectionViewCell {
         ])
     }
     
-    // MARK: - Метод, вызываемый при нажатии на "+" в ячейке
+    /// Метод, вызываемый при нажатии на "+" в ячейке
     @objc
     private func plusTapped() {
         guard let collectionView = superview as? UICollectionView,
@@ -115,4 +116,5 @@ final class TrackersCell: UICollectionViewCell {
         delegate?.saveDoneEvent(id: tappedID, index: indexPath)
         collectionView.reloadData()
     }
+    
 }

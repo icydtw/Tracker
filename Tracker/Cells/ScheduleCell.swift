@@ -21,7 +21,8 @@ final class ScheduleCell: UITableViewCell {
         return switcher
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -31,7 +32,7 @@ final class ScheduleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
         contentView.addSubview(title)
@@ -44,7 +45,7 @@ final class ScheduleCell: UITableViewCell {
         ])
     }
     
-    // MARK: - Метод, добавляющий и удаляющий из selectedDays элементы при активации/деактивации switcher
+    /// Метод, добавляющий и удаляющий из selectedDays элементы при активации/деактивации switcher
     @objc
     private func switchChanged() {
         if switcher.isOn {

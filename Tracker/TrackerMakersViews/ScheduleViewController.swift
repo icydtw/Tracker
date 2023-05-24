@@ -33,13 +33,13 @@ final class ScheduleViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
         scheduleTable.dataSource = self
@@ -62,7 +62,7 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
-    // MARK: - Метод, вызываемый при нажатии на кнопку "Готово"
+    /// Метод, вызываемый при нажатии на кнопку "Готово"
     @objc
     private func doneButtonTapped() {
         dismiss(animated: true)
@@ -73,7 +73,7 @@ final class ScheduleViewController: UIViewController {
 // MARK: - Расширение для UITableViewDataSource
 extension ScheduleViewController: UITableViewDataSource {
     
-    // MARK: Метод создания и настройки ячейки таблицы
+    /// Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "schedule", for: indexPath)
         guard let scheduleCell = cell as? ScheduleCell else {
@@ -84,12 +84,12 @@ extension ScheduleViewController: UITableViewDataSource {
         return scheduleCell
     }
     
-    // MARK: Метод, возвращающий количество строк в секции таблицы
+    /// Метод, возвращающий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    // MARK: Метод, возвращающий количество секций таблицы
+    /// Метод, возвращающий количество секций таблицы
     func numberOfSections(in tableView: UITableView) -> Int {
         return 7
     }
@@ -98,12 +98,12 @@ extension ScheduleViewController: UITableViewDataSource {
 
 extension ScheduleViewController: UITableViewDelegate {
     
-    // MARK: Метод, определяющий высоту строки таблицы
+    /// Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
-    // MARK: Метод конфигурации ячеек перед их отображением
+    /// Метод конфигурации ячеек перед их отображением
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
