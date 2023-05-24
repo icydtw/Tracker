@@ -34,6 +34,7 @@
 		B486233529FA62BB00B95667 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486233429FA62BB00B95667 /* ScheduleViewController.swift */; };
 		B486233729FA659000B95667 /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486233629FA659000B95667 /* ScheduleCell.swift */; };
 		B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */; };
+		B4D70B0C2A1E141F00DA0B3C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D70B0B2A1E141F00DA0B3C /* OnboardingViewController.swift */; };
 		B4DAE93F2A167A59008851CA /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B4DAE93D2A167A59008851CA /* DataModel.xcdatamodeld */; };
 		B4DAE9412A167AE8008851CA /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DAE9402A167AE8008851CA /* TrackerStore.swift */; };
 /* End PBXBuildFile section */
@@ -68,6 +69,7 @@
 		B486233429FA62BB00B95667 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		B486233629FA659000B95667 /* ScheduleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCell.swift; sourceTree = "<group>"; };
 		B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructs.swift; sourceTree = "<group>"; };
+		B4D70B0B2A1E141F00DA0B3C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		B4DAE93E2A167A59008851CA /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		B4DAE9402A167AE8008851CA /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackerStore.swift; path = Tracker/Application/TrackerStore.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -122,6 +124,7 @@
 		B43DE7FC29CD9C2B004AB4F7 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				B4D70B0A2A1E13F900DA0B3C /* Onboarding */,
 				B41946CC2A1A669100D0EEFE /* Helpers */,
 				B435BB022A166DB3009639CA /* Domain */,
 				B4A6D50E29EEF82800C7E63C /* Models */,
@@ -208,6 +211,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		B4D70B0A2A1E13F900DA0B3C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				B4D70B0B2A1E141F00DA0B3C /* OnboardingViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -289,6 +300,7 @@
 				B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */,
 				B41946C72A19153300D0EEFE /* TrackerCategoryStore.swift in Sources */,
 				B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */,
+				B4D70B0C2A1E141F00DA0B3C /* OnboardingViewController.swift in Sources */,
 				B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */,
 				B41946CE2A1A66A200D0EEFE /* AlertMessage.swift in Sources */,
 				B464D7E229ED431A0033AC5B /* EmojiCell.swift in Sources */,
