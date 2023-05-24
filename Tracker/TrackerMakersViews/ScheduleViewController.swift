@@ -41,6 +41,8 @@ final class ScheduleViewController: UIViewController {
     
     /// Настройка внешнего вида
     private func setupView() {
+        selectedDays = []
+        shortSelectedDays = []
         view.backgroundColor = .white
         scheduleTable.dataSource = self
         scheduleTable.delegate = self
