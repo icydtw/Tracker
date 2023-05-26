@@ -4,7 +4,7 @@ import UIKit
 final class ChoiceOfCategoryViewController: UIViewController {
     
     // MARK: - Свойства
-    let viewModel = CategoryViewModel.shared
+    let viewModel: CategoryViewModel
     
     let stackView: UIStackView = {
         let stack = UIStackView()
@@ -70,6 +70,15 @@ final class ChoiceOfCategoryViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         bind()
+    }
+    
+    init(viewModel: CategoryViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     /// Настройка внешнего вида

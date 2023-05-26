@@ -6,7 +6,7 @@ final class NewHabitViewController: UIViewController {
     // MARK: - Свойства
     let dataProvider = DataProvider()
     
-    let categoryViewModel = CategoryViewModel.shared
+    let categoryViewModel: CategoryViewModel
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -110,6 +110,15 @@ final class NewHabitViewController: UIViewController {
         super.viewDidLoad()
         setupProperties()
         setupView()
+    }
+    
+    init(categoryViewModel: CategoryViewModel) {
+        self.categoryViewModel = categoryViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     /// Настройка внешнего вида
@@ -309,7 +318,7 @@ extension NewHabitViewController: UITableViewDelegate {
     /// Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+            let choiceOfCategoryViewController = ChoiceOfCategoryViewController(viewModel: categoryViewModel)
             show(choiceOfCategoryViewController, sender: self)
         } else {
             let scheduleViewController = ScheduleViewController()

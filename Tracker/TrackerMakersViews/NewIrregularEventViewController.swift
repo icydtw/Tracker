@@ -6,7 +6,7 @@ final class NewIrregularEventViewController: UIViewController {
     // MARK: - Свойства
     let dataProvider = DataProvider()
     
-    let categoryViewModel = CategoryViewModel.shared
+    let categoryViewModel: CategoryViewModel
     
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -108,6 +108,15 @@ final class NewIrregularEventViewController: UIViewController {
         super.viewDidLoad()
         setupProperties()
         setupView()
+    }
+    
+    init(categoryViewModel: CategoryViewModel) {
+        self.categoryViewModel = categoryViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     /// Настройка внешнего вида
@@ -378,7 +387,7 @@ extension NewIrregularEventViewController: UITableViewDelegate {
     
     /// Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+        let choiceOfCategoryViewController = ChoiceOfCategoryViewController(viewModel: categoryViewModel)
         show(choiceOfCategoryViewController, sender: self)
     }
     

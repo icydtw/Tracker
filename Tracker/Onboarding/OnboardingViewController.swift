@@ -5,9 +5,10 @@ final class OnboardingViewController: UIPageViewController, UIPageViewController
     
     // MARK: - Свойства
     lazy var pages: [UIViewController] = {
-        let firstPage = FirstOnboardingPageViewController()
-        let secondPage = SecondOnboardingPageViewController()
-        secondPage.view.backgroundColor = .systemGreen
+        let firstPage = OnboardingPageViewController()
+        firstPage.backgroundImage.image = UIImage(named: "FirstOnboardPageImage")
+        let secondPage = OnboardingPageViewController()
+        secondPage.backgroundImage.image = UIImage(named: "SecondOnboardPageImage")
         return [firstPage, secondPage]
     }()
     

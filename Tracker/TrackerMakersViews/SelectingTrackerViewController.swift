@@ -4,6 +4,8 @@ import UIKit
 final class SelectingTrackerViewController: UIViewController {
     
     // MARK: - Свойства
+    let categoryViewModel = CategoryViewModel()
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
@@ -74,14 +76,14 @@ final class SelectingTrackerViewController: UIViewController {
     /// Метод, вызываемый при выборе пользователем "Нерегулярного события"
     @objc
     private func irregularTapped() {
-        let irregularEventVC = NewIrregularEventViewController()
+        let irregularEventVC = NewIrregularEventViewController(categoryViewModel: categoryViewModel)
         show(irregularEventVC, sender: self)
     }
     
     /// Метод, вызываемый при выборе пользователем "Привычки"
     @objc
     private func habitTapped() {
-        let habitVC = NewHabitViewController()
+        let habitVC = NewHabitViewController(categoryViewModel: categoryViewModel)
         show(habitVC, sender: self)
     }
     

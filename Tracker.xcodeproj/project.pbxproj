@@ -35,8 +35,7 @@
 		B486233729FA659000B95667 /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486233629FA659000B95667 /* ScheduleCell.swift */; };
 		B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */; };
 		B4D70B0C2A1E141F00DA0B3C /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D70B0B2A1E141F00DA0B3C /* OnboardingViewController.swift */; };
-		B4D70B0E2A1E1CDA00DA0B3C /* FirstOnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D70B0D2A1E1CDA00DA0B3C /* FirstOnboardingPageViewController.swift */; };
-		B4D70B102A1E22BE00DA0B3C /* SecondOnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D70B0F2A1E22BE00DA0B3C /* SecondOnboardingPageViewController.swift */; };
+		B4D70B0E2A1E1CDA00DA0B3C /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D70B0D2A1E1CDA00DA0B3C /* OnboardingPageViewController.swift */; };
 		B4D70B3A2A1F3F8C00DA0B3C /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D70B392A1F3F8C00DA0B3C /* CategoryViewModel.swift */; };
 		B4DAE93F2A167A59008851CA /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B4DAE93D2A167A59008851CA /* DataModel.xcdatamodeld */; };
 		B4DAE9412A167AE8008851CA /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DAE9402A167AE8008851CA /* TrackerStore.swift */; };
@@ -73,8 +72,7 @@
 		B486233629FA659000B95667 /* ScheduleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCell.swift; sourceTree = "<group>"; };
 		B4A6D50F29EEF83300C7E63C /* TrackerStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructs.swift; sourceTree = "<group>"; };
 		B4D70B0B2A1E141F00DA0B3C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
-		B4D70B0D2A1E1CDA00DA0B3C /* FirstOnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstOnboardingPageViewController.swift; sourceTree = "<group>"; };
-		B4D70B0F2A1E22BE00DA0B3C /* SecondOnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondOnboardingPageViewController.swift; sourceTree = "<group>"; };
+		B4D70B0D2A1E1CDA00DA0B3C /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		B4D70B392A1F3F8C00DA0B3C /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		B4DAE93E2A167A59008851CA /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		B4DAE9402A167AE8008851CA /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackerStore.swift; path = Tracker/Application/TrackerStore.swift; sourceTree = SOURCE_ROOT; };
@@ -222,8 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				B4D70B0B2A1E141F00DA0B3C /* OnboardingViewController.swift */,
-				B4D70B0D2A1E1CDA00DA0B3C /* FirstOnboardingPageViewController.swift */,
-				B4D70B0F2A1E22BE00DA0B3C /* SecondOnboardingPageViewController.swift */,
+				B4D70B0D2A1E1CDA00DA0B3C /* OnboardingPageViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -328,10 +325,9 @@
 				B486232B29F272F600B95667 /* IrregularCategoryCell.swift in Sources */,
 				B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */,
 				B41946CB2A19195100D0EEFE /* DataProvider.swift in Sources */,
-				B4D70B0E2A1E1CDA00DA0B3C /* FirstOnboardingPageViewController.swift in Sources */,
+				B4D70B0E2A1E1CDA00DA0B3C /* OnboardingPageViewController.swift in Sources */,
 				B486233329F8FE7C00B95667 /* HabitCategoryCell.swift in Sources */,
 				B4A6D51029EEF83300C7E63C /* TrackerStructs.swift in Sources */,
-				B4D70B102A1E22BE00DA0B3C /* SecondOnboardingPageViewController.swift in Sources */,
 				B41946C92A19154200D0EEFE /* TrackerRecordStore.swift in Sources */,
 				B43DE80029CD9C2B004AB4F7 /* SceneDelegate.swift in Sources */,
 				B486233729FA659000B95667 /* ScheduleCell.swift in Sources */,
