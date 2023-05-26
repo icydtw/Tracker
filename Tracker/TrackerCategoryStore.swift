@@ -1,46 +1,60 @@
-import Foundation
+import UIKit
 import CoreData
 
 /// Класс, работающий с категориями в БД
-final class TrackerCategoryStore {
+final class TrackerCategoryStore: NSObject {
     
     // MARK: - Свойства
-    /// Массив с категориями, используемыми в приложении
-    
-    private var categories = UserDefaults.standard.array(forKey: "category_list") as? [String]
-
     /// Переменная, хранящая выбранную пользователем категорию события
     private var categoryName = ""
     
+    let appDelegate: AppDelegate
+    let context: NSManagedObjectContext
+    
     // MARK: - Методы
+    override init() {
+        self.appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.coreDataContainer.viewContext
+    }
+    
     func changeChoosedCategory(category: String) -> Bool {
         categoryName = category
         return true
     }
     
-    func getCategories() -> [String] {
-        return categories ?? []
+    func getCategories() -> [String?] {
+        let request = NSFetchRequest<CategoriesList>(entityName: "CategoriesList")
+        guard let result = try? context.fetch(request) else { return [] }
+        let categories = result.map({$0.name})
+        return categories
     }
     
     func deleteCategory(at index: IndexPath) -> IndexPath {
-        categories?.remove(at: index.row)
-        UserDefaults.standard.set(categories, forKey: "category_list")
+        let request = NSFetchRequest<CategoriesList>(entityName: "CategoriesList")
+        guard let result = try? context.fetch(request) else { return IndexPath() }
+        context.delete(result[index.row])
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления категории")
+        }
         return index
-    }
-    
-    func getChoosedCategory() -> String {
-        return categoryName
     }
     
     /// Метод, добавляющий новую категорию в список
     func addCategory(newCategory: String) -> Bool {
-        categories?.append(newCategory)
-        UserDefaults.standard.set(categories, forKey: "category_list")
-        if UserDefaults.standard.synchronize() {
-            return true
-        } else {
-            return false
+        let category = CategoriesList(context: context)
+        category.name = newCategory
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления категории")
         }
+        return true
+    }
+    
+    func getChoosedCategory() -> String {
+        return categoryName
     }
  
     /// Метод, добавляющий структуру "категория + трекеры" в БД
@@ -70,6 +84,16 @@ final class TrackerCategoryStore {
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
         }
+    }
+    
+}
+
+// MARK: - Расширение для NSFetchedResultsControllerDelegate
+extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    
+    /// Метод, вызываемый автоматически при изменении данных в БД
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("1234567890SOS")
     }
     
 }

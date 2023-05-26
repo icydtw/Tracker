@@ -76,6 +76,7 @@ final class SelectingTrackerViewController: UIViewController {
     /// Метод, вызываемый при выборе пользователем "Нерегулярного события"
     @objc
     private func irregularTapped() {
+        categoryViewModel.getCategories()
         let irregularEventVC = NewIrregularEventViewController(categoryViewModel: categoryViewModel)
         show(irregularEventVC, sender: self)
     }
@@ -83,6 +84,7 @@ final class SelectingTrackerViewController: UIViewController {
     /// Метод, вызываемый при выборе пользователем "Привычки"
     @objc
     private func habitTapped() {
+        categoryViewModel.getCategories()
         let habitVC = NewHabitViewController(categoryViewModel: categoryViewModel)
         show(habitVC, sender: self)
     }

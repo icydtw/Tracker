@@ -142,6 +142,7 @@ final class ChoiceOfCategoryViewController: UIViewController {
         categoryViewModel.isCategoryDeleted = { [weak self] index in
             guard let self = self else { return }
             self.categoriesTable.deleteRows(at: [index], with: .fade)
+            self.categoriesTable.reloadData()
             if self.categoryViewModel.getCategories().isEmpty {
                 self.categoriesTable.isHidden = true
                 self.stackView.isHidden = false

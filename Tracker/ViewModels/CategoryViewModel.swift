@@ -20,7 +20,7 @@ final class CategoryViewModel {
         isCategoryChoosed?(result)
     }
     
-    func getCategories() -> [String] {
+    func getCategories() -> [String?] {
         return model.getCategories()
     }
     

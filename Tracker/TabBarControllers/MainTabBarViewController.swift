@@ -27,12 +27,6 @@ final class MainTabBarViewController: UITabBarController {
     /// Настройка свойств
     private func setupProperties() {
         UserDefaults.standard.set(true, forKey: "isLogged")
-        let categoryList = UserDefaults.standard.array(forKey: "category_list") as? [String]
-        if categoryList == nil || categoryList == [] {
-            UserDefaults.standard.set([
-                "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
-            ], forKey: "category_list")
-        }
     }
     
 }
