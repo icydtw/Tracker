@@ -69,8 +69,9 @@ final class AdditionNewCategoryViewController: UIViewController {
             createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            
         ])
+        createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     /// Настройка свойств и жестов
@@ -82,6 +83,8 @@ final class AdditionNewCategoryViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     /// Активация кнопки
@@ -100,6 +103,22 @@ final class AdditionNewCategoryViewController: UIViewController {
         }
     }
     
+    @objc
+    private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            UIView.animate(withDuration: 0.3) {
+                self.createButton.transform = CGAffineTransform(translationX: 0, y: -keyboardSize.height)
+            }
+        }
+    }
+
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.createButton.transform = .identity
+        }
+    }
+
     private func bind() {
         categoryViewModel.isCategoryAdded = { result in
             switch result {
