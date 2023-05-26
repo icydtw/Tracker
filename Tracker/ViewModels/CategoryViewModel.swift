@@ -9,6 +9,8 @@ final class CategoryViewModel {
     
     var isCategoryDeleted: Binding<IndexPath>?
     
+    var isCategoryAdded: Binding<Bool>?
+    
     var model = TrackerCategoryStore()
     
     // MARK: - Методы
@@ -29,5 +31,10 @@ final class CategoryViewModel {
     
     func getChoosedCategory() -> String {
         return model.getChoosedCategory()
+    }
+    
+    func addCategory(newCategory: String) {
+        let result = model.addCategory(newCategory: newCategory)
+        isCategoryAdded?(result)
     }
 }

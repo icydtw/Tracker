@@ -7,7 +7,7 @@ final class MainTabBarViewController: UITabBarController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setupTabBar()
-        UserDefaults.standard.set(true, forKey: "isLogged")
+        setupProperties()
     }
     
     required init?(coder: NSCoder) {
@@ -22,6 +22,17 @@ final class MainTabBarViewController: UITabBarController {
         let statistics = StatisticsViewController() //вторая вкладка "Статистика"
         statistics.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(systemName: "hare.fill"), tag: 1)
         viewControllers = [trackers, statistics]
+    }
+    
+    /// Настройка свойств
+    private func setupProperties() {
+        UserDefaults.standard.set(true, forKey: "isLogged")
+        let categoryList = UserDefaults.standard.array(forKey: "category_list") as? [String]
+        if categoryList == nil || categoryList == [] {
+            UserDefaults.standard.set([
+                "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
+            ], forKey: "category_list")
+        }
     }
     
 }

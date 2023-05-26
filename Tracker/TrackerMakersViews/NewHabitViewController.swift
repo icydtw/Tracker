@@ -188,6 +188,13 @@ final class NewHabitViewController: UIViewController {
         }
     }
     
+    private func deactivateButton() {
+        if !enterNameTextField.hasText || categoryViewModel.getChoosedCategory().isEmpty || selectedDays.isEmpty || (emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) || (colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+            createButton.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+            createButton.isEnabled = false
+        }
+    }
+    
     private func vibrate() {
         let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         impactFeedbackGenerator.prepare()
@@ -265,11 +272,12 @@ extension NewHabitViewController: UITextFieldDelegate {
     }
     
     /// Метод, используемый для проверки наличия текста в UITextField
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         if textField.hasText {
             activateButton()
+        } else {
+            deactivateButton()
         }
-        return true
     }
     
 }

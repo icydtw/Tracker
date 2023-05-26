@@ -17,7 +17,7 @@ final class TrackerStore {
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
         }
-        trackerCategoryStore.addCategory(category: category, tracker: tracker, context: context)
+        trackerCategoryStore.addCategoryStruct(category: category, tracker: tracker, context: context)
     }
     
     /// Метод, удаляющий трекер из БД

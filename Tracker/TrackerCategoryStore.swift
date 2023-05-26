@@ -6,9 +6,8 @@ final class TrackerCategoryStore {
     
     // MARK: - Свойства
     /// Массив с категориями, используемыми в приложении
-    private var categories = [
-        "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
-    ]
+    
+    private var categories = UserDefaults.standard.array(forKey: "category_list") as? [String]
 
     /// Переменная, хранящая выбранную пользователем категорию события
     private var categoryName = ""
@@ -20,20 +19,32 @@ final class TrackerCategoryStore {
     }
     
     func getCategories() -> [String] {
-        return categories
+        return categories ?? []
     }
     
     func deleteCategory(at index: IndexPath) -> IndexPath {
-        categories.remove(at: index.row)
+        categories?.remove(at: index.row)
+        UserDefaults.standard.set(categories, forKey: "category_list")
         return index
     }
     
     func getChoosedCategory() -> String {
         return categoryName
     }
+    
+    /// Метод, добавляющий новую категорию в список
+    func addCategory(newCategory: String) -> Bool {
+        categories?.append(newCategory)
+        UserDefaults.standard.set(categories, forKey: "category_list")
+        if UserDefaults.standard.synchronize() {
+            return true
+        } else {
+            return false
+        }
+    }
  
-    /// Метод, добавляющий категорию в БД
-    func addCategory(category: String, tracker: TrackerCoreData, context: NSManagedObjectContext) {
+    /// Метод, добавляющий структуру "категория + трекеры" в БД
+    func addCategoryStruct(category: String, tracker: TrackerCoreData, context: NSManagedObjectContext) {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
         var trackerCategories: [TrackerCategoryCoreData] = []
