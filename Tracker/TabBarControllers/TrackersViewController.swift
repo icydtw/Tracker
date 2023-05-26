@@ -175,7 +175,8 @@ class TrackersViewController: UIViewController {
     
     func showMenuForCell(at indexPath: IndexPath) {
         let alertController = UIAlertController(title: "Меню", message: "Выберите действие", preferredStyle: .actionSheet)
-        let action1 = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
+        let action1 = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (action) in
+            guard let self = self else { return }
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
             let id = self.localTrackers[indexPath.section].trackers[indexPath.row].id
             self.dataProvider.deleteTracker(id: id)

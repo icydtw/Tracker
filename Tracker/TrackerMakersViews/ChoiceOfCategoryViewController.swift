@@ -116,7 +116,8 @@ final class ChoiceOfCategoryViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.isCategoryChoosed = { isOk in
+        viewModel.isCategoryChoosed = { [weak self] isOk in
+            guard let self = self else { return }
             if isOk {
                 self.dismiss(animated: true)
                 let notification = Notification(name: Notification.Name("category_changed"))
@@ -126,7 +127,8 @@ final class ChoiceOfCategoryViewController: UIViewController {
             }
         }
         
-        viewModel.isCategoryDeleted = { index in
+        viewModel.isCategoryDeleted = { [weak self] index in
+            guard let self = self else { return }
             self.categoriesTable.deleteRows(at: [index], with: .fade)
             if self.viewModel.getCategories().isEmpty {
                 self.categoriesTable.isHidden = true
