@@ -104,6 +104,8 @@ final class AdditionNewCategoryViewController: UIViewController {
         categoryViewModel.isCategoryAdded = { result in
             switch result {
             case true: self.dismiss(animated: true)
+                let notification = Notification(name: Notification.Name("categories_added"))
+                NotificationCenter.default.post(notification)
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления категории")
             }
         }

@@ -83,6 +83,7 @@ final class ChoiceOfCategoryViewController: UIViewController {
     
     /// Настройка внешнего вида
     private func setupView() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCategories), name: Notification.Name("categories_added"), object: nil)
         view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(stackView)
@@ -101,18 +102,28 @@ final class ChoiceOfCategoryViewController: UIViewController {
             addCategoryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            addCategoryButton.heightAnchor.constraint(equalToConstant: 60)
+            addCategoryButton.heightAnchor.constraint(equalToConstant: 60),
+            categoriesTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoriesTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            categoriesTable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            categoriesTable.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -46)
         ])
+        showCategories()
+    }
+    
+    @objc
+    private func updateCategories() {
+        showCategories()
+        categoriesTable.reloadData()
+    }
+    
+    private func showCategories() {
         if !categoryViewModel.getCategories().isEmpty {
             stackView.isHidden = true
-            NSLayoutConstraint.activate([
-                categoriesTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                categoriesTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                categoriesTable.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-                categoriesTable.heightAnchor.constraint(equalToConstant: CGFloat(75 * categoryViewModel.getCategories().count)),
-                categoriesTable.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: 46)
-            ])
-            
+            categoriesTable.isHidden = false
+        } else {
+            stackView.isHidden = false
+            categoriesTable.isHidden = true
         }
     }
     
@@ -135,6 +146,9 @@ final class ChoiceOfCategoryViewController: UIViewController {
                 self.categoriesTable.isHidden = true
                 self.stackView.isHidden = false
             }
+            categoriesTable.cellForRow(at: IndexPath(row: categoryViewModel.getCategories().count - 1, section: 0))?.contentView.layer.cornerRadius = 16
+            categoriesTable.cellForRow(at: IndexPath(row: categoryViewModel.getCategories().count - 1, section: 0))?.contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            categoriesTable.cellForRow(at: IndexPath(row: categoryViewModel.getCategories().count - 1, section: 0))?.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: categoriesTable.bounds.size.width)
         }
     }
     
@@ -157,6 +171,8 @@ extension ChoiceOfCategoryViewController: UITableViewDataSource {
     /// Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
+        cell.separatorInset = .zero
+        cell.contentView.layer.cornerRadius = .zero
         guard let categoryCell = cell as? ChoiceOfCategoryCell else {
             return UITableViewCell()
         }
@@ -189,6 +205,10 @@ extension ChoiceOfCategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
+            cell.contentView.layer.cornerRadius = 16
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
+            cell.contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.layer.masksToBounds = true
         }
     }
     
