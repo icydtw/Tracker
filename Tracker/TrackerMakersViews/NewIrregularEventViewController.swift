@@ -109,6 +109,7 @@ final class NewIrregularEventViewController: UIViewController {
         super.viewDidLoad()
         setupProperties()
         setupView()
+        bind()
     }
     
     init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
@@ -180,6 +181,15 @@ final class NewIrregularEventViewController: UIViewController {
         enterNameTextField.delegate = self
     }
     
+    private func bind() {
+        trackersViewModel.isTrackerAdded = { result in
+            switch result{
+            case true: self.dismiss(animated: true)
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
+            }
+        }
+    }
+    
     /// Метод, вызываемый при нажатии на кнопку "Отмена"
     @objc
     private func cancel() {
@@ -202,7 +212,6 @@ final class NewIrregularEventViewController: UIViewController {
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let event = Event(name: name, emoji: emoji, color: color, day: nil)
-        dismiss(animated: true)
         categoryViewModel.didChooseCategory(name: "")
         trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
         vibrate()

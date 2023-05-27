@@ -106,6 +106,7 @@ class TrackersViewController: UIViewController {
         hideCollection()
         setupProperties()
         setupView()
+        bind()
         dataProvider.updateCollectionView()
         do {
             try dataProvider.fetchedResultsController.performFetch()
@@ -194,7 +195,6 @@ class TrackersViewController: UIViewController {
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
             let id = self.localTrackers[indexPath.section].trackers[indexPath.row].id
             self.trackersViewModel.deleteTracker(id: id)
-            self.datePickerValueChanged(sender: self.datePicker)
         }
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         alertController.addAction(action1)
@@ -226,6 +226,35 @@ class TrackersViewController: UIViewController {
             }
         }
         localTrackers = newTrackers.sorted(by: {$0.label < $1.label})
+    }
+    
+    /// Биндинг
+    private func bind() {
+        trackersViewModel.isTrackerDeleted = { result in
+            switch result {
+            case true: self.datePickerValueChanged(sender: self.datePicker)
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления трекера")
+            }
+        }
+        recordViewModel.isRecordAdded = { result in
+            switch result {
+            case true: self.vibrate()
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления рекорда")
+            }
+        }
+        recordViewModel.isRecordDeleted = { result in
+            switch result {
+            case true: self.vibrate()
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления рекорда")
+            }
+        }
+    }
+    
+    /// Метод, нужный для включения вибрации
+    private func vibrate() {
+        let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedbackGenerator.prepare()
+        impactFeedbackGenerator.impactOccurred()
     }
     
     /// Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку

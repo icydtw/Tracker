@@ -111,6 +111,7 @@ final class NewHabitViewController: UIViewController {
         super.viewDidLoad()
         setupProperties()
         setupView()
+        bind()
     }
     
     init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
@@ -183,6 +184,16 @@ final class NewHabitViewController: UIViewController {
         enterNameTextField.delegate = self
     }
     
+    private func bind() {
+        trackersViewModel.isTrackerAdded = { result in
+            print(result)
+            switch result {
+            case true: self.dismiss(animated: true)
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
+            }
+        }
+    }
+    
     private func activateButton() {
         if enterNameTextField.hasText && !categoryViewModel.getChoosedCategory().isEmpty && !selectedDays.isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
             createButton.backgroundColor = .black
@@ -220,7 +231,6 @@ final class NewHabitViewController: UIViewController {
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = selectedDays
         let event = Event(name: name, emoji: emoji, color: color, day: day)
-        dismiss(animated: true)
         categoryViewModel.didChooseCategory(name: "")
         selectedDays = []
         shortSelectedDays = []

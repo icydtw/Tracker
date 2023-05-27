@@ -13,7 +13,7 @@ final class TrackerStore: NSObject {
     }
     
     /// Метод, добавляющий в БД новый трекер
-    func addTracker(event: Event, category: String, categoryViewModel: CategoryViewModel) {
+    func addTracker(event: Event, category: String, categoryViewModel: CategoryViewModel) -> Bool {
         let tracker = TrackerCoreData(context: context)
         tracker.trackerID = event.id
         tracker.color = UIColor.hexString(from: event.color)
@@ -23,13 +23,14 @@ final class TrackerStore: NSObject {
         do {
             try context.save()
         } catch {
-            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+            return false
         }
         categoryViewModel.addCategoryStruct(category: category, tracker: tracker)
+        return true
     }
     
     /// Метод, удаляющий трекер из БД
-    func deleteTracker(id inID: UUID) {
+    func deleteTracker(id inID: UUID) -> Bool {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
         let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
@@ -44,8 +45,9 @@ final class TrackerStore: NSObject {
         do {
             try context.save()
         } catch {
-            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+            return false
         }
+         return true
     }
     
 }

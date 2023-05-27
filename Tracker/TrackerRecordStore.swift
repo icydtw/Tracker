@@ -12,7 +12,7 @@ final class TrackerRecordStore: NSObject {
     }
     
     /// Метод, добавляющий +1 к счётчику выполненных трекеров
-    func addRecord(id: UUID, day: String) {
+    func addRecord(id: UUID, day: String) -> Bool {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
         var trackers: [TrackerCoreData] = []
@@ -27,12 +27,13 @@ final class TrackerRecordStore: NSObject {
         do {
             try context.save()
         } catch {
-            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+            return false
         }
+        return true
     }
     
     /// Метод, снимающий -1 от счётчика трекеров
-    func deleteRecord(id: UUID, day: String) {
+    func deleteRecord(id: UUID, day: String) -> Bool {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.returnsObjectsAsFaults = false
         var records: [TrackerRecordCoreData] = []
@@ -45,8 +46,9 @@ final class TrackerRecordStore: NSObject {
         do {
             try context.save()
         } catch {
-            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+            return false
         }
+        return true
     }
     
 }
