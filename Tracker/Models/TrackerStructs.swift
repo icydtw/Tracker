@@ -10,7 +10,8 @@ struct Event {
     var color: UIColor
     var day: [String]?
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     init(id: UUID = UUID(), name: String, emoji: String, color: UIColor, day: [String]?) {
         self.id = id
         self.name = name
@@ -21,13 +22,15 @@ struct Event {
     
 }
 
+/// Структура, объединяющая Event'ы по категориям
 struct TrackerCategory {
     
     // MARK: - Свойства
     let label: String
     let trackers: [Event]
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     init(label: String, trackers: [Event]) {
         self.label = label
         self.trackers = trackers
@@ -35,13 +38,15 @@ struct TrackerCategory {
     
 }
 
+/// Структура записей о выполнении трекеров
 struct TrackerRecord {
     
     // MARK: - Свойства
     let id: UUID
     var day: String
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     init(id: UUID, day: String) {
         self.id = id
         self.day = day

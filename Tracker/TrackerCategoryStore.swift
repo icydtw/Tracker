@@ -1,11 +1,67 @@
-import Foundation
+import UIKit
 import CoreData
 
 /// Класс, работающий с категориями в БД
-final class TrackerCategoryStore {
+final class TrackerCategoryStore: NSObject {
     
-    // MARK: - Метод, добавляющий категорию в БД
-    func addCategory(category: String, tracker: TrackerCoreData, context: NSManagedObjectContext) {
+    // MARK: - Свойства
+    /// Переменная, хранящая выбранную пользователем категорию события
+    private var categoryName = ""
+    
+    let context: NSManagedObjectContext
+    
+    // MARK: - Методы
+    override init() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.context
+    }
+    
+    /// Изменение выбранной категории
+    func changeChoosedCategory(category: String) -> Bool {
+        categoryName = category
+        return true
+    }
+    
+    /// Получение актуального массива категорий
+    func getCategories() -> [String?] {
+        let request = NSFetchRequest<CategoriesList>(entityName: "CategoriesList")
+        guard let result = try? context.fetch(request) else { return [] }
+        let categories = result.map({$0.name})
+        return categories
+    }
+    
+    /// Удаление категории из БД
+    func deleteCategory(at index: IndexPath) -> IndexPath {
+        let request = NSFetchRequest<CategoriesList>(entityName: "CategoriesList")
+        guard let result = try? context.fetch(request) else { return IndexPath() }
+        context.delete(result[index.row])
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления категории")
+        }
+        return index
+    }
+    
+    /// Метод, добавляющий новую категорию в БД
+    func addCategory(newCategory: String) -> Bool {
+        let category = CategoriesList(context: context)
+        category.name = newCategory
+        do {
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления категории")
+        }
+        return true
+    }
+    
+    /// Получение выбранной категории
+    func getChoosedCategory() -> String {
+        return categoryName
+    }
+ 
+    /// Метод, добавляющий структуру "категория + трекеры" в БД
+    func addCategoryStruct(category: String, tracker: TrackerCoreData) {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
         var trackerCategories: [TrackerCategoryCoreData] = []

@@ -2,10 +2,18 @@ import UIKit
 import CoreData
 
 /// Класс, работающий с трекерами в БД
-final class TrackerStore {
+final class TrackerStore: NSObject {
+    //MARK: - Свойства
+    let context: NSManagedObjectContext
     
-    // MARK: - Метод, добавляющий в БД новый трекер
-    func addTracker(event: Event, category: String, context: NSManagedObjectContext, trackerCategoryStore: TrackerCategoryStore) {
+    // MARK: - Методы
+    override init() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.context
+    }
+    
+    /// Метод, добавляющий в БД новый трекер
+    func addTracker(event: Event, category: String, categoryViewModel: CategoryViewModel) -> Bool {
         let tracker = TrackerCoreData(context: context)
         tracker.trackerID = event.id
         tracker.color = UIColor.hexString(from: event.color)
@@ -15,13 +23,14 @@ final class TrackerStore {
         do {
             try context.save()
         } catch {
-            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+            return false
         }
-        trackerCategoryStore.addCategory(category: category, tracker: tracker, context: context)
+        categoryViewModel.addCategoryStruct(category: category, tracker: tracker)
+        return true
     }
     
-    // MARK: - Метод, удаляющий трекер из БД
-    func deleteTracker(id inID: UUID, context: NSManagedObjectContext) {
+    /// Метод, удаляющий трекер из БД
+    func deleteTracker(id inID: UUID) -> Bool {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
         let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
@@ -36,8 +45,9 @@ final class TrackerStore {
         do {
             try context.save()
         } catch {
-            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
+            return false
         }
+         return true
     }
-
+    
 }

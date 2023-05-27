@@ -11,7 +11,8 @@ final class CollectionHeaderSupplementaryView: UICollectionReusableView {
         return label
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -21,7 +22,7 @@ final class CollectionHeaderSupplementaryView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         addSubview(title)
         NSLayoutConstraint.activate([

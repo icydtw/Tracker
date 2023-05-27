@@ -11,7 +11,8 @@ final class EmojiCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -21,7 +22,7 @@ final class EmojiCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         contentView.addSubview(emojiLabel)
         contentView.layer.cornerRadius = 16

@@ -4,7 +4,10 @@ import UIKit
 final class NewIrregularEventViewController: UIViewController {
     
     // MARK: - Свойства
-    let dataProvider = DataProvider()
+    
+    let categoryViewModel: CategoryViewModel
+    
+    let trackersViewModel: TrackersViewModel
     
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -101,14 +104,25 @@ final class NewIrregularEventViewController: UIViewController {
         return scroll
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProperties()
         setupView()
+        bind()
     }
     
-    // MARK: - Настройка внешнего вида
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
+        self.categoryViewModel = categoryViewModel
+        self.trackersViewModel = trackersViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
@@ -140,9 +154,9 @@ final class NewIrregularEventViewController: UIViewController {
         ])
     }
     
-    // MARK: - Настройка свойств, жестов и нотификаций
+    /// Настройка свойств, жестов и нотификаций
     private func setupProperties() {
-        categoryName = ""
+        categoryViewModel.didChooseCategory(name: "")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
@@ -167,42 +181,66 @@ final class NewIrregularEventViewController: UIViewController {
         enterNameTextField.delegate = self
     }
     
-    // MARK: - Методы, вызываемые при нажатии кнопок
-    // MARK: Метод, вызываемый при нажатии на кнопку "Отмена"
+    private func bind() {
+        trackersViewModel.isTrackerAdded = { result in
+            switch result{
+            case true: self.dismiss(animated: true)
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
+            }
+        }
+    }
+    
+    /// Метод, вызываемый при нажатии на кнопку "Отмена"
     @objc
     private func cancel() {
         dismiss(animated: true)
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    /// Метод, прячущий клавиатуру при нажатии вне её области
     @objc
     func dismissKeyboard() {
         enterNameTextField.resignFirstResponder()
     }
     
-    // MARK: Метод, вызываемый при нажатии на кнопку "Создать"
+    /// Метод, вызываемый при нажатии на кнопку "Создать"
     @objc
     private func create() {
         let name = enterNameTextField.text ?? ""
-        let category = categoryName
+        let category = categoryViewModel.getChoosedCategory()
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
         let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let event = Event(name: name, emoji: emoji, color: color, day: nil)
-        dismiss(animated: true)
-        categoryName = ""
-        dataProvider.addTracker(event: event, category: category)
+        categoryViewModel.didChooseCategory(name: "")
+        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        vibrate()
     }
     
+    /// Проверка заполнения всех полей при создании трекера
     private func activateButton() {
-        if enterNameTextField.hasText && !categoryName.isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+        if enterNameTextField.hasText && !categoryViewModel.getChoosedCategory().isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
             createButton.backgroundColor = .black
             createButton.isEnabled = true
         }
     }
     
-    // MARK: Метод, обновлящий название выбранной категории при срабатывании нотификации
+    /// Деактивация кнопки
+    private func deactivateButton() {
+        if !enterNameTextField.hasText || categoryViewModel.getChoosedCategory().isEmpty || (emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) || (colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+            createButton.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+            createButton.isEnabled = false
+        }
+    }
+    
+    /// Метод, нужный для включения вибрации
+    private func vibrate() {
+        let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedbackGenerator.prepare()
+        impactFeedbackGenerator.impactOccurred()
+    }
+    
+    /// Метод, обновлящий название выбранной категории при срабатывании нотификации
     @objc
     private func showCategory() {
         categoriesTable.reloadData()
@@ -214,18 +252,19 @@ final class NewIrregularEventViewController: UIViewController {
 // MARK: - Расширение для UITextFieldDelegate
 extension NewIrregularEventViewController: UITextFieldDelegate {
     
-    // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
+    /// Метод, вызываемый при нажатии на "Return" на клавиатуре
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    // MARK: Метод, используемый для проверки наличия текста в UITextField
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    /// Метод, используемый для проверки наличия текста в UITextField
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         if textField.hasText {
             activateButton()
+        } else {
+            deactivateButton()
         }
-        return true
     }
     
 }
@@ -233,7 +272,7 @@ extension NewIrregularEventViewController: UITextFieldDelegate {
 // MARK: - Расширение для UICollectionViewDataSource
 extension NewIrregularEventViewController: UICollectionViewDataSource {
     
-    // MARK: Метод, определяющий количество ячеек в секции коллекции
+    /// Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == colorCollection {
             return colorCollectionData.count
@@ -242,7 +281,7 @@ extension NewIrregularEventViewController: UICollectionViewDataSource {
         }
     }
     
-    // MARK: Метод создания и настройки ячейки для indexPath
+    /// Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == colorCollection {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell else {
@@ -259,7 +298,7 @@ extension NewIrregularEventViewController: UICollectionViewDataSource {
         }
     }
     
-    // MARK: Метод создания и настройки Supplementary View
+    /// Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView == colorCollection {
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView else {
@@ -281,22 +320,22 @@ extension NewIrregularEventViewController: UICollectionViewDataSource {
 // MARK: - Расширение для UICollectionViewDelegateFlowLayout
 extension NewIrregularEventViewController: UICollectionViewDelegateFlowLayout {
     
-    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    /// Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 50, height: 50)
     }
     
-    // MARK: Метод, определяющий минимальное расстояние между элементами в секции коллекции
+    /// Метод, определяющий минимальное расстояние между элементами в секции коллекции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return (collectionView.bounds.width - 300) / 6
     }
     
-    // MARK: Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
+    /// Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
     
-    // MARK: Метод, определяющий размер заголовка секции
+    /// Метод, определяющий размер заголовка секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: 40)
     }
@@ -306,7 +345,7 @@ extension NewIrregularEventViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - Расширение для UICollectionViewDelegate
 extension NewIrregularEventViewController: UICollectionViewDelegate {
     
-    // MARK: Метод, вызываемый при выборе ячейки коллекции
+    /// Метод, вызываемый при выборе ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
@@ -324,7 +363,7 @@ extension NewIrregularEventViewController: UICollectionViewDelegate {
         }
     }
     
-    // MARK: Метод, вызываемый при снятии выделения с ячейки коллекции
+    /// Метод, вызываемый при снятии выделения с ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
@@ -340,19 +379,19 @@ extension NewIrregularEventViewController: UICollectionViewDelegate {
 // MARK: - Расширение для UITableViewDataSource
 extension NewIrregularEventViewController: UITableViewDataSource {
     
-    // MARK: Метод, определяющий количество строк в секции таблицы
+    /// Метод, определяющий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    // MARK: Метод создания и настройки ячейки таблицы
+    /// Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
         guard let categoryCell = cell as? IrregularCategoryCell else {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        categoryCell.categoryName.text = categoryName
+        categoryCell.categoryName.text = categoryViewModel.getChoosedCategory()
         return categoryCell
     }
     
@@ -361,14 +400,14 @@ extension NewIrregularEventViewController: UITableViewDataSource {
 // MARK: - Расширение для UITableViewDelegate
 extension NewIrregularEventViewController: UITableViewDelegate {
     
-    // MARK: Метод, определяющий высоту строки таблицы
+    /// Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 71
     }
     
-    // MARK: Метод, вызываемый при нажатии на строку таблицы
+    /// Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+        let choiceOfCategoryViewController = ChoiceOfCategoryViewController(viewModel: categoryViewModel)
         show(choiceOfCategoryViewController, sender: self)
     }
     

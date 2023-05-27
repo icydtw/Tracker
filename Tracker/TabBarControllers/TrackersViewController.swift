@@ -2,7 +2,7 @@ import UIKit
 
 protocol TrackersViewControllerProtocol {
     func saveDoneEvent(id: UUID, index: IndexPath)
-    var localTrackers: [TrackerCategory] {get set }
+    var filteredTrackers: [TrackerCategory] {get set }
 }
 
 /// Экран "Трекеры" в таб-баре
@@ -13,7 +13,15 @@ class TrackersViewController: UIViewController {
     
     var dateString = "" // день в формате "2023/05/07"
     
-    var localTrackers: [TrackerCategory] = trackers
+    var trackers: [TrackerCategory] = []
+    
+    var trackerRecords: [TrackerRecord] = []
+    
+    lazy var filteredTrackers: [TrackerCategory] = trackers
+    
+    var trackersViewModel: TrackersViewModel
+    
+    var recordViewModel: RecordViewModel
     
     var dataProvider = DataProvider()
     
@@ -95,13 +103,14 @@ class TrackersViewController: UIViewController {
         return search
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider.delegate = self
         hideCollection()
         setupProperties()
         setupView()
+        bind()
         dataProvider.updateCollectionView()
         do {
             try dataProvider.fetchedResultsController.performFetch()
@@ -110,8 +119,19 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    // MARK: - Настройка внешнего вида
+    init(trackersViewModel: TrackersViewModel, recordViewModel: RecordViewModel) {
+        self.trackersViewModel = trackersViewModel
+        self.recordViewModel = recordViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// Настройка внешнего вида
     private func setupView() {
+        dataProvider.updateCollectionView()
         datePickerValueChanged(sender: datePicker)
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
@@ -135,14 +155,15 @@ class TrackersViewController: UIViewController {
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         trackersCollection.isHidden = true
-        if !localTrackers.isEmpty {
+        if !filteredTrackers.isEmpty {
             stackView.isHidden = true
             trackersCollection.isHidden = false
         }
     }
     
-    // MARK: - Настройка свойств, жестов и нотификаций
+    /// Настройка свойств, жестов и нотификаций
     private func setupProperties() {
+        dataProvider.delegate = self
         makeDate(dateFormat: "EEEE")
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
         stackView.addArrangedSubview(starImage)
@@ -174,11 +195,11 @@ class TrackersViewController: UIViewController {
     
     func showMenuForCell(at indexPath: IndexPath) {
         let alertController = UIAlertController(title: "Меню", message: "Выберите действие", preferredStyle: .actionSheet)
-        let action1 = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
+        let action1 = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (action) in
+            guard let self = self else { return }
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
-            let id = self.localTrackers[indexPath.section].trackers[indexPath.row].id
-            self.dataProvider.deleteTracker(id: id)
-            self.datePickerValueChanged(sender: self.datePicker)
+            let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
+            self.trackersViewModel.deleteTracker(id: id)
         }
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         alertController.addAction(action1)
@@ -192,7 +213,7 @@ class TrackersViewController: UIViewController {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
-        localTrackers = []
+        filteredTrackers = []
         var isGood = false
         for tracker in trackers { // категория
             newCategory = tracker.label
@@ -209,12 +230,41 @@ class TrackersViewController: UIViewController {
                 newCategory = ""
             }
         }
-        localTrackers = newTrackers.sorted(by: {$0.label < $1.label})
+        filteredTrackers = newTrackers.sorted(by: {$0.label < $1.label})
     }
     
-    // MARK: - Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку
+    /// Биндинг
+    private func bind() {
+        trackersViewModel.isTrackerDeleted = { result in
+            switch result {
+            case true: self.datePickerValueChanged(sender: self.datePicker)
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления трекера")
+            }
+        }
+        recordViewModel.isRecordAdded = { result in
+            switch result {
+            case true: self.vibrate()
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления рекорда")
+            }
+        }
+        recordViewModel.isRecordDeleted = { result in
+            switch result {
+            case true: self.vibrate()
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления рекорда")
+            }
+        }
+    }
+    
+    /// Метод, нужный для включения вибрации
+    private func vibrate() {
+        let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedbackGenerator.prepare()
+        impactFeedbackGenerator.impactOccurred()
+    }
+    
+    /// Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку
     private func hideCollection() {
-        if !localTrackers.isEmpty {
+        if !filteredTrackers.isEmpty {
             stackView.isHidden = true
             trackersCollection.isHidden = false
         } else {
@@ -223,7 +273,7 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    // MARK: - Метод, вызываемый когда меняется дата в Date Picker
+    /// Метод, вызываемый когда меняется дата в Date Picker
     @objc
     func datePickerValueChanged(sender: UIDatePicker) {
         makeDate(dateFormat: "EEEE")
@@ -232,22 +282,22 @@ class TrackersViewController: UIViewController {
         trackersCollection.reloadData()
     }
     
-    // MARK: - Метод, вызываемый при нажатии на "+"
+    /// Метод, вызываемый при нажатии на "+"
     @objc
     private func plusTapped() {
         let selecterTrackerVC = SelectingTrackerViewController()
         show(selecterTrackerVC, sender: self)
     }
     
-    // MARK: - Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
+    /// Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
     @objc private func addEvent() {
-        localTrackers = trackers
+        filteredTrackers = trackers
         updateCollection()
         trackersCollection.reloadData()
         hideCollection()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    /// Метод, прячущий клавиатуру при нажатии вне её области
     @objc
     func dismissKeyboard() {
         updateCollection()
@@ -259,28 +309,28 @@ class TrackersViewController: UIViewController {
 // MARK: - Расширение для UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     
-    // MARK: Метод, определяющий количество ячеек в секции коллекции
+    /// Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return localTrackers[section].trackers.count
+        return filteredTrackers[section].trackers.count
     }
     
-    // MARK: Метод, определяющий количество секций в коллекции
+    /// Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return localTrackers.count
+        return filteredTrackers.count
     }
     
-    // MARK: Метод создания и настройки ячейки для indexPath
+    /// Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCell
         cell?.delegate = self
-        cell?.viewBackground.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
-        cell?.emoji.text = localTrackers[indexPath.section].trackers[indexPath.row].emoji
-        cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
-        cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
-        cell?.quantity.text = "\(trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
+        cell?.viewBackground.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color
+        cell?.emoji.text = filteredTrackers[indexPath.section].trackers[indexPath.row].emoji
+        cell?.name.text = filteredTrackers[indexPath.section].trackers[indexPath.row].name
+        cell?.plusButton.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color
+        cell?.quantity.text = "\(trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
         makeDate(dateFormat: "yyyy/MM/dd")
-        if trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
-            cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
+        if trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
+            cell?.plusButton.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
             cell?.plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
         } else {
             cell?.plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -288,10 +338,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         return cell!
     }
     
-    // MARK: Метод создания и настройки Supplementary View
+    /// Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-        header.title.text = localTrackers[indexPath.section].label
+        header.title.text = filteredTrackers[indexPath.section].label
         return header
     }
     
@@ -300,12 +350,12 @@ extension TrackersViewController: UICollectionViewDataSource {
 // MARK: - Расширение для UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
-    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    /// Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (view.frame.width - 41) / 2, height: 148)
     }
     
-    // MARK: Метод, определяющий размер заголовка секции
+    /// Метод, определяющий размер заголовка секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
@@ -320,14 +370,14 @@ extension TrackersViewController: UICollectionViewDelegate {
 // MARK: - Расширение для UISearchBarDelegate
 extension TrackersViewController: UISearchBarDelegate {
     
-    // MARK: Метод, отслеживающий ввод текста в поисковую строку
+    /// Метод, отслеживающий ввод текста в поисковую строку
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
         datePickerValueChanged(sender: datePicker)
-        let searchingTrackers = localTrackers
-        localTrackers = []
+        let searchingTrackers = filteredTrackers
+        filteredTrackers = []
         var isGood = false
         for tracker in searchingTrackers { // категория
             newCategory = tracker.label
@@ -344,16 +394,16 @@ extension TrackersViewController: UISearchBarDelegate {
                 newCategory = ""
             }
         }
-        localTrackers = newTrackers
+        filteredTrackers = newTrackers
         trackersCollection.reloadData()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии Enter
+    /// Метод, прячущий клавиатуру при нажатии Enter
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии Cancel
+    /// Метод, прячущий клавиатуру при нажатии Cancel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -363,13 +413,13 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - Расширение для TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewControllerProtocol {
     
-    // MARK: Метод, добавляющий информацию о выполненном трекере в trackerRecords
+    /// Метод, добавляющий информацию о выполненном трекере в trackerRecords
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
-        if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
-            dataProvider.deleteRecord(id: id, day: dateString)
+        if trackerRecords.filter({$0.id == filteredTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
+            recordViewModel.deleteRecord(id: id, day: dateString)
         } else {
-            dataProvider.addRecord(id: id, day: dateString)
+            recordViewModel.addRecord(id: id, day: dateString)
         }
         trackersCollection.reloadData()
     }
@@ -379,6 +429,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
 // MARK: - Расширение, упрощающее работу с DatePicker
 extension TrackersViewController {
     
+    /// Метод, заполняющий переменные с датами в том или ином формате
     private func makeDate(dateFormat: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")

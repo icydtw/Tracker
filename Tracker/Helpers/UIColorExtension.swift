@@ -3,6 +3,7 @@ import UIKit
 /// Расширение, необходимое для конвертации цвета в строку и наоборот
 extension UIColor {
     
+    // MARK: - Методы
     /// Метод для конвертации цвета в строку
     static func hexString(from color: UIColor) -> String {
         let components = color.cgColor.components
@@ -28,4 +29,5 @@ extension UIColor {
             alpha: CGFloat(1.0)
         )
     }
+    
 }

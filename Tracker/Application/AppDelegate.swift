@@ -8,10 +8,12 @@
 import UIKit
 import CoreData
 
+typealias Binding<T> = (T) -> Void
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    let coreDataContainer: NSPersistentContainer = {
+    lazy var coreDataContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "DataModel")
         container.loadPersistentStores { description, error in
             if let error {
@@ -20,14 +22,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return container
     }()
+    
+    var context: NSManagedObjectContext {
+        return coreDataContainer.viewContext
+    }
+    
+    lazy var categoryViewModel = CategoryViewModel()
+    
+    lazy var trackersViewModel = TrackersViewModel()
+    
+    lazy var recordViewModel = RecordViewModel()
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let window = UIWindow()
-        window.rootViewController = MainTabBarViewController()
-        window.makeKeyAndVisible()
-        self.window = window
         return true
     }
 

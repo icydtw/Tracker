@@ -4,6 +4,7 @@ import UIKit
 final class SelectingTrackerViewController: UIViewController {
     
     // MARK: - Свойства
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
@@ -42,14 +43,14 @@ final class SelectingTrackerViewController: UIViewController {
         return stack
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProperties()
         setupView()
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
@@ -63,7 +64,7 @@ final class SelectingTrackerViewController: UIViewController {
         ])
     }
     
-    // MARK: - Настройка свойств, жестов и нотификаций
+    /// Настройка свойств
     private func setupProperties() {
         stackView.addArrangedSubview(habitButton)
         stackView.addArrangedSubview(irregularEventButton)
@@ -71,18 +72,25 @@ final class SelectingTrackerViewController: UIViewController {
         view.addSubview(stackView)
     }
     
-    // MARK: - Методы, вызываемые при нажатии кнопок
-    //MARK: Метод, вызываемый при выборе пользователем "Нерегулярного события"
+    /// Метод, вызываемый при выборе пользователем "Нерегулярного события"
     @objc
     private func irregularTapped() {
-        let irregularEventVC = NewIrregularEventViewController()
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        let categoryViewModel = appDelegate?.categoryViewModel
+        let trackersViewModel = appDelegate?.trackersViewModel
+        categoryViewModel?.getCategories()
+        let irregularEventVC = NewIrregularEventViewController(categoryViewModel: categoryViewModel ?? CategoryViewModel(), trackersViewModel: trackersViewModel ?? TrackersViewModel())
         show(irregularEventVC, sender: self)
     }
     
-    //MARK: Метод, вызываемый при выборе пользователем "Привычки"
+    /// Метод, вызываемый при выборе пользователем "Привычки"
     @objc
     private func habitTapped() {
-        let habitVC = NewHabitViewController()
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        let categoryViewModel = appDelegate?.categoryViewModel
+        let trackersViewModel = appDelegate?.trackersViewModel
+        categoryViewModel?.getCategories()
+        let habitVC = NewHabitViewController(categoryViewModel: categoryViewModel ?? CategoryViewModel(), trackersViewModel: trackersViewModel ?? TrackersViewModel())
         show(habitVC, sender: self)
     }
     

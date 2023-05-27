@@ -26,7 +26,8 @@ final class HabitCategoryCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Инициализатор
+    // MARK: - Методы
+    /// Инициализатор
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -36,7 +37,7 @@ final class HabitCategoryCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Настройка внешнего вида
+    /// Настройка внешнего вида
     private func setupView() {
         contentView.addSubview(title)
         contentView.addSubview(arrow)

@@ -4,7 +4,10 @@ import UIKit
 final class NewHabitViewController: UIViewController {
 
     // MARK: - Свойства
-    let dataProvider = DataProvider()
+    
+    let categoryViewModel: CategoryViewModel
+    
+    let trackersViewModel: TrackersViewModel
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -103,14 +106,25 @@ final class NewHabitViewController: UIViewController {
         return scroll
     }()
     
-    // MARK: - Метод жизненного цикла viewDidLoad
+    // MARK: - Методы
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProperties()
         setupView()
+        bind()
     }
     
-    // MARK: - Настройка внешнего вида
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
+        self.categoryViewModel = categoryViewModel
+        self.trackersViewModel = trackersViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// Настройка внешнего вида
     private func setupView() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -141,13 +155,13 @@ final class NewHabitViewController: UIViewController {
         ])
     }
     
-    // MARK: - Настройка свойств, жестов и нотификаций
+    /// Настройка свойств, жестов и нотификаций
     private func setupProperties() {
-        categoryName = ""
+        categoryViewModel.didChooseCategory(name: "")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
-        NotificationCenter.default.addObserver(self, selector: #selector(changeFirstCell), name: Notification.Name("category_changed"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeSchedule), name: Notification.Name("schedule_changed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeCategoryCell), name: Notification.Name("category_changed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeScheduleCell), name: Notification.Name("schedule_changed"), object: nil)
         view.backgroundColor = .white
         firstStack.addArrangedSubview(enterNameTextField)
         firstStack.addArrangedSubview(categoriesTable)
@@ -170,45 +184,67 @@ final class NewHabitViewController: UIViewController {
         enterNameTextField.delegate = self
     }
     
+    private func bind() {
+        trackersViewModel.isTrackerAdded = { result in
+            print(result)
+            switch result {
+            case true: self.dismiss(animated: true)
+            case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
+            }
+        }
+    }
+    
     private func activateButton() {
-        if enterNameTextField.hasText && !categoryName.isEmpty && !selectedDays.isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+        if enterNameTextField.hasText && !categoryViewModel.getChoosedCategory().isEmpty && !selectedDays.isEmpty && !(emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) && !(colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
             createButton.backgroundColor = .black
             createButton.isEnabled = true
         }
     }
     
-    // MARK: - Методы, вызываемые при нажатии кнопок
-    // MARK: Метод, вызываемый при нажатии на кнопку "Отмена"
+    private func deactivateButton() {
+        if !enterNameTextField.hasText || categoryViewModel.getChoosedCategory().isEmpty || selectedDays.isEmpty || (emojiCollection.indexPathsForSelectedItems?.isEmpty ?? false) || (colorCollection.indexPathsForSelectedItems?.isEmpty ?? false) {
+            createButton.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
+            createButton.isEnabled = false
+        }
+    }
+    
+    private func vibrate() {
+        let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedbackGenerator.prepare()
+        impactFeedbackGenerator.impactOccurred()
+    }
+    
+    /// Метод, вызываемый при нажатии на кнопку "Отмена"
     @objc
     private func cancel() {
         dismiss(animated: true)
     }
     
-    // MARK: Метод, вызываемый при нажатии на кнопку "Создать"
+    /// Метод, вызываемый при нажатии на кнопку "Создать"
     @objc
     private func create() {
         let name = enterNameTextField.text ?? ""
-        let category = categoryName
+        let category = categoryViewModel.getChoosedCategory()
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
         let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = selectedDays
         let event = Event(name: name, emoji: emoji, color: color, day: day)
-        dismiss(animated: true)
-        categoryName = ""
+        categoryViewModel.didChooseCategory(name: "")
         selectedDays = []
         shortSelectedDays = []
-        dataProvider.addTracker(event: event, category: category)
+        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        vibrate()
     }
     
-    // MARK: Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
+    /// Метод, меняющий первую строку таблицы ("категория") при срабатывании нотификации
     @objc
-    private func changeFirstCell() {
+    private func changeCategoryCell() {
         let cell = categoriesTable.cellForRow(at: [0,0]) as? HabitCategoryCell
         cell?.title.removeFromSuperview()
         cell?.addSubview(cell!.title)
-        cell?.categoryName.text = categoryName
+        cell?.categoryName.text = categoryViewModel.getChoosedCategory()
         cell?.categoryName.topAnchor.constraint(equalTo: cell!.title.bottomAnchor, constant: 2).isActive = true
         cell?.categoryName.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
         cell?.title.leadingAnchor.constraint(equalTo: cell!.leadingAnchor, constant: 16).isActive = true
@@ -216,8 +252,9 @@ final class NewHabitViewController: UIViewController {
         activateButton()
     }
     
+    /// Метод, меняющий вторую строку таблицы ("расписание") при срабатывании нотификации
     @objc
-    private func changeSchedule() {
+    private func changeScheduleCell() {
         let cell = categoriesTable.cellForRow(at: [0,1]) as? HabitCategoryCell
         cell?.title.removeFromSuperview()
         cell?.addSubview(cell!.title)
@@ -229,7 +266,7 @@ final class NewHabitViewController: UIViewController {
         activateButton()
     }
     
-    // MARK: Метод, прячущий клавиатуру при нажатии вне её области
+    /// Метод, прячущий клавиатуру при нажатии вне её области
     @objc
     func dismissKeyboard() {
         enterNameTextField.resignFirstResponder()
@@ -240,18 +277,19 @@ final class NewHabitViewController: UIViewController {
 // MARK: - Расширение для UITextFieldDelegate
 extension NewHabitViewController: UITextFieldDelegate {
     
-    // MARK: Метод, вызываемый при нажатии на "Return" на клавиатуре
+    /// Метод, вызываемый при нажатии на "Return" на клавиатуре
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    // MARK: Метод, используемый для проверки наличия текста в UITextField
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    /// Метод, используемый для проверки наличия текста в UITextField
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         if textField.hasText {
             activateButton()
+        } else {
+            deactivateButton()
         }
-        return true
     }
     
 }
@@ -259,12 +297,12 @@ extension NewHabitViewController: UITextFieldDelegate {
 // MARK: - Расширение для UITableViewDataSource
 extension NewHabitViewController: UITableViewDataSource {
     
-    // MARK: Метод, возвращающий количество строк в секции таблицы
+    /// Метод, возвращающий количество строк в секции таблицы
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
-    // MARK: Метод создания и настройки ячейки таблицы
+    /// Метод создания и настройки ячейки таблицы
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
         guard let categoryCell = cell as? HabitCategoryCell else {
@@ -285,22 +323,22 @@ extension NewHabitViewController: UITableViewDataSource {
 // MARK: - Расширение для UITableViewDelegate
 extension NewHabitViewController: UITableViewDelegate {
     
-    // MARK: Метод, определяющий высоту строки таблицы
+    /// Метод, определяющий высоту строки таблицы
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 71
     }
     
-    // MARK: Метод конфигурации ячеек перед их отображением
+    /// Метод конфигурации ячеек перед их отображением
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: cell.bounds.size.width)
         }
     }
     
-    // MARK: Метод, вызываемый при нажатии на строку таблицы
+    /// Метод, вызываемый при нажатии на строку таблицы
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let choiceOfCategoryViewController = ChoiceOfCategoryViewController()
+            let choiceOfCategoryViewController = ChoiceOfCategoryViewController(viewModel: categoryViewModel)
             show(choiceOfCategoryViewController, sender: self)
         } else {
             let scheduleViewController = ScheduleViewController()
@@ -313,7 +351,7 @@ extension NewHabitViewController: UITableViewDelegate {
 // MARK: - Расширение для UICollectionViewDataSource
 extension NewHabitViewController: UICollectionViewDataSource {
     
-    // MARK: Метод, определяющий количество ячеек в секции коллекции
+    /// Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == colorCollection {
             return colorCollectionData.count
@@ -322,7 +360,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
         }
     }
     
-    // MARK: Метод создания и настройки ячейки для indexPath
+    /// Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == colorCollection {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell else {
@@ -339,7 +377,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
         }
     }
     
-    // MARK: Метод создания и настройки Supplementary View
+    /// Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView == colorCollection {
             if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView {
@@ -363,22 +401,22 @@ extension NewHabitViewController: UICollectionViewDataSource {
 // MARK: - Расширение для UICollectionViewDelegateFlowLayout
 extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     
-    // MARK: Метод, определяющий размер элемента коллекции для indexPath
+    /// Метод, определяющий размер элемента коллекции для indexPath
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 50, height: 50)
     }
     
-    // MARK: Метод, определяющий минимальное расстояние между элементами в секции коллекции
+    /// Метод, определяющий минимальное расстояние между элементами в секции коллекции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return (collectionView.bounds.width - 300) / 6
     }
     
-    // MARK: Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
+    /// Метод, определяющий минимальное расстояние между строками элементов в секции коллекции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
     
-    // MARK: Метод, определяющий размер заголовка секции
+    /// Метод, определяющий размер заголовка секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: 40)
     }
@@ -388,7 +426,7 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - Расширение для UICollectionViewDelegate
 extension NewHabitViewController: UICollectionViewDelegate {
     
-    // MARK: Метод, вызываемый при выборе ячейки коллекции
+    /// Метод, вызываемый при выборе ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
@@ -406,7 +444,7 @@ extension NewHabitViewController: UICollectionViewDelegate {
         }
     }
     
-    // MARK: Метод, вызываемый при снятии выделения с ячейки коллекции
+    /// Метод, вызываемый при снятии выделения с ячейки коллекции
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == colorCollection {
             let cell = collectionView.cellForItem(at: indexPath) as? ColorCell
