@@ -9,6 +9,7 @@ final class TrackerCategoryStore: NSObject {
     private var categoryName = ""
     
     let appDelegate: AppDelegate
+    
     let context: NSManagedObjectContext
     
     // MARK: - Методы
@@ -17,11 +18,13 @@ final class TrackerCategoryStore: NSObject {
         self.context = appDelegate.coreDataContainer.viewContext
     }
     
+    /// Изменение выбранной категории
     func changeChoosedCategory(category: String) -> Bool {
         categoryName = category
         return true
     }
     
+    /// Получение актуального массива категорий
     func getCategories() -> [String?] {
         let request = NSFetchRequest<CategoriesList>(entityName: "CategoriesList")
         guard let result = try? context.fetch(request) else { return [] }
@@ -29,6 +32,7 @@ final class TrackerCategoryStore: NSObject {
         return categories
     }
     
+    /// Удаление категории из БД
     func deleteCategory(at index: IndexPath) -> IndexPath {
         let request = NSFetchRequest<CategoriesList>(entityName: "CategoriesList")
         guard let result = try? context.fetch(request) else { return IndexPath() }
@@ -41,7 +45,7 @@ final class TrackerCategoryStore: NSObject {
         return index
     }
     
-    /// Метод, добавляющий новую категорию в список
+    /// Метод, добавляющий новую категорию в БД
     func addCategory(newCategory: String) -> Bool {
         let category = CategoriesList(context: context)
         category.name = newCategory
@@ -53,6 +57,7 @@ final class TrackerCategoryStore: NSObject {
         return true
     }
     
+    /// Получение выбранной категории
     func getChoosedCategory() -> String {
         return categoryName
     }
@@ -84,16 +89,6 @@ final class TrackerCategoryStore: NSObject {
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
         }
-    }
-    
-}
-
-// MARK: - Расширение для NSFetchedResultsControllerDelegate
-extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-    
-    /// Метод, вызываемый автоматически при изменении данных в БД
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("1234567890SOS")
     }
     
 }
