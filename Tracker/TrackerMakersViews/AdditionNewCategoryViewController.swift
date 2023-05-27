@@ -46,6 +46,7 @@ final class AdditionNewCategoryViewController: UIViewController {
         bind()
     }
     
+    /// Инициализатор
     init(categoryViewModel: CategoryViewModel) {
         self.categoryViewModel = categoryViewModel
         super.init(nibName: nil, bundle: nil)
@@ -80,9 +81,6 @@ final class AdditionNewCategoryViewController: UIViewController {
         view.addSubview(enterNameTextField)
         view.addSubview(createButton)
         enterNameTextField.delegate = self
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -103,22 +101,7 @@ final class AdditionNewCategoryViewController: UIViewController {
         }
     }
     
-    @objc
-    private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            UIView.animate(withDuration: 0.3) {
-                self.createButton.transform = CGAffineTransform(translationX: 0, y: -keyboardSize.height)
-            }
-        }
-    }
-
-    @objc
-    private func keyboardWillHide(_ notification: Notification) {
-        UIView.animate(withDuration: 0.3) {
-            self.createButton.transform = .identity
-        }
-    }
-
+    /// Биндинг
     private func bind() {
         categoryViewModel.isCategoryAdded = { result in
             switch result {
@@ -130,12 +113,25 @@ final class AdditionNewCategoryViewController: UIViewController {
         }
     }
     
-    /// Метод, прячущий клавиатуру при нажатии вне её области
+    /// Метод, вызываемый при появлении клавиатуры на экране
     @objc
-    private func dismissKeyboard() {
-        enterNameTextField.resignFirstResponder()
+    private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            UIView.animate(withDuration: 0.3) {
+                self.createButton.transform = CGAffineTransform(translationX: 0, y: -keyboardSize.height)
+            }
+        }
+    }
+
+    /// Метод, вызываемый при исчезновении клавиатуры
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.createButton.transform = .identity
+        }
     }
     
+    /// Метод создания новой категории
     @objc
     private func create() {
         if let newCategory = enterNameTextField.text {
