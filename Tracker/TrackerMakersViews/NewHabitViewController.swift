@@ -4,9 +4,10 @@ import UIKit
 final class NewHabitViewController: UIViewController {
 
     // MARK: - Свойства
-    let dataProvider = DataProvider()
     
     let categoryViewModel: CategoryViewModel
+    
+    let trackersViewModel: TrackersViewModel
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -112,8 +113,9 @@ final class NewHabitViewController: UIViewController {
         setupView()
     }
     
-    init(categoryViewModel: CategoryViewModel) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
         self.categoryViewModel = categoryViewModel
+        self.trackersViewModel = trackersViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -222,7 +224,7 @@ final class NewHabitViewController: UIViewController {
         categoryViewModel.didChooseCategory(name: "")
         selectedDays = []
         shortSelectedDays = []
-        dataProvider.addTracker(event: event, category: category)
+        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
         vibrate()
     }
     

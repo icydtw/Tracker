@@ -1,10 +1,18 @@
-import Foundation
+import UIKit
 import CoreData
 
-final class TrackerRecordStore {
+final class TrackerRecordStore: NSObject {
+    // MARK: - Свойства
+    let context: NSManagedObjectContext
+    
+    // MARK: - Методы
+    override init() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.context
+    }
     
     /// Метод, добавляющий +1 к счётчику выполненных трекеров
-    func addRecord(id: UUID, day: String, context: NSManagedObjectContext) {
+    func addRecord(id: UUID, day: String) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
         var trackers: [TrackerCoreData] = []
@@ -24,7 +32,7 @@ final class TrackerRecordStore {
     }
     
     /// Метод, снимающий -1 от счётчика трекеров
-    func deleteRecord(id: UUID, day: String, context: NSManagedObjectContext) {
+    func deleteRecord(id: UUID, day: String) {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.returnsObjectsAsFaults = false
         var records: [TrackerRecordCoreData] = []

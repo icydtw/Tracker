@@ -4,7 +4,6 @@ import UIKit
 final class SelectingTrackerViewController: UIViewController {
     
     // MARK: - Свойства
-    let categoryViewModel = CategoryViewModel()
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -76,16 +75,22 @@ final class SelectingTrackerViewController: UIViewController {
     /// Метод, вызываемый при выборе пользователем "Нерегулярного события"
     @objc
     private func irregularTapped() {
-        categoryViewModel.getCategories()
-        let irregularEventVC = NewIrregularEventViewController(categoryViewModel: categoryViewModel)
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        let categoryViewModel = appDelegate?.categoryViewModel
+        let trackersViewModel = appDelegate?.trackersViewModel
+        categoryViewModel?.getCategories()
+        let irregularEventVC = NewIrregularEventViewController(categoryViewModel: categoryViewModel ?? CategoryViewModel(), trackersViewModel: trackersViewModel ?? TrackersViewModel())
         show(irregularEventVC, sender: self)
     }
     
     /// Метод, вызываемый при выборе пользователем "Привычки"
     @objc
     private func habitTapped() {
-        categoryViewModel.getCategories()
-        let habitVC = NewHabitViewController(categoryViewModel: categoryViewModel)
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        let categoryViewModel = appDelegate?.categoryViewModel
+        let trackersViewModel = appDelegate?.trackersViewModel
+        categoryViewModel?.getCategories()
+        let habitVC = NewHabitViewController(categoryViewModel: categoryViewModel ?? CategoryViewModel(), trackersViewModel: trackersViewModel ?? TrackersViewModel())
         show(habitVC, sender: self)
     }
     

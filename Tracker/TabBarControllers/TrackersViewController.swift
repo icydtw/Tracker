@@ -15,6 +15,10 @@ class TrackersViewController: UIViewController {
     
     var localTrackers: [TrackerCategory] = trackers
     
+    var trackersViewModel: TrackersViewModel
+    
+    var recordViewModel: RecordViewModel
+    
     var dataProvider = DataProvider()
     
     var trackersCollection: UICollectionView = {
@@ -110,6 +114,16 @@ class TrackersViewController: UIViewController {
         }
     }
     
+    init(trackersViewModel: TrackersViewModel, recordViewModel: RecordViewModel) {
+        self.trackersViewModel = trackersViewModel
+        self.recordViewModel = recordViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     /// Настройка внешнего вида
     private func setupView() {
         dataProvider.updateCollectionView()
@@ -179,7 +193,7 @@ class TrackersViewController: UIViewController {
             guard let self = self else { return }
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
             let id = self.localTrackers[indexPath.section].trackers[indexPath.row].id
-            self.dataProvider.deleteTracker(id: id)
+            self.trackersViewModel.deleteTracker(id: id)
             self.datePickerValueChanged(sender: self.datePicker)
         }
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
@@ -369,9 +383,9 @@ extension TrackersViewController: TrackersViewControllerProtocol {
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
-            dataProvider.deleteRecord(id: id, day: dateString)
+            recordViewModel.deleteRecord(id: id, day: dateString)
         } else {
-            dataProvider.addRecord(id: id, day: dateString)
+            recordViewModel.addRecord(id: id, day: dateString)
         }
         trackersCollection.reloadData()
     }

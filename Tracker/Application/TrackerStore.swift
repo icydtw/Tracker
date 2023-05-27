@@ -2,10 +2,18 @@ import UIKit
 import CoreData
 
 /// Класс, работающий с трекерами в БД
-final class TrackerStore {
+final class TrackerStore: NSObject {
+    //MARK: - Свойства
+    let context: NSManagedObjectContext
+    
+    // MARK: - Методы
+    override init() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.context
+    }
     
     /// Метод, добавляющий в БД новый трекер
-    func addTracker(event: Event, category: String, context: NSManagedObjectContext, trackerCategoryStore: TrackerCategoryStore) {
+    func addTracker(event: Event, category: String, categoryViewModel: CategoryViewModel) {
         let tracker = TrackerCoreData(context: context)
         tracker.trackerID = event.id
         tracker.color = UIColor.hexString(from: event.color)
@@ -17,11 +25,11 @@ final class TrackerStore {
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
         }
-        trackerCategoryStore.addCategoryStruct(category: category, tracker: tracker, context: context)
+        categoryViewModel.addCategoryStruct(category: category, tracker: tracker)
     }
     
     /// Метод, удаляющий трекер из БД
-    func deleteTracker(id inID: UUID, context: NSManagedObjectContext) {
+    func deleteTracker(id inID: UUID) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.returnsObjectsAsFaults = false
         let predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), inID.uuidString)
@@ -39,5 +47,5 @@ final class TrackerStore {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка сохранения данных")
         }
     }
-
+    
 }

@@ -4,9 +4,10 @@ import UIKit
 final class NewIrregularEventViewController: UIViewController {
     
     // MARK: - Свойства
-    let dataProvider = DataProvider()
     
     let categoryViewModel: CategoryViewModel
+    
+    let trackersViewModel: TrackersViewModel
     
     let colorCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -110,8 +111,9 @@ final class NewIrregularEventViewController: UIViewController {
         setupView()
     }
     
-    init(categoryViewModel: CategoryViewModel) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
         self.categoryViewModel = categoryViewModel
+        self.trackersViewModel = trackersViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -202,7 +204,7 @@ final class NewIrregularEventViewController: UIViewController {
         let event = Event(name: name, emoji: emoji, color: color, day: nil)
         dismiss(animated: true)
         categoryViewModel.didChooseCategory(name: "")
-        dataProvider.addTracker(event: event, category: category)
+        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
         vibrate()
     }
     

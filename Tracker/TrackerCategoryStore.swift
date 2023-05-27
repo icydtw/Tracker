@@ -8,14 +8,12 @@ final class TrackerCategoryStore: NSObject {
     /// Переменная, хранящая выбранную пользователем категорию события
     private var categoryName = ""
     
-    let appDelegate: AppDelegate
-    
     let context: NSManagedObjectContext
     
     // MARK: - Методы
     override init() {
-        self.appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.context = appDelegate.coreDataContainer.viewContext
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.context = appDelegate.context
     }
     
     /// Изменение выбранной категории
@@ -63,7 +61,7 @@ final class TrackerCategoryStore: NSObject {
     }
  
     /// Метод, добавляющий структуру "категория + трекеры" в БД
-    func addCategoryStruct(category: String, tracker: TrackerCoreData, context: NSManagedObjectContext) {
+    func addCategoryStruct(category: String, tracker: TrackerCoreData) {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
         var trackerCategories: [TrackerCategoryCoreData] = []

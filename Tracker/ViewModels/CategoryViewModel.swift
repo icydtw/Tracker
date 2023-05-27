@@ -1,7 +1,5 @@
 import Foundation
 
-typealias Binding<T> = (T) -> Void
-
 final class CategoryViewModel {
     
     // MARK: - Свойства
@@ -36,5 +34,8 @@ final class CategoryViewModel {
     func addCategory(newCategory: String) {
         let result = model.addCategory(newCategory: newCategory)
         isCategoryAdded?(result)
+    }
+    func addCategoryStruct(category: String, tracker: TrackerCoreData) {
+        model.addCategoryStruct(category: category, tracker: tracker)
     }
 }

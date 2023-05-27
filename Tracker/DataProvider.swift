@@ -30,28 +30,8 @@ final class DataProvider: NSObject {
     /// Инициализатор
     override init() {
         self.appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.context = appDelegate.coreDataContainer.viewContext
+        self.context = appDelegate.context
         self.delegate = nil
-    }
-    
-    /// Метод, добавляющий в БД новый трекер
-    func addTracker(event: Event, category: String) {
-        trackerStore.addTracker(event: event, category: category, context: context, trackerCategoryStore: trackerCategoryStore)
-    }
-    
-    /// Метод, удаляющий трекер из БД
-    func deleteTracker(id inID: UUID) {
-        trackerStore.deleteTracker(id: inID, context: context)
-    }
-    
-    /// Метод, добавляющий +1 к счётчику выполненных трекеров
-    func addRecord(id: UUID, day: String) {
-        trackerRecordStore.addRecord(id: id, day: day, context: context)
-    }
-    
-    /// Метод, снимающий -1 от счётчика трекеров
-    func deleteRecord(id: UUID, day: String) {
-        trackerRecordStore.deleteRecord(id: id, day: day, context: context)
     }
     
     /// Метод, обновляющий массивы, из которых UICollection берёт данные
