@@ -30,14 +30,6 @@ let colorCollectionData = [
     UIColor(red: 0.184, green: 0.816, blue: 0.345, alpha: 1)
 ]
 
-// MARK: - Массив с категориями, используемыми в приложении
-//var categories = [
-//    "Домашние дела", "Хобби", "Работа", "Учёба", "Спорт"
-//]
-//
-//// MARK: - Переменная, хранящая выбранную пользователем категорию события
-//var categoryName = ""
-
 // MARK: - Перечисление с днями недели
 enum dayOfWeek: String {
     case monday = "понедельник"
@@ -55,9 +47,6 @@ let daysOfWeek: [dayOfWeek] = [.monday, .tuesday, .wednesday, .thursday, .friday
 // MARK: - Массив с выбранными пользователем днями недели для события
 var selectedDays: [String] = []
 var shortSelectedDays: [String] = []
-
-// MARK: - Массив существующих на экране "Трекеры" заголовков
-var titles: [String] = []
 
 // MARK: - Массив, хранящий в какие дни какие трекеры выполнялись
 var trackerRecords: [TrackerRecord] = []
