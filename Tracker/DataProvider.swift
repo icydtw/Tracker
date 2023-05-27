@@ -52,7 +52,7 @@ final class DataProvider: NSObject {
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
         }
-        trackers = []
+        delegate?.trackers = []
         trackerCategories.forEach { category in
             let newCategoryName = category.name
             var events: [Event] = []
@@ -62,9 +62,9 @@ final class DataProvider: NSObject {
                 }
             }
             let neeeew = [TrackerCategory(label: newCategoryName ?? "", trackers: events)]
-            trackers.append(contentsOf: neeeew.sorted(by: {$0.label > $1.label}))
+            delegate?.trackers.append(contentsOf: neeeew.sorted(by: {$0.label > $1.label}))
         }
-        trackerRecords = []
+        delegate?.trackerRecords = []
         let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         recordRequest.returnsObjectsAsFaults = false
         var trackerRecordCD: [TrackerRecordCoreData] = []
@@ -74,7 +74,7 @@ final class DataProvider: NSObject {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
         }
         trackerRecordCD.forEach { record in
-            trackerRecords.append(TrackerRecord(id: record.tracker?.trackerID ?? UUID(), day: record.day ?? ""))
+            delegate?.trackerRecords.append(TrackerRecord(id: record.tracker?.trackerID ?? UUID(), day: record.day ?? ""))
         }
         delegate?.updateCollection()
     }

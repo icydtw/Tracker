@@ -2,9 +2,6 @@ import UIKit
 
 /// Файл, в котором хранятся основные данные для работы приложения
 
-// MARK: - Массив всех событий, создаваемых пользователем
-var trackers: [TrackerCategory] = []
-
 // MARK: - Массив с emoji, используемыми в приложении
 let emojiCollectionData = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
 
@@ -47,6 +44,3 @@ let daysOfWeek: [dayOfWeek] = [.monday, .tuesday, .wednesday, .thursday, .friday
 // MARK: - Массив с выбранными пользователем днями недели для события
 var selectedDays: [String] = []
 var shortSelectedDays: [String] = []
-
-// MARK: - Массив, хранящий в какие дни какие трекеры выполнялись
-var trackerRecords: [TrackerRecord] = []

@@ -2,7 +2,7 @@ import UIKit
 
 protocol TrackersViewControllerProtocol {
     func saveDoneEvent(id: UUID, index: IndexPath)
-    var localTrackers: [TrackerCategory] {get set }
+    var filteredTrackers: [TrackerCategory] {get set }
 }
 
 /// Экран "Трекеры" в таб-баре
@@ -13,7 +13,11 @@ class TrackersViewController: UIViewController {
     
     var dateString = "" // день в формате "2023/05/07"
     
-    var localTrackers: [TrackerCategory] = trackers
+    var trackers: [TrackerCategory] = []
+    
+    var trackerRecords: [TrackerRecord] = []
+    
+    lazy var filteredTrackers: [TrackerCategory] = trackers
     
     var trackersViewModel: TrackersViewModel
     
@@ -151,7 +155,7 @@ class TrackersViewController: UIViewController {
             trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         trackersCollection.isHidden = true
-        if !localTrackers.isEmpty {
+        if !filteredTrackers.isEmpty {
             stackView.isHidden = true
             trackersCollection.isHidden = false
         }
@@ -159,6 +163,7 @@ class TrackersViewController: UIViewController {
     
     /// Настройка свойств, жестов и нотификаций
     private func setupProperties() {
+        dataProvider.delegate = self
         makeDate(dateFormat: "EEEE")
         NotificationCenter.default.addObserver(self, selector: #selector(addEvent), name: Notification.Name("addEvent"), object: nil)
         stackView.addArrangedSubview(starImage)
@@ -193,7 +198,7 @@ class TrackersViewController: UIViewController {
         let action1 = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (action) in
             guard let self = self else { return }
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
-            let id = self.localTrackers[indexPath.section].trackers[indexPath.row].id
+            let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
             self.trackersViewModel.deleteTracker(id: id)
         }
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
@@ -208,7 +213,7 @@ class TrackersViewController: UIViewController {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
-        localTrackers = []
+        filteredTrackers = []
         var isGood = false
         for tracker in trackers { // категория
             newCategory = tracker.label
@@ -225,7 +230,7 @@ class TrackersViewController: UIViewController {
                 newCategory = ""
             }
         }
-        localTrackers = newTrackers.sorted(by: {$0.label < $1.label})
+        filteredTrackers = newTrackers.sorted(by: {$0.label < $1.label})
     }
     
     /// Биндинг
@@ -259,7 +264,7 @@ class TrackersViewController: UIViewController {
     
     /// Метод, проверяющий, есть ли трекеры на экране и отбражающий (или нет) заглушку
     private func hideCollection() {
-        if !localTrackers.isEmpty {
+        if !filteredTrackers.isEmpty {
             stackView.isHidden = true
             trackersCollection.isHidden = false
         } else {
@@ -286,7 +291,7 @@ class TrackersViewController: UIViewController {
     
     /// Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
     @objc private func addEvent() {
-        localTrackers = trackers
+        filteredTrackers = trackers
         updateCollection()
         trackersCollection.reloadData()
         hideCollection()
@@ -306,26 +311,26 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     /// Метод, определяющий количество ячеек в секции коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return localTrackers[section].trackers.count
+        return filteredTrackers[section].trackers.count
     }
     
     /// Метод, определяющий количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return localTrackers.count
+        return filteredTrackers.count
     }
     
     /// Метод создания и настройки ячейки для indexPath
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackers", for: indexPath) as? TrackersCell
         cell?.delegate = self
-        cell?.viewBackground.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
-        cell?.emoji.text = localTrackers[indexPath.section].trackers[indexPath.row].emoji
-        cell?.name.text = localTrackers[indexPath.section].trackers[indexPath.row].name
-        cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color
-        cell?.quantity.text = "\(trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
+        cell?.viewBackground.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color
+        cell?.emoji.text = filteredTrackers[indexPath.section].trackers[indexPath.row].emoji
+        cell?.name.text = filteredTrackers[indexPath.section].trackers[indexPath.row].name
+        cell?.plusButton.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color
+        cell?.quantity.text = "\(trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
         makeDate(dateFormat: "yyyy/MM/dd")
-        if trackerRecords.filter({$0.id == localTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
-            cell?.plusButton.backgroundColor = localTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
+        if trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
+            cell?.plusButton.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
             cell?.plusButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
         } else {
             cell?.plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -336,7 +341,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     /// Метод создания и настройки Supplementary View
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! CollectionHeaderSupplementaryView
-        header.title.text = localTrackers[indexPath.section].label
+        header.title.text = filteredTrackers[indexPath.section].label
         return header
     }
     
@@ -371,8 +376,8 @@ extension TrackersViewController: UISearchBarDelegate {
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
         datePickerValueChanged(sender: datePicker)
-        let searchingTrackers = localTrackers
-        localTrackers = []
+        let searchingTrackers = filteredTrackers
+        filteredTrackers = []
         var isGood = false
         for tracker in searchingTrackers { // категория
             newCategory = tracker.label
@@ -389,7 +394,7 @@ extension TrackersViewController: UISearchBarDelegate {
                 newCategory = ""
             }
         }
-        localTrackers = newTrackers
+        filteredTrackers = newTrackers
         trackersCollection.reloadData()
     }
     
@@ -411,7 +416,7 @@ extension TrackersViewController: TrackersViewControllerProtocol {
     /// Метод, добавляющий информацию о выполненном трекере в trackerRecords
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
-        if trackerRecords.filter({$0.id == localTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
+        if trackerRecords.filter({$0.id == filteredTrackers[index.section].trackers[index.row].id}).contains(where: {$0.day == dateString}) {
             recordViewModel.deleteRecord(id: id, day: dateString)
         } else {
             recordViewModel.addRecord(id: id, day: dateString)

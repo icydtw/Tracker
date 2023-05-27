@@ -110,7 +110,7 @@ final class TrackersCell: UICollectionViewCell {
               let indexPath = collectionView.indexPath(for: self) else {
             return
         }
-        guard let tappedID = (delegate?.localTrackers[indexPath.section].trackers[indexPath.row].id) else {
+        guard let tappedID = (delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row].id) else {
             return
         }
         delegate?.saveDoneEvent(id: tappedID, index: indexPath)
