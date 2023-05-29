@@ -28,6 +28,8 @@
 		B464D7E929EE84FA0033AC5B /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7E829EE84FA0033AC5B /* ColorCell.swift */; };
 		B47938D62A21BDF30001ADD7 /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47938D52A21BDF30001ADD7 /* TrackersViewModel.swift */; };
 		B47938D82A21C7630001ADD7 /* RecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47938D72A21C7630001ADD7 /* RecordViewModel.swift */; };
+		B47939102A248E620001ADD7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B47939122A248E620001ADD7 /* Localizable.strings */; };
+		B47939162A248EA10001ADD7 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = B47939182A248EA10001ADD7 /* Localizable.stringsdict */; };
 		B486232B29F272F600B95667 /* IrregularCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232A29F272F600B95667 /* IrregularCategoryCell.swift */; };
 		B486232D29F280E200B95667 /* ChoiceOfCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */; };
 		B486232F29F3D02F00B95667 /* ChoiceOfCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B486232E29F3D02F00B95667 /* ChoiceOfCategoryCell.swift */; };
@@ -68,6 +70,8 @@
 		B464D7E829EE84FA0033AC5B /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		B47938D52A21BDF30001ADD7 /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
 		B47938D72A21C7630001ADD7 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
+		B47939132A248E6D0001ADD7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B47939172A248EA10001ADD7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		B486232A29F272F600B95667 /* IrregularCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularCategoryCell.swift; sourceTree = "<group>"; };
 		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
 		B486232E29F3D02F00B95667 /* ChoiceOfCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryCell.swift; sourceTree = "<group>"; };
@@ -211,6 +215,8 @@
 				B43DE7FF29CD9C2B004AB4F7 /* SceneDelegate.swift */,
 				B43DE80829CD9C2B004AB4F7 /* LaunchScreen.storyboard */,
 				B43DE80629CD9C2B004AB4F7 /* Assets.xcassets */,
+				B47939122A248E620001ADD7 /* Localizable.strings */,
+				B47939182A248EA10001ADD7 /* Localizable.stringsdict */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -279,11 +285,11 @@
 			};
 			buildConfigurationList = B43DE7F529CD9C2B004AB4F7 /* Build configuration list for PBXProject "Tracker" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ru,
 			);
 			mainGroup = B43DE7F129CD9C2B004AB4F7;
 			productRefGroup = B43DE7FB29CD9C2B004AB4F7 /* Products */;
@@ -301,6 +307,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B43DE80A29CD9C2B004AB4F7 /* LaunchScreen.storyboard in Resources */,
+				B47939162A248EA10001ADD7 /* Localizable.stringsdict in Resources */,
+				B47939102A248E620001ADD7 /* Localizable.strings in Resources */,
 				B43DE80729CD9C2B004AB4F7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +367,22 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		B47939122A248E620001ADD7 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B47939132A248E6D0001ADD7 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		B47939182A248EA10001ADD7 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B47939172A248EA10001ADD7 /* ru */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -366,6 +390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -426,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
