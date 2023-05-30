@@ -72,6 +72,8 @@
 		B47938D72A21C7630001ADD7 /* RecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordViewModel.swift; sourceTree = "<group>"; };
 		B47939132A248E6D0001ADD7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B47939172A248EA10001ADD7 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		B47939232A25DE9D0001ADD7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		B47939242A25DEB50001ADD7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B486232A29F272F600B95667 /* IrregularCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IrregularCategoryCell.swift; sourceTree = "<group>"; };
 		B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryViewController.swift; sourceTree = "<group>"; };
 		B486232E29F3D02F00B95667 /* ChoiceOfCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceOfCategoryCell.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 			knownRegions = (
 				Base,
 				ru,
+				en,
 			);
 			mainGroup = B43DE7F129CD9C2B004AB4F7;
 			productRefGroup = B43DE7FB29CD9C2B004AB4F7 /* Products */;
@@ -371,6 +374,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				B47939132A248E6D0001ADD7 /* ru */,
+				B47939242A25DEB50001ADD7 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -379,6 +383,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				B47939172A248EA10001ADD7 /* ru */,
+				B47939232A25DE9D0001ADD7 /* en */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";

@@ -6,3 +6,10 @@
   
 */
 
+/// TrackersViewController
+"TrackersViewController.title" = "Трекеры";
+"TrackersViewController.search" = "Поиск";
+"TrackersViewController.whatWeWillTrace" = "Что будем отслеживать?";
+
+/// StatisticsViewController
+"StatisticsViewController.title" = "Статистика";
