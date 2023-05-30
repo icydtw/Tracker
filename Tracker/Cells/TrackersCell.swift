@@ -42,7 +42,6 @@ final class TrackersCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .black
-        label.text = "0 дней"
         return label
     }()
     
