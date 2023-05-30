@@ -186,7 +186,6 @@ final class NewHabitViewController: UIViewController {
     
     private func bind() {
         trackersViewModel.isTrackerAdded = { result in
-            print(result)
             switch result {
             case true: self.dismiss(animated: true)
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")

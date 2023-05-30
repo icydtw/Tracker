@@ -197,7 +197,6 @@ class TrackersViewController: UIViewController {
         let alertController = UIAlertController(title: NSLocalizedString("Touch.title", comment: "Меню"), message: NSLocalizedString("Touch.description", comment: "описание"), preferredStyle: .actionSheet)
         let action1 = UIAlertAction(title: NSLocalizedString("Touch.delete", comment: "Удалить"), style: .destructive) { [weak self] (action) in
             guard let self = self else { return }
-            let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
             let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
             self.trackersViewModel.deleteTracker(id: id)
         }
