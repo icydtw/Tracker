@@ -13,3 +13,8 @@
 
 /// StatisticsViewController
 "StatisticsViewController.title" = "Статистика";
+
+/// SelectingTrackerViewController
+"SelectingTrackerViewController.title" = "Создание трекера";
+"SelectingTrackerViewController.habit" = "Привычка";
+"SelectingTrackerViewController.irregularEvent" = "Нерегулярное событие";

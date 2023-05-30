@@ -14,3 +14,8 @@
 /// StatisticsViewController
 "StatisticsViewController.title" = "Statistics";
 
+/// SelectingTrackerViewController
+"SelectingTrackerViewController.title" = "Creating a tracker";
+"SelectingTrackerViewController.habit" = "Habit";
+"SelectingTrackerViewController.irregularEvent" = "Irregular event";
+
