@@ -6,7 +6,7 @@ final class IrregularCategoryCell: UITableViewCell {
     // MARK: - Свойства
     let title: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("categoryCell", comment: "")
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

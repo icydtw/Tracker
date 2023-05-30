@@ -194,21 +194,21 @@ class TrackersViewController: UIViewController {
     }
     
     func showMenuForCell(at indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "Меню", message: "Выберите действие", preferredStyle: .actionSheet)
-        let action1 = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (action) in
+        let alertController = UIAlertController(title: NSLocalizedString("Touch.title", comment: "Меню"), message: NSLocalizedString("Touch.description", comment: "описание"), preferredStyle: .actionSheet)
+        let action1 = UIAlertAction(title: NSLocalizedString("Touch.delete", comment: "Удалить"), style: .destructive) { [weak self] (action) in
             guard let self = self else { return }
             let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
             let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
             self.trackersViewModel.deleteTracker(id: id)
         }
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Touch.cancel", comment: "Отмена"), style: .cancel, handler: nil)
         alertController.addAction(action1)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
 
     
-    //Метод, обновляющий коллекцию в соответствии с выбранным днём
+    /// Метод, обновляющий коллекцию в соответствии с выбранным днём
     func updateCollection() {
         var newEvents: [Event] = []
         var newCategory: String = ""
@@ -435,7 +435,7 @@ extension TrackersViewController {
     /// Метод, заполняющий переменные с датами в том или ином формате
     private func makeDate(dateFormat: String) {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = dateFormat
         let dateFormatterString = dateFormatter.string(from: datePicker.date)
         if dateFormat == "EEEE" {

@@ -19,3 +19,52 @@
 "SelectingTrackerViewController.habit" = "Habit";
 "SelectingTrackerViewController.irregularEvent" = "Irregular event";
 
+/// NewHabitViewController
+"NewHabitViewController.title" = "New habit";
+
+/// NewIrregularEventViewController
+"NewIrregularEventViewController.title" = "New irregular event";
+
+/// Общие у NewHabitViewController и NewIrregularEventViewController
+"enterTrackerName" = "Enter the name of the tracker";
+"categoryCell" = "Category";
+"scheduleCell" = "Schedule";
+"color" = "Color";
+"cancel" = "Cancel";
+"create" = "Create";
+
+/// ChoiceOfCategoryViewController
+"ChoiceOfCategoryViewController.title" = "Category";
+"ChoiceOfCategoryViewController.addCategory" = "Add category";
+"ChoiceOfCategoryViewController.deleteCategory" = "Delete";
+
+/// AdditionNewCategoryViewController
+"AdditionNewCategoryViewController.title" = "New category";
+"AdditionNewCategoryViewController.enterName" = "Enter a category name";
+"AdditionNewCategoryViewController.done" = "Done";
+
+/// ScheduleViewController
+"ScheduleViewController.title" = "Schedule";
+// Длинные названия дней недели
+"LongName.monday" = "Monday";
+"LongName.tuesday" = "Tuesday";
+"LongName.wednesday" = "Wednesday";
+"LongName.thursday" = "Thursday";
+"LongName.friday" = "Friday";
+"LongName.saturday" = "Saturday";
+"LongName.sunday" = "Sunday";
+// Короткие названия дней недели
+"ShortName.monday" = "Mon";
+"ShortName.tuesday" = "Tue";
+"ShortName.wednesday" = "Wed";
+"ShortName.thursday" = "Thu";
+"ShortName.friday" = "Fri";
+"ShortName.saturday" = "Sat";
+"ShortName.sunday" = "Sun";
+
+/// UIAlertController при нажатии на ячейку коллекции
+"Touch.delete" = "Delete";
+"Touch.cancel" = "Cancel";
+"Touch.title" = "Menu";
+"Touch.description" = "Select an action";
+

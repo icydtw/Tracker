@@ -11,7 +11,7 @@ final class NewHabitViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = NSLocalizedString("NewHabitViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -19,7 +19,7 @@ final class NewHabitViewController: UIViewController {
     
     let enterNameTextField: UITextField = {
         let field = UITextField()
-        field.placeholder = "Введите название трекера"
+        field.placeholder = NSLocalizedString("enterTrackerName", comment: "Плейсхолдер в строке ввода названия")
         field.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
         field.layer.cornerRadius = 16
         field.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +67,7 @@ final class NewHabitViewController: UIViewController {
     
     let cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("cancel", comment: "Кнопка отмены"), for: .normal)
         button.setTitleColor(UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1), for: .normal)
         button.layer.borderColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1).cgColor
         button.layer.borderWidth = 1
@@ -79,7 +79,7 @@ final class NewHabitViewController: UIViewController {
     
     let createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("create", comment: "Кнопка создания трекера"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
         button.layer.cornerRadius = 16
@@ -311,9 +311,9 @@ extension NewHabitViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         switch indexPath.row {
         case 0:
-            categoryCell.title.text = "Категория"
+            categoryCell.title.text = NSLocalizedString("categoryCell", comment: "")
         default:
-            categoryCell.title.text = "Расписание"
+            categoryCell.title.text = NSLocalizedString("scheduleCell", comment: "")
         }
         return categoryCell
     }
@@ -381,7 +381,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView == colorCollection {
             if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView {
-                header.title.text = "Цвет"
+                header.title.text = NSLocalizedString("color", comment: "")
                 return header
             } else {
                 assertionFailure("Unable to dequeue CollectionHeaderSupplementaryView")

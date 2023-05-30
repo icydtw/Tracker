@@ -27,7 +27,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новое нерегулярное событие"
+        label.text = NSLocalizedString("NewIrregularEventViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -35,7 +35,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     let enterNameTextField: UITextField = {
         let field = UITextField()
-        field.placeholder = "Введите название трекера"
+        field.placeholder = NSLocalizedString("enterTrackerName", comment: "Плейсхолдер в строке ввода названия трекера")
         field.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
         field.layer.cornerRadius = 16
         field.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +65,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     let cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("cancel", comment: "Кнопка отмены"), for: .normal)
         button.setTitleColor(UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1), for: .normal)
         button.layer.borderColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1).cgColor
         button.layer.borderWidth = 1
@@ -77,7 +77,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     let createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("create", comment: "Кнопка создания трекера"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
         button.layer.cornerRadius = 16
@@ -304,7 +304,7 @@ extension NewIrregularEventViewController: UICollectionViewDataSource {
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView else {
                 fatalError("Unable to dequeue CollectionHeaderSupplementaryView")
             }
-            header.title.text = "Цвет"
+            header.title.text = NSLocalizedString("color", comment: "")
             return header
         } else {
             guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView else {
