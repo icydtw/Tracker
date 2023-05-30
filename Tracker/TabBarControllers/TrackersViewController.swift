@@ -67,7 +67,7 @@ class TrackersViewController: UIViewController {
         datePicker.calendar = Calendar(identifier: .iso8601)
         datePicker.maximumDate = Date()
         datePicker.locale = Locale.current
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(dataChanged), for: .valueChanged)
         return datePicker
     }()
     
@@ -132,7 +132,7 @@ class TrackersViewController: UIViewController {
     /// Настройка внешнего вида
     private func setupView() {
         dataProvider.updateCollectionView()
-        datePickerValueChanged(sender: datePicker)
+        dataChanged(sender: datePicker)
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
@@ -236,7 +236,7 @@ class TrackersViewController: UIViewController {
     private func bind() {
         trackersViewModel.isTrackerDeleted = { result in
             switch result {
-            case true: self.datePickerValueChanged(sender: self.datePicker)
+            case true: self.dataChanged(sender: self.datePicker)
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления трекера")
             }
         }
@@ -274,7 +274,7 @@ class TrackersViewController: UIViewController {
     
     /// Метод, вызываемый когда меняется дата в Date Picker
     @objc
-    func datePickerValueChanged(sender: UIDatePicker) {
+    func dataChanged(sender: UIDatePicker) {
         makeDate(dateFormat: "EEEE")
         updateCollection()
         hideCollection()
@@ -377,7 +377,7 @@ extension TrackersViewController: UISearchBarDelegate {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
-        datePickerValueChanged(sender: datePicker)
+        dataChanged(sender: datePicker)
         let searchingTrackers = filteredTrackers
         filteredTrackers = []
         var isGood = false

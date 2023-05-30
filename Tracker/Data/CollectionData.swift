@@ -28,7 +28,6 @@ let colorCollectionData = [
 ]
 
 // MARK: - Перечисление с днями недели
-let monday = NSLocalizedString("LongName.monday", comment: "")
 
 enum dayOfWeek {
     case sunday

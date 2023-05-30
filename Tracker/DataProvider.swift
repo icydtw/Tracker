@@ -87,7 +87,7 @@ extension DataProvider: NSFetchedResultsControllerDelegate {
     /// Метод, вызываемый автоматически при изменении данных в БД
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         updateCollectionView()
-        delegate?.datePickerValueChanged(sender: delegate?.datePicker ?? UIDatePicker())
+        delegate?.dataChanged(sender: delegate?.datePicker ?? UIDatePicker())
     }
     
 }
