@@ -250,8 +250,8 @@ class TrackersViewController: UIViewController {
             }
         }
         filteredTrackers = newTrackers.sorted(by: {$0.label > $1.label})
-        if let copy = filteredTrackers.filter({$0.label == "Закреплено"}).first {
-            filteredTrackers.removeAll(where: {$0.label == "Закреплено"})
+        if let copy = filteredTrackers.filter({$0.label == NSLocalizedString("TrackersViewController.pinned", comment: "")}).first {
+            filteredTrackers.removeAll(where: {$0.label == NSLocalizedString("TrackersViewController.pinned", comment: "")})
             filteredTrackers.append(copy)
             filteredTrackers.reverse()
         }
