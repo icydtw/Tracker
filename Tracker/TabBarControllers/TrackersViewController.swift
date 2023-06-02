@@ -23,6 +23,8 @@ class TrackersViewController: UIViewController {
     
     var recordViewModel: RecordViewModel
     
+    var categoryViewModel: CategoryViewModel
+    
     var dataProvider = DataProvider()
     
     var trackersCollection: UICollectionView = {
@@ -119,9 +121,10 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    init(trackersViewModel: TrackersViewModel, recordViewModel: RecordViewModel) {
+    init(trackersViewModel: TrackersViewModel, recordViewModel: RecordViewModel, categoryViewModel: CategoryViewModel) {
         self.trackersViewModel = trackersViewModel
         self.recordViewModel = recordViewModel
+        self.categoryViewModel = categoryViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -200,8 +203,15 @@ class TrackersViewController: UIViewController {
             let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
             self.trackersViewModel.deleteTracker(id: id)
         }
+        let action2 = UIAlertAction(title: NSLocalizedString("Touch.pin", comment: "Закрепить"), style: .destructive) { [weak self] (action) in
+            guard let self = self else { return }
+            let oldCategory = self.filteredTrackers[indexPath.section].label
+            let eventToPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
+            self.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: categoryViewModel)
+        }
         let cancelAction = UIAlertAction(title: NSLocalizedString("Touch.cancel", comment: "Отмена"), style: .cancel, handler: nil)
         alertController.addAction(action1)
+        alertController.addAction(action2)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }

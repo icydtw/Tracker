@@ -50,4 +50,9 @@ final class TrackerStore: NSObject {
          return true
     }
     
+    /// Метод, "закрепляющий" трекер
+    func pinEvent() {
+        print("PINNED")
+    }
+    
 }

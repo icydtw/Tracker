@@ -67,4 +67,5 @@
 "Touch.cancel" = "Cancel";
 "Touch.title" = "Menu";
 "Touch.description" = "Select an action";
+"Touch.pin" = "Pin";
 

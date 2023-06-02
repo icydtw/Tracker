@@ -21,4 +21,9 @@ final class TrackersViewModel {
         isTrackerDeleted?(result)
     }
     
+    /// Метод, "закрепляющий" трекер
+    func pinEvent(oldCategory: String, eventToPin: Event, categoryViewModel: CategoryViewModel) {
+        
+    }
+    
 }

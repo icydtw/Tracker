@@ -67,4 +67,5 @@
 "Touch.cancel" = "Отмена";
 "Touch.title" = "Меню";
 "Touch.description" = "Выберите действие";
+"Touch.pin" = "Закрепить";
 
