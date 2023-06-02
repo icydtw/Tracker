@@ -10,6 +10,7 @@
 "TrackersViewController.title" = "Трекеры";
 "TrackersViewController.search" = "Поиск";
 "TrackersViewController.whatWeWillTrace" = "Что будем отслеживать?";
+"TrackersViewController.pinned" = "Закреплённые";
 
 /// StatisticsViewController
 "StatisticsViewController.title" = "Статистика";

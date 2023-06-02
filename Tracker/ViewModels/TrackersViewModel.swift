@@ -24,7 +24,7 @@ final class TrackersViewModel {
     /// Метод, "закрепляющий" трекер
     func pinEvent(oldCategory: String, eventToPin: Event, categoryViewModel: CategoryViewModel) {
         deleteTracker(id: eventToPin.id)
-        addTracker(event: eventToPin, category: "Закреплено", categoryViewModel: categoryViewModel)
+        addTracker(event: eventToPin, category: NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые"), categoryViewModel: categoryViewModel)
         model.pinEvent(oldCategory: oldCategory, id: eventToPin.id)
     }
     

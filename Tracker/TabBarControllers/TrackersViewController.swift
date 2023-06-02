@@ -204,7 +204,7 @@ class TrackersViewController: UIViewController {
             self.trackersViewModel.deleteTracker(id: id)
         }
         var action2 = UIAlertAction()
-        if self.filteredTrackers[indexPath.section].label == "Закреплено" {
+        if self.filteredTrackers[indexPath.section].label == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые") {
             action2 = UIAlertAction(title: NSLocalizedString("Touch.unpin", comment: ""), style: .destructive) { [weak self] (action) in
                 guard let self = self else { return }
                 let eventToUnPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]

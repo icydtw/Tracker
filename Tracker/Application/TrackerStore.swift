@@ -56,9 +56,7 @@ final class TrackerStore: NSObject {
         pinnedTracker.pinnedTrackerID = id
         pinnedTracker.pinnedTrackerCategory = oldCategory
         try! context.save()
-        
         let request = NSFetchRequest<PinnedTrackers>(entityName: "PinnedTrackers")
-        print(try! context.fetch(request))
     }
     
     /// Метод, "открепляющий" трекер
@@ -66,6 +64,7 @@ final class TrackerStore: NSObject {
         let request = NSFetchRequest<PinnedTrackers>(entityName: "PinnedTrackers")
         request.predicate = NSPredicate(format: "pinnedTrackerID == %@", id.uuidString)
         guard let result = try! context.fetch(request).first?.pinnedTrackerCategory else { return "" }
+        context.delete(try! context.fetch(request).first ?? PinnedTrackers())
         return result
     }
     

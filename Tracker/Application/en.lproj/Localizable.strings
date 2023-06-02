@@ -10,6 +10,7 @@
 "TrackersViewController.title" = "Trackers";
 "TrackersViewController.search" = "Search";
 "TrackersViewController.whatWeWillTrace" = "What will we be tracking?";
+"TrackersViewController.pinned" = "Pinned";
 
 /// StatisticsViewController
 "StatisticsViewController.title" = "Statistics";
