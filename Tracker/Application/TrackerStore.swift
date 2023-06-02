@@ -51,8 +51,22 @@ final class TrackerStore: NSObject {
     }
     
     /// Метод, "закрепляющий" трекер
-    func pinEvent() {
-        print("PINNED")
+    func pinEvent(oldCategory: String, id: UUID) {
+        let pinnedTracker = PinnedTrackers(context: context)
+        pinnedTracker.pinnedTrackerID = id
+        pinnedTracker.pinnedTrackerCategory = oldCategory
+        try! context.save()
+        
+        let request = NSFetchRequest<PinnedTrackers>(entityName: "PinnedTrackers")
+        print(try! context.fetch(request))
+    }
+    
+    /// Метод, "открепляющий" трекер
+    func unpinEvent(id: UUID) -> String {
+        let request = NSFetchRequest<PinnedTrackers>(entityName: "PinnedTrackers")
+        request.predicate = NSPredicate(format: "pinnedTrackerID == %@", id.uuidString)
+        guard let result = try! context.fetch(request).first?.pinnedTrackerCategory else { return "" }
+        return result
     }
     
 }

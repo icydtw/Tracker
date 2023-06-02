@@ -23,7 +23,16 @@ final class TrackersViewModel {
     
     /// Метод, "закрепляющий" трекер
     func pinEvent(oldCategory: String, eventToPin: Event, categoryViewModel: CategoryViewModel) {
-        
+        deleteTracker(id: eventToPin.id)
+        addTracker(event: eventToPin, category: "Закреплено", categoryViewModel: categoryViewModel)
+        model.pinEvent(oldCategory: oldCategory, id: eventToPin.id)
+    }
+    
+    /// Метод, "открепляющий" трекер
+    func unpinEvent(eventToUnpin: Event, categoryViewModel: CategoryViewModel) {
+        deleteTracker(id: eventToUnpin.id)
+        let oldCategory = model.unpinEvent(id: eventToUnpin.id)
+        addTracker(event: eventToUnpin, category: oldCategory, categoryViewModel: categoryViewModel)
     }
     
 }

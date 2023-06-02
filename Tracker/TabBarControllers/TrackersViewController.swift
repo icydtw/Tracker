@@ -203,12 +203,22 @@ class TrackersViewController: UIViewController {
             let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
             self.trackersViewModel.deleteTracker(id: id)
         }
-        let action2 = UIAlertAction(title: NSLocalizedString("Touch.pin", comment: "Закрепить"), style: .destructive) { [weak self] (action) in
-            guard let self = self else { return }
-            let oldCategory = self.filteredTrackers[indexPath.section].label
-            let eventToPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
-            self.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: categoryViewModel)
+        var action2 = UIAlertAction()
+        if self.filteredTrackers[indexPath.section].label == "Закреплено" {
+            action2 = UIAlertAction(title: NSLocalizedString("Touch.unpin", comment: ""), style: .destructive) { [weak self] (action) in
+                guard let self = self else { return }
+                let eventToUnPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
+                self.trackersViewModel.unpinEvent(eventToUnpin: eventToUnPin, categoryViewModel: categoryViewModel)
+            }
+        } else {
+            action2 = UIAlertAction(title: NSLocalizedString("Touch.pin", comment: ""), style: .destructive) { [weak self] (action) in
+                guard let self = self else { return }
+                let oldCategory = self.filteredTrackers[indexPath.section].label
+                let eventToPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
+                self.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: categoryViewModel)
+            }
         }
+
         let cancelAction = UIAlertAction(title: NSLocalizedString("Touch.cancel", comment: "Отмена"), style: .cancel, handler: nil)
         alertController.addAction(action1)
         alertController.addAction(action2)
@@ -239,7 +249,12 @@ class TrackersViewController: UIViewController {
                 newCategory = ""
             }
         }
-        filteredTrackers = newTrackers.sorted(by: {$0.label < $1.label})
+        filteredTrackers = newTrackers.sorted(by: {$0.label > $1.label})
+        if let copy = filteredTrackers.filter({$0.label == "Закреплено"}).first {
+            filteredTrackers.removeAll(where: {$0.label == "Закреплено"})
+            filteredTrackers.append(copy)
+            filteredTrackers.reverse()
+        }
     }
     
     /// Биндинг
