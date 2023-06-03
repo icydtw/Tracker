@@ -192,40 +192,11 @@ class TrackersViewController: UIViewController {
     func handleLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = gestureRecognizer.location(in: trackersCollection)
         if let indexPath = trackersCollection.indexPathForItem(at: touchPoint) {
-            showMenuForCell(at: indexPath)
+            let interaction = UIContextMenuInteraction(delegate: self)
+            let cell = trackersCollection.cellForItem(at: indexPath) as? TrackersCell
+            cell?.viewBackground.addInteraction(interaction)
         }
     }
-    
-    func showMenuForCell(at indexPath: IndexPath) {
-        let alertController = UIAlertController(title: NSLocalizedString("Touch.title", comment: "Меню"), message: NSLocalizedString("Touch.description", comment: "описание"), preferredStyle: .actionSheet)
-        let action1 = UIAlertAction(title: NSLocalizedString("Touch.delete", comment: "Удалить"), style: .destructive) { [weak self] (action) in
-            guard let self = self else { return }
-            let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
-            self.trackersViewModel.deleteTracker(id: id)
-        }
-        var action2 = UIAlertAction()
-        if self.filteredTrackers[indexPath.section].label == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые") {
-            action2 = UIAlertAction(title: NSLocalizedString("Touch.unpin", comment: ""), style: .destructive) { [weak self] (action) in
-                guard let self = self else { return }
-                let eventToUnPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
-                self.trackersViewModel.unpinEvent(eventToUnpin: eventToUnPin, categoryViewModel: categoryViewModel)
-            }
-        } else {
-            action2 = UIAlertAction(title: NSLocalizedString("Touch.pin", comment: ""), style: .destructive) { [weak self] (action) in
-                guard let self = self else { return }
-                let oldCategory = self.filteredTrackers[indexPath.section].label
-                let eventToPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
-                self.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: categoryViewModel)
-            }
-        }
-
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Touch.cancel", comment: "Отмена"), style: .cancel, handler: nil)
-        alertController.addAction(action1)
-        alertController.addAction(action2)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-
     
     /// Метод, обновляющий коллекцию в соответствии с выбранным днём
     func updateCollection() {
@@ -326,6 +297,38 @@ class TrackersViewController: UIViewController {
     func dismissKeyboard() {
         updateCollection()
         searchBar.resignFirstResponder()
+    }
+    
+}
+
+// MARK: - Расширение для UIContextMenuInteractionDelegate
+extension TrackersViewController: UIContextMenuInteractionDelegate {
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            guard let indexPath = self.trackersCollection.indexPathForItem(at: location) else { return UIMenu() }
+            var pinAction = UIAction(title: NSLocalizedString("Touch.pin", comment: ""), image: nil) { _ in
+                let oldCategory = self.filteredTrackers[indexPath.section].label
+                let eventToPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
+                self.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: self.categoryViewModel)
+            }
+            if self.filteredTrackers[indexPath.section].label == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые") {
+                pinAction = UIAction(title: NSLocalizedString("Touch.unpin", comment: ""), image: nil) { _ in
+                    let eventToUnPin = self.filteredTrackers[indexPath.section].trackers[indexPath.row]
+                    self.trackersViewModel.unpinEvent(eventToUnpin: eventToUnPin, categoryViewModel: self.categoryViewModel)
+                }
+            }
+            let editAction = UIAction(title: "Редактировать", image: nil) { _ in
+                print("EDIT")
+            }
+            let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in
+                let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
+                self.trackersViewModel.deleteTracker(id: id)
+            }
+            deleteAction.attributes = .destructive
+            return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+        }
+        return configuration
     }
     
 }
