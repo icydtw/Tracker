@@ -100,6 +100,8 @@ final class TrackersCell: UICollectionViewCell {
             quantity.topAnchor.constraint(equalTo: viewBackground.bottomAnchor, constant: 16),
             quantity.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
+        let interaction = UIContextMenuInteraction(delegate: self)
+        self.viewBackground.addInteraction(interaction)
     }
     
     /// Метод, вызываемый при нажатии на "+" в ячейке
@@ -116,4 +118,35 @@ final class TrackersCell: UICollectionViewCell {
         collectionView.reloadData()
     }
     
+}
+
+extension TrackersCell: UIContextMenuInteractionDelegate {
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let collectionView = superview as? UICollectionView,
+              let indexPath = collectionView.indexPath(for: self),
+              let tappedID = delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row].id else {
+            return UIContextMenuConfiguration()
+        }
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label
+            let eventToPin = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row]
+            let pinActionTitle = (oldCategory == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые")) ? NSLocalizedString("Touch.unpin", comment: "") : NSLocalizedString("Touch.pin", comment: "")
+            let pinAction = UIAction(title: pinActionTitle, image: nil) { _ in
+                if let oldCategory = oldCategory, let eventToPin = eventToPin {
+                    self.delegate?.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel())
+                }
+            }
+            let editAction = UIAction(title: "Редактировать", image: nil) { _ in
+                print("EDIT")
+            }
+            let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in
+                self.delegate?.trackersViewModel.deleteTracker(id: tappedID)
+            }
+            deleteAction.attributes = .destructive
+            return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+        }
+        return configuration
+    }
+
 }
