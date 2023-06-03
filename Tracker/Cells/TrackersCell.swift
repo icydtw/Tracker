@@ -124,22 +124,31 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
     
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         guard let collectionView = superview as? UICollectionView,
-              let indexPath = collectionView.indexPath(for: self),
-              let tappedID = delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row].id else {
+              let indexPath = collectionView.indexPath(for: self) else {
+            return UIContextMenuConfiguration()
+        }
+        guard let tappedID = (delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row].id) else {
             return UIContextMenuConfiguration()
         }
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label
-            let eventToPin = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row]
-            let pinActionTitle = (oldCategory == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые")) ? NSLocalizedString("Touch.unpin", comment: "") : NSLocalizedString("Touch.pin", comment: "")
-            let pinAction = UIAction(title: pinActionTitle, image: nil) { _ in
-                if let oldCategory = oldCategory, let eventToPin = eventToPin {
-                    self.delegate?.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel())
+            // Закрепление
+            var pinAction = UIAction(title: NSLocalizedString("Touch.pin", comment: ""), image: nil) { _ in
+                guard let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label,
+                      let eventToPin = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row] else { return }
+                self.delegate?.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel())
+            }
+            // Открепление
+            if self.delegate?.filteredTrackers[indexPath.section].label == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые") {
+                pinAction = UIAction(title: NSLocalizedString("Touch.unpin", comment: ""), image: nil) { _ in
+                    guard let eventToUnPin = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row] else { return }
+                    self.delegate?.trackersViewModel.unpinEvent(eventToUnpin: eventToUnPin, categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel())
                 }
             }
+            // Редактирование
             let editAction = UIAction(title: "Редактировать", image: nil) { _ in
                 print("EDIT")
             }
+            // Удаление
             let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in
                 self.delegate?.trackersViewModel.deleteTracker(id: tappedID)
             }
@@ -148,5 +157,6 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
         }
         return configuration
     }
+
 
 }
