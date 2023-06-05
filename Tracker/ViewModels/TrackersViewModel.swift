@@ -35,4 +35,9 @@ final class TrackersViewModel {
         addTracker(event: eventToUnpin, category: oldCategory, categoryViewModel: categoryViewModel)
     }
     
+    /// Метод редактирования трекера
+    func editEvent() {
+        
+    }
+    
 }

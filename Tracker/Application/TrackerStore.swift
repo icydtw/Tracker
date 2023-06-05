@@ -68,4 +68,9 @@ final class TrackerStore: NSObject {
         return result
     }
     
+    /// Метод редактирования трекера
+    func editEvent() {
+        
+    }
+    
 }

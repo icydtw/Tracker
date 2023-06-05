@@ -17,6 +17,7 @@
 		B43DE80229CD9C2B004AB4F7 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DE80129CD9C2B004AB4F7 /* TrackersViewController.swift */; };
 		B43DE80729CD9C2B004AB4F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B43DE80629CD9C2B004AB4F7 /* Assets.xcassets */; };
 		B43DE80A29CD9C2B004AB4F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B43DE80829CD9C2B004AB4F7 /* LaunchScreen.storyboard */; };
+		B46356C12A2DC6C1005DF917 /* EditIrregularTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46356C02A2DC6C1005DF917 /* EditIrregularTrackerViewController.swift */; };
 		B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */; };
 		B464D7D329EAB97F0033AC5B /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */; };
 		B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */; };
@@ -59,6 +60,7 @@
 		B43DE80629CD9C2B004AB4F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B43DE80929CD9C2B004AB4F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B43DE80B29CD9C2B004AB4F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B46356C02A2DC6C1005DF917 /* EditIrregularTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditIrregularTrackerViewController.swift; sourceTree = "<group>"; };
 		B464D7D029EAB6D90033AC5B /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		B464D7D229EAB97F0033AC5B /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		B464D7D529EC15150033AC5B /* SelectingTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectingTrackerViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				B486232C29F280E200B95667 /* ChoiceOfCategoryViewController.swift */,
 				B486233429FA62BB00B95667 /* ScheduleViewController.swift */,
 				B4D70B3B2A210EB100DA0B3C /* AdditionNewCategoryViewController.swift */,
+				B46356C02A2DC6C1005DF917 /* EditIrregularTrackerViewController.swift */,
 			);
 			path = TrackerMakersViews;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				B41946C72A19153300D0EEFE /* TrackerCategoryStore.swift in Sources */,
 				B464D7DF29ED41E70033AC5B /* CollectionData.swift in Sources */,
 				B4D70B0C2A1E141F00DA0B3C /* OnboardingViewController.swift in Sources */,
+				B46356C12A2DC6C1005DF917 /* EditIrregularTrackerViewController.swift in Sources */,
 				B464D7D129EAB6D90033AC5B /* MainTabBarViewController.swift in Sources */,
 				B41946CE2A1A66A200D0EEFE /* AlertMessage.swift in Sources */,
 				B464D7E229ED431A0033AC5B /* EmojiCell.swift in Sources */,

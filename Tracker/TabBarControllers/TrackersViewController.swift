@@ -5,6 +5,7 @@ protocol TrackersViewControllerProtocol {
     var categoryViewModel: CategoryViewModel { get }
     func saveDoneEvent(id: UUID, index: IndexPath)
     var filteredTrackers: [TrackerCategory] {get set }
+    func present(VC: UIViewController)
 }
 
 /// Экран "Трекеры" в таб-баре
@@ -399,6 +400,12 @@ extension TrackersViewController: UISearchBarDelegate {
 
 // MARK: - Расширение для TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewControllerProtocol {
+    
+    /// Метод, презентующий новый экран в случае, если это редактирование трекера
+    func present(VC: UIViewController) {
+        present(VC, animated: true)
+    }
+    
     
     /// Метод, добавляющий информацию о выполненном трекере в trackerRecords
     func saveDoneEvent(id: UUID, index: IndexPath) {

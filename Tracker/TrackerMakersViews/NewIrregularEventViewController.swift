@@ -5,6 +5,8 @@ final class NewIrregularEventViewController: UIViewController {
     
     // MARK: - Свойства
     
+    let eventToEdit: Event?
+    
     let categoryViewModel: CategoryViewModel
     
     let trackersViewModel: TrackersViewModel
@@ -112,9 +114,10 @@ final class NewIrregularEventViewController: UIViewController {
         bind()
     }
     
-    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil) {
         self.categoryViewModel = categoryViewModel
         self.trackersViewModel = trackersViewModel
+        self.eventToEdit = eventToEdit
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -124,6 +127,9 @@ final class NewIrregularEventViewController: UIViewController {
     
     /// Настройка внешнего вида
     private func setupView() {
+        if let eventToEdit = eventToEdit {
+            print("СТАРОЕ НА МЕСТЕ")
+        }
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
