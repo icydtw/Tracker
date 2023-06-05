@@ -169,7 +169,21 @@ final class NewHabitViewController: UIViewController {
         enterNameTextField.text = eventToEdit?.name
         guard let categoryToEdit = categoryToEdit else { return }
         categoryViewModel.didChooseCategory(name: categoryToEdit)
-        
+        guard let days = eventToEdit?.day else { return }
+        selectedDays = days
+        for day in selectedDays {
+            switch day {
+            case dayOfWeek.monday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.monday", comment: "ПН"))
+            case dayOfWeek.tuesday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.tuesday", comment: "ВТ"))
+            case dayOfWeek.wednesday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.wednesday", comment: "СР"))
+            case dayOfWeek.thursday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.thursday", comment: "ЧТ"))
+            case dayOfWeek.friday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.friday", comment: "ПТ"))
+            case dayOfWeek.saturday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.saturday", comment: "СБ"))
+            case dayOfWeek.sunday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.sunday", comment: "ВС"))
+            default:
+                return
+            }
+        }
         guard let emoji = eventToEdit?.emoji else { return }
         guard let emojiIndex = emojiCollectionData.firstIndex(of: emoji) else { return }
         emojiCollection.selectItem(at: IndexPath(row: emojiIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
@@ -346,6 +360,13 @@ extension NewHabitViewController: UITableViewDataSource {
             }
         default:
             categoryCell.title.text = NSLocalizedString("scheduleCell", comment: "")
+            categoryCell.title.removeFromSuperview()
+            categoryCell.addSubview(categoryCell.title)
+            categoryCell.categoryName.text = shortSelectedDays.joined(separator: ", ")
+            categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
+            categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+            categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+            categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
         }
         return categoryCell
     }
