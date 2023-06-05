@@ -6,6 +6,7 @@ final class NewHabitViewController: UIViewController {
     // MARK: - Свойства
     
     let eventToEdit: Event?
+    let categoryToEdit: String?
     
     let categoryViewModel: CategoryViewModel
     
@@ -116,10 +117,11 @@ final class NewHabitViewController: UIViewController {
         bind()
     }
     
-    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil, categoryToEdit: String? = nil) {
         self.categoryViewModel = categoryViewModel
         self.trackersViewModel = trackersViewModel
         self.eventToEdit = eventToEdit
+        self.categoryToEdit = categoryToEdit
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -156,6 +158,25 @@ final class NewHabitViewController: UIViewController {
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
+        if eventToEdit != nil {
+            setupEdit()
+        }
+    }
+    
+    func setupEdit() {
+        titleLabel.text = "Редактирование привычки"
+        createButton.setTitle("Сохранить", for: .normal)
+        enterNameTextField.text = eventToEdit?.name
+        guard let categoryToEdit = categoryToEdit else { return }
+        categoryViewModel.didChooseCategory(name: categoryToEdit)
+        
+        guard let emoji = eventToEdit?.emoji else { return }
+        guard let emojiIndex = emojiCollectionData.firstIndex(of: emoji) else { return }
+        emojiCollection.selectItem(at: IndexPath(row: emojiIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+        guard let color = eventToEdit?.color else { return }
+        guard let colorIndex = colorCollectionData.firstIndex(where: {UIColor.hexString(from: $0) == UIColor.hexString(from: color)}) else { return }
+        colorCollection.selectItem(at: IndexPath(row: colorIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+        activateButton()
     }
     
     /// Настройка свойств, жестов и нотификаций
@@ -314,6 +335,15 @@ extension NewHabitViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             categoryCell.title.text = NSLocalizedString("categoryCell", comment: "")
+            if eventToEdit != nil {
+                categoryCell.title.removeFromSuperview()
+                categoryCell.addSubview(categoryCell.title)
+                categoryCell.categoryName.text = categoryViewModel.getChoosedCategory()
+                categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
+                categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
+            }
         default:
             categoryCell.title.text = NSLocalizedString("scheduleCell", comment: "")
         }
@@ -369,12 +399,28 @@ extension NewHabitViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             cell.color.backgroundColor = colorCollectionData[indexPath.row]
+            if let cellColor = cell.color.backgroundColor,
+               let eventColor = eventToEdit?.color {
+                if UIColor.hexString(from: cellColor) == UIColor.hexString(from: eventColor) {
+                    cell.layer.borderWidth = 3
+                    cell.layer.borderColor = cell.color.backgroundColor?.cgColor.copy(alpha: 0.3)
+                    cell.layer.cornerRadius = 8
+                    cell.layer.masksToBounds = true
+                }
+            }
+            
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell else {
                 return UICollectionViewCell()
             }
             cell.emojiLabel.text = emojiCollectionData[indexPath.row]
+            if cell.emojiLabel.text == eventToEdit?.emoji {
+                cell.isSelected = true
+                cell.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+                cell.layer.cornerRadius = 16
+                cell.layer.masksToBounds = true
+            }
             return cell
         }
     }

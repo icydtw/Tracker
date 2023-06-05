@@ -432,6 +432,15 @@ extension NewIrregularEventViewController: UITableViewDataSource {
         }
         cell.selectionStyle = .none
         categoryCell.categoryName.text = categoryViewModel.getChoosedCategory()
+        if eventToEdit != nil {
+            categoryCell.title.removeFromSuperview()
+            categoryCell.addSubview(categoryCell.title)
+            categoryCell.categoryName.text = categoryViewModel.getChoosedCategory()
+            categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
+            categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+            categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+            categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
+        }
         return categoryCell
     }
     

@@ -132,8 +132,6 @@ final class ChoiceOfCategoryViewController: UIViewController {
             guard let self = self else { return }
             if isOk {
                 self.dismiss(animated: true)
-                let notification = Notification(name: Notification.Name("category_changed"))
-                NotificationCenter.default.post(notification)
             } else {
                 AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка выбора категории")
             }

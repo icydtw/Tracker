@@ -155,7 +155,7 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
                     let showEditView = NewIrregularEventViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit, categoryToEdit: oldCategory)
                     self.delegate?.present(VC: showEditView)
                 } else {
-                    let showEditView = NewHabitViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit)
+                    let showEditView = NewHabitViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit, categoryToEdit: oldCategory)
                     self.delegate?.present(VC: showEditView)
                 }
             }
