@@ -120,8 +120,10 @@ final class TrackersCell: UICollectionViewCell {
     
 }
 
+// MARK: - Расширение для UIContextMenuInteractionDelegate
 extension TrackersCell: UIContextMenuInteractionDelegate {
     
+    /// Метод, управляющий контекстным меню
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         guard let collectionView = superview as? UICollectionView,
               let indexPath = collectionView.indexPath(for: self) else {
