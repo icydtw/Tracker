@@ -165,6 +165,7 @@ final class NewIrregularEventViewController: UIViewController {
     
     func setupEdit() {
         titleLabel.text = "Редактирование привычки"
+        createButton.setTitle("Сохранить", for: .normal)
         enterNameTextField.text = eventToEdit?.name
         guard let categoryToEdit = categoryToEdit else { return }
         categoryViewModel.didChooseCategory(name: categoryToEdit)
