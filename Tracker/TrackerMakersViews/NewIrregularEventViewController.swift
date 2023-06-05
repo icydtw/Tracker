@@ -226,9 +226,12 @@ final class NewIrregularEventViewController: UIViewController {
         enterNameTextField.resignFirstResponder()
     }
     
-    /// Метод, вызываемый при нажатии на кнопку "Создать"
+    /// Метод, вызываемый при нажатии на кнопку "Создать/Сохранить"
     @objc
     private func create() {
+        if eventToEdit != nil {
+            trackersViewModel.deleteTracker(id: eventToEdit?.id ?? UUID())
+        }
         let name = enterNameTextField.text ?? ""
         let category = categoryViewModel.getChoosedCategory()
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first

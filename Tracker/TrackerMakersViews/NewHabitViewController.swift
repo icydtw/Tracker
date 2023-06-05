@@ -257,9 +257,12 @@ final class NewHabitViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    /// Метод, вызываемый при нажатии на кнопку "Создать"
+    /// Метод, вызываемый при нажатии на кнопку "Создать/Сохранить"
     @objc
     private func create() {
+        if eventToEdit != nil {
+            trackersViewModel.deleteTracker(id: eventToEdit?.id ?? UUID())
+        }
         let name = enterNameTextField.text ?? ""
         let category = categoryViewModel.getChoosedCategory()
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
@@ -360,13 +363,15 @@ extension NewHabitViewController: UITableViewDataSource {
             }
         default:
             categoryCell.title.text = NSLocalizedString("scheduleCell", comment: "")
-            categoryCell.title.removeFromSuperview()
-            categoryCell.addSubview(categoryCell.title)
-            categoryCell.categoryName.text = shortSelectedDays.joined(separator: ", ")
-            categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
-            categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
-            categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
-            categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
+            if eventToEdit != nil {
+                categoryCell.title.removeFromSuperview()
+                categoryCell.addSubview(categoryCell.title)
+                categoryCell.categoryName.text = shortSelectedDays.joined(separator: ", ")
+                categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
+                categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
+            }
         }
         return categoryCell
     }
