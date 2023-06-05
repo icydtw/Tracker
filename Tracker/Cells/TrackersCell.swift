@@ -148,9 +148,16 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
             }
             // Редактирование
             let editAction = UIAction(title: "Редактировать", image: nil) { _ in
-                guard let eventToEdit = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row] else { return }
-                let showEditView = NewIrregularEventViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit)
-                self.delegate?.present(VC: showEditView)
+                guard let eventToEdit = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row],
+                      let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label
+                else { return }
+                if eventToEdit.day == nil {
+                    let showEditView = NewIrregularEventViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit, categoryToEdit: oldCategory)
+                    self.delegate?.present(VC: showEditView)
+                } else {
+                    let showEditView = NewHabitViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit)
+                    self.delegate?.present(VC: showEditView)
+                }
             }
             // Удаление
             let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in

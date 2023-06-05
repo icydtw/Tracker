@@ -22,6 +22,16 @@ final class EmojiCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    override var isSelected: Bool {
+//        didSet {
+//            if isSelected {
+//                contentView.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+//                contentView.layer.cornerRadius = 16
+//                contentView.layer.masksToBounds = true
+//            }
+//        }
+//    }
+    
     /// Настройка внешнего вида
     private func setupView() {
         contentView.addSubview(emojiLabel)

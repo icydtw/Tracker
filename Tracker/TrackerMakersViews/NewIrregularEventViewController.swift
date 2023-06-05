@@ -6,6 +6,7 @@ final class NewIrregularEventViewController: UIViewController {
     // MARK: - Свойства
     
     let eventToEdit: Event?
+    let categoryToEdit: String?
     
     let categoryViewModel: CategoryViewModel
     
@@ -24,6 +25,7 @@ final class NewIrregularEventViewController: UIViewController {
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
         collection.register(CollectionHeaderSupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collection.allowsMultipleSelection = false
         return collection
     }()
     
@@ -114,10 +116,11 @@ final class NewIrregularEventViewController: UIViewController {
         bind()
     }
     
-    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil, categoryToEdit: String? = nil) {
         self.categoryViewModel = categoryViewModel
         self.trackersViewModel = trackersViewModel
         self.eventToEdit = eventToEdit
+        self.categoryToEdit = categoryToEdit
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -127,9 +130,6 @@ final class NewIrregularEventViewController: UIViewController {
     
     /// Настройка внешнего вида
     private func setupView() {
-        if let eventToEdit = eventToEdit {
-            print("СТАРОЕ НА МЕСТЕ")
-        }
         view.backgroundColor = .white
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -158,6 +158,23 @@ final class NewIrregularEventViewController: UIViewController {
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
+        if eventToEdit != nil {
+            setupEdit()
+        }
+    }
+    
+    func setupEdit() {
+        titleLabel.text = "Редактирование привычки"
+        enterNameTextField.text = eventToEdit?.name
+        guard let categoryToEdit = categoryToEdit else { return }
+        categoryViewModel.didChooseCategory(name: categoryToEdit)
+        guard let emoji = eventToEdit?.emoji else { return }
+        guard let emojiIndex = emojiCollectionData.firstIndex(of: emoji) else { return }
+        emojiCollection.selectItem(at: IndexPath(row: emojiIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+        guard let color = eventToEdit?.color else { return }
+        guard let colorIndex = colorCollectionData.firstIndex(where: {UIColor.hexString(from: $0) == UIColor.hexString(from: color)}) else { return }
+        colorCollection.selectItem(at: IndexPath(row: colorIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+        activateButton()
     }
     
     /// Настройка свойств, жестов и нотификаций
@@ -294,12 +311,28 @@ extension NewIrregularEventViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             cell.color.backgroundColor = colorCollectionData[indexPath.row]
+            if let cellColor = cell.color.backgroundColor,
+               let eventColor = eventToEdit?.color {
+                if UIColor.hexString(from: cellColor) == UIColor.hexString(from: eventColor) {
+                    cell.layer.borderWidth = 3
+                    cell.layer.borderColor = cell.color.backgroundColor?.cgColor.copy(alpha: 0.3)
+                    cell.layer.cornerRadius = 8
+                    cell.layer.masksToBounds = true
+                }
+            }
+            
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell else {
                 return UICollectionViewCell()
             }
             cell.emojiLabel.text = emojiCollectionData[indexPath.row]
+            if cell.emojiLabel.text == eventToEdit?.emoji {
+                cell.isSelected = true
+                cell.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+                cell.layer.cornerRadius = 16
+                cell.layer.masksToBounds = true
+            }
             return cell
         }
     }

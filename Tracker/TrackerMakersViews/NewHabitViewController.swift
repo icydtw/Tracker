@@ -5,6 +5,8 @@ final class NewHabitViewController: UIViewController {
 
     // MARK: - Свойства
     
+    let eventToEdit: Event?
+    
     let categoryViewModel: CategoryViewModel
     
     let trackersViewModel: TrackersViewModel
@@ -114,9 +116,10 @@ final class NewHabitViewController: UIViewController {
         bind()
     }
     
-    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil) {
         self.categoryViewModel = categoryViewModel
         self.trackersViewModel = trackersViewModel
+        self.eventToEdit = eventToEdit
         super.init(nibName: nil, bundle: nil)
     }
     
