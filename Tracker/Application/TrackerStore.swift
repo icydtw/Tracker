@@ -82,8 +82,27 @@ final class TrackerStore: NSObject {
     }
     
     /// Метод редактирования трекера
-    func editEvent() {
-        
+    func editEvent(event: Event, category: String) {
+        let eventRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        eventRequest.predicate = NSPredicate(format: "trackerID == %@", event.id.uuidString)
+        let eventResult = try! context.fetch(eventRequest).first
+        let color = UIColor.hexString(from: event.color)
+        eventResult?.color = color
+        let day = event.day?.joined(separator: " ")
+        eventResult?.day = day
+        let emoji = event.emoji
+        eventResult?.emoji = emoji
+        let name = event.name
+        eventResult?.name = name
+        let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        categoryRequest.predicate = NSPredicate(format: "name == %@", category)
+        var categoryResult = try! context.fetch(categoryRequest).first
+        if categoryResult == nil {
+            categoryResult = TrackerCategoryCoreData(context: context)
+            categoryResult?.name = category
+        }
+        eventResult?.category = categoryResult
+        try! context.save()
     }
     
 }

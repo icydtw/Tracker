@@ -229,6 +229,9 @@ final class NewHabitViewController: UIViewController {
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
             }
         }
+        trackersViewModel.isTrackerChanged = { result in
+            self.dismiss(animated: true)
+        }
     }
     
     private func activateButton() {
@@ -260,9 +263,6 @@ final class NewHabitViewController: UIViewController {
     /// Метод, вызываемый при нажатии на кнопку "Создать/Сохранить"
     @objc
     private func create() {
-        if eventToEdit != nil {
-            trackersViewModel.deleteTracker(id: eventToEdit?.id ?? UUID())
-        }
         let name = enterNameTextField.text ?? ""
         let category = categoryViewModel.getChoosedCategory()
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
@@ -270,11 +270,16 @@ final class NewHabitViewController: UIViewController {
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = selectedDays
-        let event = Event(name: name, emoji: emoji, color: color, day: day)
-        categoryViewModel.didChooseCategory(name: "")
+        let event = Event(id: eventToEdit?.id ?? UUID(), name: name, emoji: emoji, color: color, day: day)
+        if let eventToEdit = eventToEdit {
+            //trackersViewModel.deleteTracker(id: eventToEdit?.id ?? UUID())
+            trackersViewModel.editEvent(event: event, category: category)
+        } else {
+            trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        }
         selectedDays = []
         shortSelectedDays = []
-        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        categoryViewModel.didChooseCategory(name: "")
         vibrate()
     }
     

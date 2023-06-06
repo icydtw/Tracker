@@ -8,6 +8,8 @@ final class TrackersViewModel {
     
     var isTrackerDeleted: Binding<Bool>?
     
+    var isTrackerChanged: Binding<Bool>?
+    
     // MARK: - Методы
     /// Метод, добавляющий в БД новый трекер
     func addTracker(event: Event, category: String, categoryViewModel: CategoryViewModel) {
@@ -36,8 +38,9 @@ final class TrackersViewModel {
     }
     
     /// Метод редактирования трекера
-    func editEvent() {
-        
+    func editEvent(event: Event, category: String) {
+        model.editEvent(event: event, category: category)
+        isTrackerChanged?(true)
     }
     
 }

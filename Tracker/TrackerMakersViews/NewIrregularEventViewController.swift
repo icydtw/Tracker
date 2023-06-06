@@ -212,6 +212,9 @@ final class NewIrregularEventViewController: UIViewController {
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
             }
         }
+        trackersViewModel.isTrackerChanged = { result in
+            self.dismiss(animated: true)
+        }
     }
     
     /// Метод, вызываемый при нажатии на кнопку "Отмена"
@@ -229,18 +232,19 @@ final class NewIrregularEventViewController: UIViewController {
     /// Метод, вызываемый при нажатии на кнопку "Создать/Сохранить"
     @objc
     private func create() {
-        if eventToEdit != nil {
-            trackersViewModel.deleteTracker(id: eventToEdit?.id ?? UUID())
-        }
         let name = enterNameTextField.text ?? ""
         let category = categoryViewModel.getChoosedCategory()
         let emojiIndex = emojiCollection.indexPathsForSelectedItems?.first
         let emoji = emojiCollectionData[emojiIndex?.row ?? 0]
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
-        let event = Event(name: name, emoji: emoji, color: color, day: nil)
+        let event = Event(id: eventToEdit?.id ?? UUID(), name: name, emoji: emoji, color: color, day: nil)
+        if let eventToEdit = eventToEdit {
+            trackersViewModel.editEvent(event: event, category: category)
+        } else {
+            trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        }
         categoryViewModel.didChooseCategory(name: "")
-        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
         vibrate()
     }
     
