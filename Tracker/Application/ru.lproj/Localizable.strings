@@ -71,3 +71,6 @@
 "Touch.pin" = "Закрепить";
 "Touch.unpin" = "Открепить";
 
+/// StatisticsViewController
+"StatisticsViewController.title" = "Статистика";
+"StatisticsViewController.nothingToAnalize" = "Анализировать пока нечего";

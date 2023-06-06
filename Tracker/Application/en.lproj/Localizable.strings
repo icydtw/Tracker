@@ -71,3 +71,6 @@
 "Touch.pin" = "Pin";
 "Touch.unpin" = "Unpin";
 
+/// StatisticsViewController
+"StatisticsViewController.title" = "Statistics";
+"StatisticsViewController.title" = "Nothing to analyse yet";
