@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var trackersViewModel = TrackersViewModel()
     
     lazy var recordViewModel = RecordViewModel()
+    
+    lazy var statisticsViewModel = StatisticsViewModel()
 
     var window: UIWindow?
 

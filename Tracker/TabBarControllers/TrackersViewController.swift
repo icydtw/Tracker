@@ -416,6 +416,8 @@ extension TrackersViewController: TrackersViewControllerProtocol {
         } else {
             recordViewModel.addRecord(id: id, day: dateString)
         }
+        let notification = Notification(name: Notification.Name("plus_tapped"))
+        NotificationCenter.default.post(notification)
         trackersCollection.reloadData()
     }
     
