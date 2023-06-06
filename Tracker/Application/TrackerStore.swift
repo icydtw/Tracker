@@ -55,6 +55,12 @@ final class TrackerStore: NSObject {
         let pinnedTracker = PinnedTrackers(context: context)
         pinnedTracker.pinnedTrackerID = id
         pinnedTracker.pinnedTrackerCategory = oldCategory
+        let eventRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        eventRequest.predicate = NSPredicate(format: "trackerID == %@", id.uuidString)
+        let event = try! context.fetch(eventRequest).first
+        let category = TrackerCategoryCoreData(context: context)
+        category.name = "Закреплённые"
+        event?.category = category
         try! context.save()
     }
     
@@ -63,6 +69,13 @@ final class TrackerStore: NSObject {
         let request = NSFetchRequest<PinnedTrackers>(entityName: "PinnedTrackers")
         request.predicate = NSPredicate(format: "pinnedTrackerID == %@", id.uuidString)
         guard let result = try! context.fetch(request).first?.pinnedTrackerCategory else { return "" }
+        let eventRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        eventRequest.predicate = NSPredicate(format: "trackerID == %@", id.uuidString)
+        let event = try! context.fetch(eventRequest).first
+        let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        categoryRequest.predicate = NSPredicate(format: "name == %@", result)
+        let category = try! context.fetch(categoryRequest).first
+        event?.category = category
         context.delete(try! context.fetch(request).first ?? PinnedTrackers())
         try! context.save()
         return result
