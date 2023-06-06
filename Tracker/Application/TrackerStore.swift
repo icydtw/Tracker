@@ -38,6 +38,11 @@ final class TrackerStore: NSObject {
         var result: [TrackerCoreData] = []
         do {
             result = try context.fetch(request)
+            let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+            request.predicate = NSPredicate(format: "tracker == %@", result.first ?? TrackerCoreData())
+            for object in try context.fetch(recordRequest) {
+                context.delete(object)
+            }
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
         }
