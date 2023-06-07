@@ -4,6 +4,9 @@ import UIKit
 final class TrackersCell: UICollectionViewCell {
     
     // MARK: - Свойства
+    
+    let analyticsService = AnalyticsService()
+    
     var delegate: TrackersViewControllerProtocol?
     
     var emoji: UILabel = {
@@ -116,6 +119,7 @@ final class TrackersCell: UICollectionViewCell {
         }
         delegate?.saveDoneEvent(id: tappedID, index: indexPath)
         collectionView.reloadData()
+        self.analyticsService.report(event: "TRACKED", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "track"])
     }
     
 }
@@ -148,6 +152,7 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
             }
             // Редактирование
             let editAction = UIAction(title: "Редактировать", image: nil) { _ in
+                self.analyticsService.report(event: "EDIT_TRACKER", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "edit"])
                 guard let eventToEdit = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row],
                       let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label
                 else { return }
@@ -161,6 +166,7 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
             }
             // Удаление
             let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in
+                self.analyticsService.report(event: "DELETE_TRACKER", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "delete"])
                 self.delegate?.trackersViewModel.deleteTracker(id: tappedID)
             }
             deleteAction.attributes = .destructive

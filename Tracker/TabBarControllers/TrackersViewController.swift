@@ -12,6 +12,9 @@ protocol TrackersViewControllerProtocol {
 class TrackersViewController: UIViewController {
     
     // MARK: - Свойства
+    
+    let analyticsService = AnalyticsService()
+    
     var choosenDay = "" // день в формате "понедельник"
     
     var dateString = "" // день в формате "2023/05/07"
@@ -187,6 +190,7 @@ class TrackersViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        analyticsService.report(event: "OPEN_TRACKERSSCREEN", params: ["event" : "open", "screen" : "TrackersViewController"])
     }
     
     /// Метод, обновляющий коллекцию в соответствии с выбранным днём
@@ -271,8 +275,10 @@ class TrackersViewController: UIViewController {
     /// Метод, вызываемый при нажатии на "+"
     @objc
     private func plusTapped() {
+        analyticsService.report(event: "TAP_ON_ADDBUTTON", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "add_track"])
         let selecterTrackerVC = SelectingTrackerViewController()
         show(selecterTrackerVC, sender: self)
+        analyticsService.report(event: "CLOSE_TRACKERSSCREEN", params: ["event" : "close", "screen" : "TrackersViewController"])
     }
     
     /// Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
