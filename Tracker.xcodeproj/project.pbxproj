@@ -51,6 +51,7 @@
 		B4F0220A2A2F85C800003850 /* StatisticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F022092A2F85C800003850 /* StatisticsStore.swift */; };
 		B4F0220C2A2F85F200003850 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0220B2A2F85F200003850 /* StatisticsViewModel.swift */; };
 		B4F0220E2A2F8CFE00003850 /* StatisticsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0220D2A2F8CFE00003850 /* StatisticsCell.swift */; };
+		B4F022112A30663900003850 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F022102A30663900003850 /* AnalyticsService.swift */; };
 		DB28AF8ACE1634A7D957191F /* Pods_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BD1E96CF9D218F24CD98E74 /* Pods_Tracker.framework */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +119,7 @@
 		B4F022092A2F85C800003850 /* StatisticsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StatisticsStore.swift; path = TrackerTests/StatisticsStore.swift; sourceTree = SOURCE_ROOT; };
 		B4F0220B2A2F85F200003850 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		B4F0220D2A2F8CFE00003850 /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
+		B4F022102A30663900003850 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,7 +160,6 @@
 				64711F061AB87A58033BB3BB /* Pods-TrackerTests.debug.xcconfig */,
 				26F758CAADA9D706120A25CE /* Pods-TrackerTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -206,6 +207,7 @@
 		B43DE7FC29CD9C2B004AB4F7 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				B4F0220F2A30662900003850 /* YandexMetrica */,
 				B4D70B382A1F3F7C00DA0B3C /* ViewModels */,
 				B4D70B0A2A1E13F900DA0B3C /* Onboarding */,
 				B41946CC2A1A669100D0EEFE /* Helpers */,
@@ -325,6 +327,14 @@
 				B4F0220B2A2F85F200003850 /* StatisticsViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B4F0220F2A30662900003850 /* YandexMetrica */ = {
+			isa = PBXGroup;
+			children = (
+				B4F022102A30663900003850 /* AnalyticsService.swift */,
+			);
+			path = YandexMetrica;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -525,6 +535,7 @@
 				B41946D02A1A6CED00D0EEFE /* UIColorExtension.swift in Sources */,
 				B43DE7FE29CD9C2B004AB4F7 /* AppDelegate.swift in Sources */,
 				B486233529FA62BB00B95667 /* ScheduleViewController.swift in Sources */,
+				B4F022112A30663900003850 /* AnalyticsService.swift in Sources */,
 				B486232B29F272F600B95667 /* IrregularCategoryCell.swift in Sources */,
 				B464D7D629EC15150033AC5B /* SelectingTrackerViewController.swift in Sources */,
 				B41946CB2A19195100D0EEFE /* DataProvider.swift in Sources */,
