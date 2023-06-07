@@ -46,6 +46,7 @@ final class StatisticsViewController: UIViewController {
         table.register(StatisticsCell.self, forCellReuseIdentifier: "statisticsCell")
         table.isScrollEnabled = false
         table.separatorStyle = .none
+        table.allowsSelection = false
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
     }()
