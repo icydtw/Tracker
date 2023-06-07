@@ -87,6 +87,7 @@ final class StatisticsViewController: UIViewController {
     /// Настройка свойств
     private func setupProperties() {
         NotificationCenter.default.addObserver(self, selector: #selector(showStatistics), name: Notification.Name("plus_tapped"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showStatistics), name: Notification.Name("tracker_deleted"), object: nil)
         view.addSubview(statisticsLabel)
         view.addSubview(stackView)
         view.addSubview(statisticsTable)
@@ -107,6 +108,8 @@ final class StatisticsViewController: UIViewController {
             } else {
                 self.stackView.isHidden = false
                 self.statisticsTable.isHidden = true
+                self.statisticsNumber = result.endedTracks
+                self.statisticsTable.reloadData()
             }
         }
     }

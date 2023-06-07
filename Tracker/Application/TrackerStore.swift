@@ -39,7 +39,7 @@ final class TrackerStore: NSObject {
         do {
             result = try context.fetch(request)
             let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-            request.predicate = NSPredicate(format: "tracker == %@", result.first ?? TrackerCoreData())
+            recordRequest.predicate = NSPredicate(format: "tracker == %@", result.first ?? TrackerCoreData())
             for object in try context.fetch(recordRequest) {
                 context.delete(object)
             }

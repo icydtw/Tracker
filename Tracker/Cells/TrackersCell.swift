@@ -168,6 +168,8 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
             let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in
                 self.analyticsService.report(event: "DELETE_TRACKER", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "delete"])
                 self.delegate?.trackersViewModel.deleteTracker(id: tappedID)
+                let notification = Notification(name: Notification.Name("tracker_deleted"))
+                NotificationCenter.default.post(notification)
             }
             deleteAction.attributes = .destructive
             return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
