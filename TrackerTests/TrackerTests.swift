@@ -13,7 +13,8 @@ final class TrackerTests: XCTestCase {
     
     func testMyViewController() {
         let vc = MainTabBarViewController()
-        assertSnapshot(matching: vc, as: .image)
-      }
-
+        assertSnapshot(matching: vc, as: .image(traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(matching: vc, as: .image(traits: .init(userInterfaceStyle: .dark)))
+    }
+    
 }

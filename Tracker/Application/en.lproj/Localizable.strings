@@ -73,4 +73,4 @@
 
 /// StatisticsViewController
 "StatisticsViewController.title" = "Statistics";
-"StatisticsViewController.title" = "Nothing to analyse yet";
+"StatisticsViewController.nothingToAnalize" = "Nothing to analyse yet";
