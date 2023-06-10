@@ -74,3 +74,6 @@
 /// StatisticsViewController
 "StatisticsViewController.title" = "Statistics";
 "StatisticsViewController.nothingToAnalize" = "Nothing to analyse yet";
+
+/// TrackersCell
+"TrackersCell.edit" = "Edit";

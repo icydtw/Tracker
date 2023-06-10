@@ -151,7 +151,7 @@ extension TrackersCell: UIContextMenuInteractionDelegate {
                 }
             }
             // Редактирование
-            let editAction = UIAction(title: "Редактировать", image: nil) { _ in
+            let editAction = UIAction(title: NSLocalizedString("TrackersCell.edit", comment: "редактировать"), image: nil) { _ in
                 self.analyticsService.report(event: "EDIT_TRACKER", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "edit"])
                 guard let eventToEdit = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row],
                       let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label
