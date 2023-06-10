@@ -77,3 +77,6 @@
 
 /// TrackersCell
 "TrackersCell.edit" = "Edit";
+
+/// TrackerStore
+"TrackerStore.pinned" = "Pinned";

@@ -77,3 +77,6 @@
 
 /// TrackersCell
 "TrackersCell.edit" = "Редактировать";
+
+/// TrackerStore
+"TrackerStore.pinned" = "Закреплённые";
