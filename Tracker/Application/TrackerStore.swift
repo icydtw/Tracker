@@ -38,6 +38,11 @@ final class TrackerStore: NSObject {
         var result: [TrackerCoreData] = []
         do {
             result = try context.fetch(request)
+            let recordRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+            recordRequest.predicate = NSPredicate(format: "tracker == %@", result.first ?? TrackerCoreData())
+            for object in try context.fetch(recordRequest) {
+                context.delete(object)
+            }
         } catch {
             AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка получения данных")
         }
@@ -48,6 +53,74 @@ final class TrackerStore: NSObject {
             return false
         }
          return true
+    }
+    
+    /// Метод, "закрепляющий" трекер
+    func pinEvent(oldCategory: String, id: UUID) {
+        let pinnedTracker = PinnedTrackers(context: context)
+        pinnedTracker.pinnedTrackerID = id
+        pinnedTracker.pinnedTrackerCategory = oldCategory
+        let eventRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        eventRequest.predicate = NSPredicate(format: "trackerID == %@", id.uuidString)
+        do {
+            let event = try context.fetch(eventRequest).first
+            let category = TrackerCategoryCoreData(context: context)
+            category.name = NSLocalizedString("TrackerStore.pinned", comment: "закреплённые")
+            event?.category = category
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Не удалось закрепить трекер")
+        }
+    }
+    
+    /// Метод, "открепляющий" трекер
+    func unpinEvent(id: UUID) -> String {
+        let request = NSFetchRequest<PinnedTrackers>(entityName: "PinnedTrackers")
+        request.predicate = NSPredicate(format: "pinnedTrackerID == %@", id.uuidString)
+        do {
+            guard let result = try context.fetch(request).first?.pinnedTrackerCategory else { return "" }
+            let eventRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+            eventRequest.predicate = NSPredicate(format: "trackerID == %@", id.uuidString)
+            let event = try context.fetch(eventRequest).first
+            let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+            categoryRequest.predicate = NSPredicate(format: "name == %@", result)
+            let category = try context.fetch(categoryRequest).first
+            event?.category = category
+            context.delete(try context.fetch(request).first ?? PinnedTrackers())
+            try context.save()
+            return result
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Не удалось открепить трекер")
+        }
+        return ""
+    }
+    
+    /// Метод редактирования трекера
+    func editEvent(event: Event, category: String) {
+        let eventRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        eventRequest.predicate = NSPredicate(format: "trackerID == %@", event.id.uuidString)
+        do {
+            let eventResult = try context.fetch(eventRequest).first
+            let color = UIColor.hexString(from: event.color)
+            eventResult?.color = color
+            let day = event.day?.joined(separator: " ")
+            eventResult?.day = day
+            let emoji = event.emoji
+            eventResult?.emoji = emoji
+            let name = event.name
+            eventResult?.name = name
+            let categoryRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+            categoryRequest.predicate = NSPredicate(format: "name == %@", category)
+            var categoryResult = try context.fetch(categoryRequest).first
+            if categoryResult == nil {
+                categoryResult = TrackerCategoryCoreData(context: context)
+                categoryResult?.name = category
+            }
+            eventResult?.category = categoryResult
+            try context.save()
+        } catch {
+            AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Не удалось отредактировать трекер")
+        }
     }
     
 }

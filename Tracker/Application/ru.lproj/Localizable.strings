@@ -1,0 +1,82 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Илья Тимченко on 29.05.2023.
+  
+*/
+
+/// TrackersViewController
+"TrackersViewController.title" = "Трекеры";
+"TrackersViewController.search" = "Поиск";
+"TrackersViewController.whatWeWillTrace" = "Что будем отслеживать?";
+"TrackersViewController.pinned" = "Закреплённые";
+
+/// StatisticsViewController
+"StatisticsViewController.title" = "Статистика";
+
+/// SelectingTrackerViewController
+"SelectingTrackerViewController.title" = "Создание трекера";
+"SelectingTrackerViewController.habit" = "Привычка";
+"SelectingTrackerViewController.irregularEvent" = "Нерегулярное событие";
+
+/// NewHabitViewController
+"NewHabitViewController.title" = "Новая привычка";
+
+/// NewIrregularEventViewController
+"NewIrregularEventViewController.title" = "Новое нерегулярное событие";
+
+/// Общие у NewHabitViewController и NewIrregularEventViewController
+"enterTrackerName" = "Введите название трекера";
+"categoryCell" = "Категория";
+"scheduleCell" = "Расписание";
+"color" = "Цвет";
+"cancel" = "Отменить";
+"create" = "Создать";
+
+/// ChoiceOfCategoryViewController
+"ChoiceOfCategoryViewController.title" = "Категория";
+"ChoiceOfCategoryViewController.addCategory" = "Добавить категорию";
+"ChoiceOfCategoryViewController.deleteCategory" = "Удалить";
+
+/// AdditionNewCategoryViewController
+"AdditionNewCategoryViewController.title" = "Новая категория";
+"AdditionNewCategoryViewController.enterName" = "Введите название категории";
+"AdditionNewCategoryViewController.done" = "Готово";
+
+/// ScheduleViewController
+"ScheduleViewController.title" = "Расписание";
+// Длинные названия дней недели
+"LongName.monday" = "понедельник";
+"LongName.tuesday" = "вторник";
+"LongName.wednesday" = "среда";
+"LongName.thursday" = "четверг";
+"LongName.friday" = "пятница";
+"LongName.saturday" = "суббота";
+"LongName.sunday" = "воскресенье";
+// Короткие названия дней недели
+"ShortName.monday" = "ПН";
+"ShortName.tuesday" = "ВТ";
+"ShortName.wednesday" = "СР";
+"ShortName.thursday" = "ЧТ";
+"ShortName.friday" = "ПТ";
+"ShortName.saturday" = "СБ";
+"ShortName.sunday" = "ВС";
+
+/// UIAlertController при нажатии на ячейку коллекции
+"Touch.delete" = "Удалить";
+"Touch.cancel" = "Отмена";
+"Touch.title" = "Меню";
+"Touch.description" = "Выберите действие";
+"Touch.pin" = "Закрепить";
+"Touch.unpin" = "Открепить";
+
+/// StatisticsViewController
+"StatisticsViewController.title" = "Статистика";
+"StatisticsViewController.nothingToAnalize" = "Анализировать пока нечего";
+
+/// TrackersCell
+"TrackersCell.edit" = "Редактировать";
+
+/// TrackerStore
+"TrackerStore.pinned" = "Закреплённые";

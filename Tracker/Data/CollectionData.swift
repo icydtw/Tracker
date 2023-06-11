@@ -28,15 +28,36 @@ let colorCollectionData = [
 ]
 
 // MARK: - Перечисление с днями недели
-enum dayOfWeek: String {
-    case monday = "понедельник"
-    case tuesday = "вторник"
-    case wednesday = "среда"
-    case thursday = "четверг"
-    case friday = "пятница"
-    case saturday = "суббота"
-    case sunday = "воскресенье"
+
+enum dayOfWeek {
+    case sunday
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    
+    var localizedString: String {
+        switch self {
+        case .sunday:
+            return NSLocalizedString("LongName.sunday", comment: "")
+        case .monday:
+            return NSLocalizedString("LongName.monday", comment: "")
+        case .tuesday:
+            return NSLocalizedString("LongName.tuesday", comment: "")
+        case .wednesday:
+            return NSLocalizedString("LongName.wednesday", comment: "")
+        case .thursday:
+            return NSLocalizedString("LongName.thursday", comment: "")
+        case .friday:
+            return NSLocalizedString("LongName.friday", comment: "")
+        case .saturday:
+            return NSLocalizedString("LongName.saturday", comment: "")
+        }
+    }
 }
+
 
 // MARK: - Массив дней недели
 let daysOfWeek: [dayOfWeek] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]

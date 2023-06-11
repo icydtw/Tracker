@@ -15,6 +15,8 @@ final class CategoryViewModel {
     
     func didChooseCategory(name category: String) {
         let result = model.changeChoosedCategory(category: category)
+        let notification = Notification(name: Notification.Name("category_changed"))
+        NotificationCenter.default.post(notification)
         isCategoryChoosed?(result)
     }
     

@@ -16,12 +16,12 @@ final class MainTabBarViewController: UITabBarController {
     
     /// Настройка внешнего вида
     private func setupTabBar() {
-        tabBar.backgroundColor = .white
+        tabBar.backgroundColor = UIColor(named: "WhiteToBlack")
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        let trackers = TrackersViewController(trackersViewModel: appDelegate?.trackersViewModel ?? TrackersViewModel(), recordViewModel: appDelegate?.recordViewModel ?? RecordViewModel()) //первая вкладка "Трекеры"
-        trackers.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(systemName: "record.circle.fill"), tag: 0)
-        let statistics = StatisticsViewController() //вторая вкладка "Статистика"
-        statistics.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(systemName: "hare.fill"), tag: 1)
+        let trackers = TrackersViewController(trackersViewModel: appDelegate?.trackersViewModel ?? TrackersViewModel(), recordViewModel: appDelegate?.recordViewModel ?? RecordViewModel(), categoryViewModel: appDelegate?.categoryViewModel ?? CategoryViewModel()) //первая вкладка "Трекеры"
+        trackers.tabBarItem = UITabBarItem(title: NSLocalizedString("TrackersViewController.title", comment: ""), image: UIImage(systemName: "record.circle.fill"), tag: 0)
+        let statistics = StatisticsViewController(statisticsViewModel: appDelegate?.statisticsViewModel ?? StatisticsViewModel()) //вторая вкладка "Статистика"
+        statistics.tabBarItem = UITabBarItem(title: NSLocalizedString("StatisticsViewController.title", comment: ""), image: UIImage(systemName: "hare.fill"), tag: 1)
         viewControllers = [trackers, statistics]
     }
     

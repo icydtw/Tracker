@@ -6,7 +6,7 @@ final class ScheduleViewController: UIViewController {
     // MARK: - Свойства
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = NSLocalizedString("ScheduleViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -82,7 +82,7 @@ extension ScheduleViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.selectionStyle = .none
-        scheduleCell.title.text = daysOfWeek[indexPath.section].rawValue
+        scheduleCell.title.text = daysOfWeek[indexPath.section].localizedString
         return scheduleCell
     }
     

@@ -8,6 +8,8 @@ final class TrackersViewModel {
     
     var isTrackerDeleted: Binding<Bool>?
     
+    var isTrackerChanged: Binding<Bool>?
+    
     // MARK: - Методы
     /// Метод, добавляющий в БД новый трекер
     func addTracker(event: Event, category: String, categoryViewModel: CategoryViewModel) {
@@ -19,6 +21,26 @@ final class TrackersViewModel {
     func deleteTracker(id inID: UUID) {
         let result = model.deleteTracker(id: inID)
         isTrackerDeleted?(result)
+    }
+    
+    /// Метод, "закрепляющий" трекер
+    func pinEvent(oldCategory: String, eventToPin: Event, categoryViewModel: CategoryViewModel) {
+        //deleteTracker(id: eventToPin.id)
+        //addTracker(event: eventToPin, category: NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые"), categoryViewModel: categoryViewModel)
+        model.pinEvent(oldCategory: oldCategory, id: eventToPin.id)
+    }
+    
+    /// Метод, "открепляющий" трекер
+    func unpinEvent(eventToUnpin: Event, categoryViewModel: CategoryViewModel) {
+        //deleteTracker(id: eventToUnpin.id)
+        let oldCategory = model.unpinEvent(id: eventToUnpin.id)
+        //addTracker(event: eventToUnpin, category: oldCategory, categoryViewModel: categoryViewModel)
+    }
+    
+    /// Метод редактирования трекера
+    func editEvent(event: Event, category: String) {
+        model.editEvent(event: event, category: category)
+        isTrackerChanged?(true)
     }
     
 }

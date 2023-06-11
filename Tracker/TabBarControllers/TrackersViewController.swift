@@ -1,14 +1,20 @@
 import UIKit
 
 protocol TrackersViewControllerProtocol {
+    var trackersViewModel: TrackersViewModel { get }
+    var categoryViewModel: CategoryViewModel { get }
     func saveDoneEvent(id: UUID, index: IndexPath)
     var filteredTrackers: [TrackerCategory] {get set }
+    func present(VC: UIViewController)
 }
 
 /// Экран "Трекеры" в таб-баре
 class TrackersViewController: UIViewController {
     
     // MARK: - Свойства
+    
+    let analyticsService = AnalyticsService()
+    
     var choosenDay = "" // день в формате "понедельник"
     
     var dateString = "" // день в формате "2023/05/07"
@@ -22,6 +28,8 @@ class TrackersViewController: UIViewController {
     var trackersViewModel: TrackersViewModel
     
     var recordViewModel: RecordViewModel
+    
+    var categoryViewModel: CategoryViewModel
     
     var dataProvider = DataProvider()
     
@@ -39,13 +47,14 @@ class TrackersViewController: UIViewController {
             return layout
         }()
         collection.collectionViewLayout = layout
+        collection.backgroundColor = UIColor(named: "WhiteToBlack")
         return collection
     }()
     
     let plusButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 19, height: 18))
         button.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)), for: .normal)
-        button.tintColor = .black
+        button.tintColor = UIColor(named: "BlackToWhite")
         button.addTarget(nil, action: #selector(plusTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -53,7 +62,7 @@ class TrackersViewController: UIViewController {
     
     let trackersLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = NSLocalizedString("TrackersViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -66,8 +75,8 @@ class TrackersViewController: UIViewController {
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.calendar = Calendar(identifier: .iso8601)
         datePicker.maximumDate = Date()
-        datePicker.locale = Locale(identifier: "ru_RU")
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        datePicker.locale = Locale.current
+        datePicker.addTarget(self, action: #selector(dataChanged), for: .valueChanged)
         return datePicker
     }()
     
@@ -79,7 +88,7 @@ class TrackersViewController: UIViewController {
     
     let questionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("TrackersViewController.whatWeWillTrace", comment: "Надпись посередине экрана")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12)
         return label
@@ -97,7 +106,7 @@ class TrackersViewController: UIViewController {
     
     let searchBar: UISearchBar = {
         let search = UISearchBar()
-        search.placeholder = "Поиск"
+        search.placeholder = NSLocalizedString("TrackersViewController.search", comment: "Плейсхолдер в строке поиска")
         search.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
         search.translatesAutoresizingMaskIntoConstraints = false
         return search
@@ -119,9 +128,10 @@ class TrackersViewController: UIViewController {
         }
     }
     
-    init(trackersViewModel: TrackersViewModel, recordViewModel: RecordViewModel) {
+    init(trackersViewModel: TrackersViewModel, recordViewModel: RecordViewModel, categoryViewModel: CategoryViewModel) {
         self.trackersViewModel = trackersViewModel
         self.recordViewModel = recordViewModel
+        self.categoryViewModel = categoryViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -132,8 +142,8 @@ class TrackersViewController: UIViewController {
     /// Настройка внешнего вида
     private func setupView() {
         dataProvider.updateCollectionView()
-        datePickerValueChanged(sender: datePicker)
-        view.backgroundColor = .white
+        dataChanged(sender: datePicker)
+        view.backgroundColor = UIColor(named: "WhiteToBlack")
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
             plusButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -180,35 +190,10 @@ class TrackersViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        trackersCollection.addGestureRecognizer(longPressGestureRecognizer)
-
+        analyticsService.report(event: "OPEN_TRACKERSSCREEN", params: ["event" : "open", "screen" : "TrackersViewController"])
     }
     
-    @objc
-    func handleLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        let touchPoint = gestureRecognizer.location(in: trackersCollection)
-        if let indexPath = trackersCollection.indexPathForItem(at: touchPoint) {
-            showMenuForCell(at: indexPath)
-        }
-    }
-    
-    func showMenuForCell(at indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "Меню", message: "Выберите действие", preferredStyle: .actionSheet)
-        let action1 = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (action) in
-            guard let self = self else { return }
-            let cell = self.trackersCollection.cellForItem(at: indexPath) as? TrackersCell
-            let id = self.filteredTrackers[indexPath.section].trackers[indexPath.row].id
-            self.trackersViewModel.deleteTracker(id: id)
-        }
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-        alertController.addAction(action1)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
-    }
-
-    
-    //Метод, обновляющий коллекцию в соответствии с выбранным днём
+    /// Метод, обновляющий коллекцию в соответствии с выбранным днём
     func updateCollection() {
         var newEvents: [Event] = []
         var newCategory: String = ""
@@ -230,14 +215,19 @@ class TrackersViewController: UIViewController {
                 newCategory = ""
             }
         }
-        filteredTrackers = newTrackers.sorted(by: {$0.label < $1.label})
+        filteredTrackers = newTrackers.sorted(by: {$0.label > $1.label})
+        if let copy = filteredTrackers.filter({$0.label == NSLocalizedString("TrackersViewController.pinned", comment: "")}).first {
+            filteredTrackers.removeAll(where: {$0.label == NSLocalizedString("TrackersViewController.pinned", comment: "")})
+            filteredTrackers.append(copy)
+            filteredTrackers.reverse()
+        }
     }
     
     /// Биндинг
     private func bind() {
         trackersViewModel.isTrackerDeleted = { result in
             switch result {
-            case true: self.datePickerValueChanged(sender: self.datePicker)
+            case true: self.dataChanged(sender: self.datePicker)
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка удаления трекера")
             }
         }
@@ -275,7 +265,7 @@ class TrackersViewController: UIViewController {
     
     /// Метод, вызываемый когда меняется дата в Date Picker
     @objc
-    func datePickerValueChanged(sender: UIDatePicker) {
+    func dataChanged(sender: UIDatePicker) {
         makeDate(dateFormat: "EEEE")
         updateCollection()
         hideCollection()
@@ -285,8 +275,10 @@ class TrackersViewController: UIViewController {
     /// Метод, вызываемый при нажатии на "+"
     @objc
     private func plusTapped() {
+        analyticsService.report(event: "TAP_ON_ADDBUTTON", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "add_track"])
         let selecterTrackerVC = SelectingTrackerViewController()
         show(selecterTrackerVC, sender: self)
+        analyticsService.report(event: "CLOSE_TRACKERSSCREEN", params: ["event" : "close", "screen" : "TrackersViewController"])
     }
     
     /// Метод, добавляющий коллекцию трекеров на экран и убирающий заглушку
@@ -327,7 +319,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell?.emoji.text = filteredTrackers[indexPath.section].trackers[indexPath.row].emoji
         cell?.name.text = filteredTrackers[indexPath.section].trackers[indexPath.row].name
         cell?.plusButton.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color
-        cell?.quantity.text = "\(trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).count) дней"
+        let daysDone = trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).count
+        let doneString = String.localizedStringWithFormat(
+            NSLocalizedString("days", comment: ""), daysDone)
+        cell?.quantity.text = doneString
         makeDate(dateFormat: "yyyy/MM/dd")
         if trackerRecords.filter({$0.id == filteredTrackers[indexPath.section].trackers[indexPath.row].id}).contains(where: {$0.day == dateString}) {
             cell?.plusButton.backgroundColor = filteredTrackers[indexPath.section].trackers[indexPath.row].color.withAlphaComponent(0.5)
@@ -375,7 +370,7 @@ extension TrackersViewController: UISearchBarDelegate {
         var newEvents: [Event] = []
         var newCategory: String = ""
         var newTrackers: [TrackerCategory] = []
-        datePickerValueChanged(sender: datePicker)
+        dataChanged(sender: datePicker)
         let searchingTrackers = filteredTrackers
         filteredTrackers = []
         var isGood = false
@@ -413,6 +408,12 @@ extension TrackersViewController: UISearchBarDelegate {
 // MARK: - Расширение для TrackersViewControllerProtocol
 extension TrackersViewController: TrackersViewControllerProtocol {
     
+    /// Метод, презентующий новый экран в случае, если это редактирование трекера
+    func present(VC: UIViewController) {
+        present(VC, animated: true)
+    }
+    
+    
     /// Метод, добавляющий информацию о выполненном трекере в trackerRecords
     func saveDoneEvent(id: UUID, index: IndexPath) {
         makeDate(dateFormat: "yyyy/MM/dd")
@@ -421,6 +422,8 @@ extension TrackersViewController: TrackersViewControllerProtocol {
         } else {
             recordViewModel.addRecord(id: id, day: dateString)
         }
+        let notification = Notification(name: Notification.Name("plus_tapped"))
+        NotificationCenter.default.post(notification)
         trackersCollection.reloadData()
     }
     
@@ -432,7 +435,7 @@ extension TrackersViewController {
     /// Метод, заполняющий переменные с датами в том или ином формате
     private func makeDate(dateFormat: String) {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = dateFormat
         let dateFormatterString = dateFormatter.string(from: datePicker.date)
         if dateFormat == "EEEE" {

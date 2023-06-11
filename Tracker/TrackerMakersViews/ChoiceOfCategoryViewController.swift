@@ -29,7 +29,7 @@ final class ChoiceOfCategoryViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("ChoiceOfCategoryViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -57,7 +57,7 @@ final class ChoiceOfCategoryViewController: UIViewController {
     let addCategoryButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("ChoiceOfCategoryViewController.addCategory", comment: "Кнопка добавления категории"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -132,8 +132,6 @@ final class ChoiceOfCategoryViewController: UIViewController {
             guard let self = self else { return }
             if isOk {
                 self.dismiss(animated: true)
-                let notification = Notification(name: Notification.Name("category_changed"))
-                NotificationCenter.default.post(notification)
             } else {
                 AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка выбора категории")
             }
@@ -222,7 +220,7 @@ extension ChoiceOfCategoryViewController: UITableViewDelegate {
     
     /// Метод, определяющий заголовок для удаления строки таблицы
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "Удалить"
+        return NSLocalizedString("ChoiceOfCategoryViewController.deleteCategory", comment: "Удаление строки категории")
     }
     
 }

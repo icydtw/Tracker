@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import YandexMobileMetrica
 
 typealias Binding<T> = (T) -> Void
 
@@ -32,10 +33,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var trackersViewModel = TrackersViewModel()
     
     lazy var recordViewModel = RecordViewModel()
+    
+    lazy var statisticsViewModel = StatisticsViewModel()
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        guard let configuration = YMMYandexMetricaConfiguration.init(apiKey: "6d262c7c-142c-4a41-9936-3c182f5f5b20") else {
+            return true
+        }
+        YMMYandexMetrica.activate(with: configuration)
         return true
     }
 

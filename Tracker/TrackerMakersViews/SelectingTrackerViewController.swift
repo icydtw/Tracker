@@ -7,7 +7,7 @@ final class SelectingTrackerViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = NSLocalizedString("SelectingTrackerViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -16,7 +16,7 @@ final class SelectingTrackerViewController: UIViewController {
     let habitButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("SelectingTrackerViewController.habit", comment: "Первая кнопка"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.addTarget(nil, action: #selector(habitTapped), for: .touchUpInside)
@@ -26,7 +26,7 @@ final class SelectingTrackerViewController: UIViewController {
     let irregularEventButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(NSLocalizedString("SelectingTrackerViewController.irregularEvent", comment: "Вторая кнопка"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         button.addTarget(nil, action: #selector(irregularTapped), for: .touchUpInside)

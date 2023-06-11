@@ -4,6 +4,9 @@ import UIKit
 final class TrackersCell: UICollectionViewCell {
     
     // MARK: - Свойства
+    
+    let analyticsService = AnalyticsService()
+    
     var delegate: TrackersViewControllerProtocol?
     
     var emoji: UILabel = {
@@ -42,7 +45,6 @@ final class TrackersCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .black
-        label.text = "0 дней"
         return label
     }()
     
@@ -101,6 +103,8 @@ final class TrackersCell: UICollectionViewCell {
             quantity.topAnchor.constraint(equalTo: viewBackground.bottomAnchor, constant: 16),
             quantity.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
+        let interaction = UIContextMenuInteraction(delegate: self)
+        self.viewBackground.addInteraction(interaction)
     }
     
     /// Метод, вызываемый при нажатии на "+" в ячейке
@@ -115,6 +119,63 @@ final class TrackersCell: UICollectionViewCell {
         }
         delegate?.saveDoneEvent(id: tappedID, index: indexPath)
         collectionView.reloadData()
+        self.analyticsService.report(event: "TRACKED", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "track"])
     }
     
+}
+
+// MARK: - Расширение для UIContextMenuInteractionDelegate
+extension TrackersCell: UIContextMenuInteractionDelegate {
+    
+    /// Метод, управляющий контекстным меню
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let collectionView = superview as? UICollectionView,
+              let indexPath = collectionView.indexPath(for: self) else {
+            return UIContextMenuConfiguration()
+        }
+        guard let tappedID = (delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row].id) else {
+            return UIContextMenuConfiguration()
+        }
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            // Закрепление
+            var pinAction = UIAction(title: NSLocalizedString("Touch.pin", comment: ""), image: nil) { _ in
+                guard let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label,
+                      let eventToPin = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row] else { return }
+                self.delegate?.trackersViewModel.pinEvent(oldCategory: oldCategory, eventToPin: eventToPin, categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel())
+            }
+            // Открепление
+            if self.delegate?.filteredTrackers[indexPath.section].label == NSLocalizedString("TrackersViewController.pinned", comment: "Закреплённые") {
+                pinAction = UIAction(title: NSLocalizedString("Touch.unpin", comment: ""), image: nil) { _ in
+                    guard let eventToUnPin = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row] else { return }
+                    self.delegate?.trackersViewModel.unpinEvent(eventToUnpin: eventToUnPin, categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel())
+                }
+            }
+            // Редактирование
+            let editAction = UIAction(title: NSLocalizedString("TrackersCell.edit", comment: "редактировать"), image: nil) { _ in
+                self.analyticsService.report(event: "EDIT_TRACKER", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "edit"])
+                guard let eventToEdit = self.delegate?.filteredTrackers[indexPath.section].trackers[indexPath.row],
+                      let oldCategory = self.delegate?.filteredTrackers[indexPath.section].label
+                else { return }
+                if eventToEdit.day == nil {
+                    let showEditView = NewIrregularEventViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit, categoryToEdit: oldCategory)
+                    self.delegate?.present(VC: showEditView)
+                } else {
+                    let showEditView = NewHabitViewController(categoryViewModel: self.delegate?.categoryViewModel ?? CategoryViewModel(), trackersViewModel: self.delegate?.trackersViewModel ?? TrackersViewModel(), eventToEdit: eventToEdit, categoryToEdit: oldCategory)
+                    self.delegate?.present(VC: showEditView)
+                }
+            }
+            // Удаление
+            let deleteAction = UIAction(title: NSLocalizedString("Touch.delete", comment: ""), image: nil) { _ in
+                self.analyticsService.report(event: "DELETE_TRACKER", params: ["event" : "click", "screen" : "TrackersViewController", "item" : "delete"])
+                self.delegate?.trackersViewModel.deleteTracker(id: tappedID)
+                let notification = Notification(name: Notification.Name("tracker_deleted"))
+                NotificationCenter.default.post(notification)
+            }
+            deleteAction.attributes = .destructive
+            return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
+        }
+        return configuration
+    }
+
+
 }

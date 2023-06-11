@@ -5,13 +5,16 @@ final class NewHabitViewController: UIViewController {
 
     // MARK: - Свойства
     
+    let eventToEdit: Event?
+    let categoryToEdit: String?
+    
     let categoryViewModel: CategoryViewModel
     
     let trackersViewModel: TrackersViewModel
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = NSLocalizedString("NewHabitViewController.title", comment: "Заголовок экрана")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -19,7 +22,7 @@ final class NewHabitViewController: UIViewController {
     
     let enterNameTextField: UITextField = {
         let field = UITextField()
-        field.placeholder = "Введите название трекера"
+        field.placeholder = NSLocalizedString("enterTrackerName", comment: "Плейсхолдер в строке ввода названия")
         field.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 0.3)
         field.layer.cornerRadius = 16
         field.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +70,7 @@ final class NewHabitViewController: UIViewController {
     
     let cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("cancel", comment: "Кнопка отмены"), for: .normal)
         button.setTitleColor(UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1), for: .normal)
         button.layer.borderColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1).cgColor
         button.layer.borderWidth = 1
@@ -79,7 +82,7 @@ final class NewHabitViewController: UIViewController {
     
     let createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("create", comment: "Кнопка создания трекера"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1)
         button.layer.cornerRadius = 16
@@ -114,9 +117,11 @@ final class NewHabitViewController: UIViewController {
         bind()
     }
     
-    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel) {
+    init(categoryViewModel: CategoryViewModel, trackersViewModel: TrackersViewModel, eventToEdit: Event? = nil, categoryToEdit: String? = nil) {
         self.categoryViewModel = categoryViewModel
         self.trackersViewModel = trackersViewModel
+        self.eventToEdit = eventToEdit
+        self.categoryToEdit = categoryToEdit
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -153,6 +158,39 @@ final class NewHabitViewController: UIViewController {
             secondStack.centerXAnchor.constraint(equalTo: scroll.centerXAnchor),
             secondStack.topAnchor.constraint(equalTo: colorCollection.bottomAnchor, constant: 24),
         ])
+        if eventToEdit != nil {
+            setupEdit()
+        }
+    }
+    
+    func setupEdit() {
+        titleLabel.text = "Редактирование привычки"
+        createButton.setTitle("Сохранить", for: .normal)
+        enterNameTextField.text = eventToEdit?.name
+        guard let categoryToEdit = categoryToEdit else { return }
+        categoryViewModel.didChooseCategory(name: categoryToEdit)
+        guard let days = eventToEdit?.day else { return }
+        selectedDays = days
+        for day in selectedDays {
+            switch day {
+            case dayOfWeek.monday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.monday", comment: "ПН"))
+            case dayOfWeek.tuesday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.tuesday", comment: "ВТ"))
+            case dayOfWeek.wednesday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.wednesday", comment: "СР"))
+            case dayOfWeek.thursday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.thursday", comment: "ЧТ"))
+            case dayOfWeek.friday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.friday", comment: "ПТ"))
+            case dayOfWeek.saturday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.saturday", comment: "СБ"))
+            case dayOfWeek.sunday.localizedString: shortSelectedDays.append(NSLocalizedString("ShortName.sunday", comment: "ВС"))
+            default:
+                return
+            }
+        }
+        guard let emoji = eventToEdit?.emoji else { return }
+        guard let emojiIndex = emojiCollectionData.firstIndex(of: emoji) else { return }
+        emojiCollection.selectItem(at: IndexPath(row: emojiIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+        guard let color = eventToEdit?.color else { return }
+        guard let colorIndex = colorCollectionData.firstIndex(where: {UIColor.hexString(from: $0) == UIColor.hexString(from: color)}) else { return }
+        colorCollection.selectItem(at: IndexPath(row: colorIndex, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+        activateButton()
     }
     
     /// Настройка свойств, жестов и нотификаций
@@ -186,11 +224,13 @@ final class NewHabitViewController: UIViewController {
     
     private func bind() {
         trackersViewModel.isTrackerAdded = { result in
-            print(result)
             switch result {
             case true: self.dismiss(animated: true)
             case false: AlertMessage.shared.displayErrorAlert(title: "Ошибка!", message: "Ошибка добавления трекера")
             }
+        }
+        trackersViewModel.isTrackerChanged = { result in
+            self.dismiss(animated: true)
         }
     }
     
@@ -220,7 +260,7 @@ final class NewHabitViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    /// Метод, вызываемый при нажатии на кнопку "Создать"
+    /// Метод, вызываемый при нажатии на кнопку "Создать/Сохранить"
     @objc
     private func create() {
         let name = enterNameTextField.text ?? ""
@@ -230,11 +270,16 @@ final class NewHabitViewController: UIViewController {
         let colorIndex = colorCollection.indexPathsForSelectedItems?.first
         let color = colorCollectionData[colorIndex?.row ?? 0]
         let day = selectedDays
-        let event = Event(name: name, emoji: emoji, color: color, day: day)
-        categoryViewModel.didChooseCategory(name: "")
+        let event = Event(id: eventToEdit?.id ?? UUID(), name: name, emoji: emoji, color: color, day: day)
+        if let eventToEdit = eventToEdit {
+            //trackersViewModel.deleteTracker(id: eventToEdit?.id ?? UUID())
+            trackersViewModel.editEvent(event: event, category: category)
+        } else {
+            trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        }
         selectedDays = []
         shortSelectedDays = []
-        trackersViewModel.addTracker(event: event, category: category, categoryViewModel: categoryViewModel)
+        categoryViewModel.didChooseCategory(name: "")
         vibrate()
     }
     
@@ -311,9 +356,27 @@ extension NewHabitViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         switch indexPath.row {
         case 0:
-            categoryCell.title.text = "Категория"
+            categoryCell.title.text = NSLocalizedString("categoryCell", comment: "")
+            if eventToEdit != nil {
+                categoryCell.title.removeFromSuperview()
+                categoryCell.addSubview(categoryCell.title)
+                categoryCell.categoryName.text = categoryViewModel.getChoosedCategory()
+                categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
+                categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
+            }
         default:
-            categoryCell.title.text = "Расписание"
+            categoryCell.title.text = NSLocalizedString("scheduleCell", comment: "")
+            if eventToEdit != nil {
+                categoryCell.title.removeFromSuperview()
+                categoryCell.addSubview(categoryCell.title)
+                categoryCell.categoryName.text = shortSelectedDays.joined(separator: ", ")
+                categoryCell.categoryName.topAnchor.constraint(equalTo: categoryCell.title.bottomAnchor, constant: 2).isActive = true
+                categoryCell.categoryName.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.leadingAnchor.constraint(equalTo: categoryCell.leadingAnchor, constant: 16).isActive = true
+                categoryCell.title.topAnchor.constraint(equalTo: categoryCell.topAnchor, constant: 15).isActive = true
+            }
         }
         return categoryCell
     }
@@ -367,12 +430,28 @@ extension NewHabitViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             cell.color.backgroundColor = colorCollectionData[indexPath.row]
+            if let cellColor = cell.color.backgroundColor,
+               let eventColor = eventToEdit?.color {
+                if UIColor.hexString(from: cellColor) == UIColor.hexString(from: eventColor) {
+                    cell.layer.borderWidth = 3
+                    cell.layer.borderColor = cell.color.backgroundColor?.cgColor.copy(alpha: 0.3)
+                    cell.layer.cornerRadius = 8
+                    cell.layer.masksToBounds = true
+                }
+            }
+            
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell else {
                 return UICollectionViewCell()
             }
             cell.emojiLabel.text = emojiCollectionData[indexPath.row]
+            if cell.emojiLabel.text == eventToEdit?.emoji {
+                cell.isSelected = true
+                cell.backgroundColor = UIColor(red: 0.902, green: 0.91, blue: 0.922, alpha: 1)
+                cell.layer.cornerRadius = 16
+                cell.layer.masksToBounds = true
+            }
             return cell
         }
     }
@@ -381,7 +460,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if collectionView == colorCollection {
             if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as? CollectionHeaderSupplementaryView {
-                header.title.text = "Цвет"
+                header.title.text = NSLocalizedString("color", comment: "")
                 return header
             } else {
                 assertionFailure("Unable to dequeue CollectionHeaderSupplementaryView")
